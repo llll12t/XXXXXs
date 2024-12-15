@@ -18,7 +18,7 @@
     <!-- Swiper.js -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 
-<style>
+    <style>
         .main-shop {
             display: none;
             /* ซ่อนในตอนเริ่มต้น */
@@ -45,7 +45,7 @@
         }
 
         .bg-main-cart {
-            background-color: #f6f8fc;
+            background-color: #192028;
         }
 
         .bg-main-gray {
@@ -81,7 +81,7 @@
 
         .go-to-cart {
             animation: go-to-cart 0.5s ease-in-out;
-            background-color: #D8FA00;
+            background-color: #4bc56b;
             transform: scale(1.1);
         }
 
@@ -176,7 +176,7 @@
 
 <body class="bg-main-black2 ">
     <!-- Loading Screen -->
-    <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-white z-50">
+    <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-[#4bc56b] z-50">
         <div class="text-center">
             <p class="text-xl font-bold">กำลังโหลด...ข้อมูล 😊</p>
         </div>
@@ -203,11 +203,11 @@
                             </div>
                         </div>
                         <div class="flex items-center">
-                            <p class="bg-main-green mx-1 rounded-xl w-full max-w-24 p-2 text-main2 text-md font-bold flex items-center gap-2"
+                            <p class="bg-main-gray mx-1 rounded-xl w-full max-w-24 p-2 text-main text-md font-bold flex items-center gap-2"
                                 id="userPoints">
                                 <!-- ไอคอนคะแนน -->
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
-                                    color="#FFFFFF" fill="none">
+                                    color="#000000" fill="none">
                                     <path
                                         d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"
                                         stroke="currentColor" stroke-width="1.5" />
@@ -219,10 +219,10 @@
                                 0
                             </p>
                             <button id="go-to-cart"
-                                class="bg-main-cart text-main text-md py-2 px-4 flex items-center gap-2 rounded-xl ml-4">
+                                class="bg-main-cart text-main2 text-md py-2 px-4 flex items-center gap-2 rounded-xl ml-4">
                                 <!-- ไอคอนตะกร้าสินค้า -->
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
-                                    color="#000000" fill="none">
+                                    color="#FFFFFF" fill="none">
                                     <path
                                         d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7205 10.6235 21.621 10.747 21.4816 10.8132C20.9033 11.0876 20.4982 11.6081 20.3919 12.2134L19.7993 15.5878C19.5386 17.0725 19.4495 19.1943 18.1484 20.2402C17.1938 21 15.8184 21 13.0675 21H10.9325C8.18162 21 6.8062 21 5.8516 20.2402C4.55052 19.1942 4.46138 17.0725 4.20066 15.5878L3.60807 12.2134C3.50177 11.6081 3.09673 11.0876 2.51841 10.8132C2.37896 10.747 2.27952 10.6235 2.24894 10.4784C2.07874 9.67075 1.6264 8.5469 2.63812 8.10084C2.86684 8 3.17922 8 3.80397 8H7.5"
                                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -453,7 +453,6 @@
                 console.error('Error initializing app:', error);
             } finally {
                 showLoading(false);
-                loadCart(); // โหลดตะกร้าหลังจากโหลดข้อมูลสินค้าเสร็จ
             }
         }
 
@@ -532,6 +531,7 @@
             }
         }
 
+
         // ฟังก์ชันดึงข้อมูลการจัดส่ง
         async function fetchShippingOptions() {
             try {
@@ -564,7 +564,6 @@
 
             // ตั้งค่าการจัดส่งเริ่มต้น
             selectedShipping = shippingOptions[0];
-            shippingDropdown.value = selectedShipping.id;
             updateTotalPrice();
         }
 
@@ -766,35 +765,6 @@
             renderProducts(productsCache);
         }
 
-        // ฟังก์ชันสำหรับคำนวณราคาหลังลดตาม Discount
-        /**
-         * คำนวณราคาหลังจากลดตาม Discount
-         * @param {number} price - ราคาสินค้าก่อนลด
-         * @param {string|number} discount - ส่วนลดที่ใช้ (เปอร์เซ็นต์หรือตัวเลข)
-         * @returns {number} ราคาหลังจากลด
-         */
-        function getDiscountedPrice(price, discount) {
-            if (!discount) return price; // ไม่มีส่วนลด
-            let discountedPrice = price;
-
-            if (typeof discount === 'string' && discount.endsWith('%')) {
-                // ส่วนลดเป็นเปอร์เซ็นต์
-                const percentage = parseFloat(discount);
-                if (!isNaN(percentage)) {
-                    discountedPrice = price - (price * (percentage / 100));
-                }
-            } else {
-                // ส่วนลดเป็นจำนวนเงิน
-                const amount = parseFloat(discount);
-                if (!isNaN(amount)) {
-                    discountedPrice = price - amount;
-                }
-            }
-
-            // ตรวจสอบไม่ให้ราคาติดลบ
-            return discountedPrice >= 0 ? discountedPrice : 0;
-        }
-
         // ฟังก์ชันแสดงสินค้าตามหมวดหมู่
         function renderProducts(products, append) {
             if (append === undefined) {
@@ -835,7 +805,7 @@
             }
         }
 
-       // ฟังก์ชันสร้างองค์ประกอบสินค้า
+// ฟังก์ชันสร้างองค์ประกอบสินค้า
 function createProductElement(product) {
     const productDiv = document.createElement('div');
     productDiv.classList.add('bg-main', 'flex', 'flex-col', 'rounded-xl', 'border-2', 'shadow-sm', 'relative');
@@ -851,6 +821,7 @@ function createProductElement(product) {
     productImg.setAttribute('data-id', product.id);
 
     imgContainer.appendChild(productImg);
+
     productDiv.appendChild(imgContainer);
 
     const productInfoContainer = document.createElement('div');
@@ -863,39 +834,37 @@ function createProductElement(product) {
     productInfoContainer.appendChild(productName);
 
     const actionContainer = document.createElement('div');
-    actionContainer.classList.add('flex', 'justify-between', 'items-center', 'space-x-2');
+    actionContainer.classList.add('flex', 'justify-between', 'items-center');
+
+   
+
+    const sizeSelect = document.createElement('select');
+    sizeSelect.classList.add('bg-main-green2', 'text-main', 'rounded-xl', 'p-2', 'product-size', 'hidden');
+    sizeSelect.setAttribute('data-id', product.id);
+
+    const defaultOption = document.createElement('option');
+    defaultOption.value = 'Stock';
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+
+    sizeSelect.appendChild(defaultOption);
+
+    ['Stock'].forEach(function (size) {
+        if (product[size] > 0) {
+            const option = document.createElement('option');
+            option.value = size;
+            option.textContent = size + ' (' + product[size] + ')';
+            sizeSelect.appendChild(option);
+        }
+    });
+
+    actionContainer.appendChild(sizeSelect);
+  
 
     // เพิ่มการแสดงราคาสินค้าใน actionContainer
-    const priceDisplay = document.createElement('div');
-    priceDisplay.classList.add('text-main', 'font-semibold', 'flex', 'flex-col', 'items-start'); // เพิ่ม flex-col เพื่อจัดเรียงแนวตั้ง
-
-    // ราคาก่อนส่วนลด (ถ้ามีส่วนลด)
-    if (product.Discount) {
-        const originalPrice = document.createElement('div');
-        originalPrice.classList.add('line-through', 'text-gray-500', 'text-sm');
-        originalPrice.textContent = `${product.Price.toFixed(2)} บาท`;
-        priceDisplay.appendChild(originalPrice);
-    }
-
-    // ส่วนลด
-    if (product.Discount) {
-        const discountElement = document.createElement('div');
-        discountElement.classList.add('text-red-500', 'text-sm', 'mt-1');
-        if (typeof product.Discount === 'string' && product.Discount.endsWith('%')) {
-            discountElement.textContent = `${product.Discount}`;
-        } else {
-            discountElement.textContent = `- ${product.Discount} บาท`;
-        }
-        priceDisplay.appendChild(discountElement);
-    }
-
-    // ราคาหลังส่วนลด
-    const discountedPrice = getDiscountedPrice(product.Price, product.Discount);
-    const priceText = document.createElement('div');
-    priceText.classList.add('text-lg', 'font-bold', 'mt-1');
-    priceText.textContent = `${discountedPrice.toFixed(2)} บาท`;
-    priceDisplay.appendChild(priceText);
-
+    const priceDisplay = document.createElement('span');
+    priceDisplay.classList.add('text-[#4bc56b]', 'font-semibold');
+    priceDisplay.textContent = `${product.Price} บาท`;
     actionContainer.appendChild(priceDisplay);
 
     const addToCartBtn = document.createElement('button');
@@ -928,17 +897,6 @@ function createProductElement(product) {
                     showProductDetails(product);
                 }
             }
-
-            // เพิ่ม event listeners สำหรับปุ่มเพิ่มและลดจำนวนสินค้าในตะกร้า
-            if (event.target.classList.contains('increment-btn')) {
-                const index = parseInt(event.target.getAttribute('data-index'));
-                increment(index);
-            }
-
-            if (event.target.classList.contains('decrement-btn')) {
-                const index = parseInt(event.target.getAttribute('data-index'));
-                decrement(index);
-            }
         });
 
         function addToCart(event) {
@@ -952,45 +910,36 @@ function createProductElement(product) {
                 return;
             }
 
-            // **ลบการจัดการ size และ stock ถ้าไม่มีข้อมูล stock ในสินค้า**
-            /*
-            // ดึงขนาดสินค้าจาก data-attribute
-            const productElement = event.target.closest('.bg-main');
-            const size = productElement.getAttribute('data-size') || 'Stock';
+            const sizeElement = document.querySelector('.product-size[data-id="' + productId + '"]');
+            if (!sizeElement) {
+                console.error('Size element not found for product ID: ' + productId);
+                return;
+            }
+
+            const size = sizeElement.value;
+            if (!size) {
+                sizeElement.style.border = "1px solid red";
+                return;
+            }
+
+            sizeElement.style.border = "";
 
             const quantity = 1;
 
-            // คำนวณราคาหลังลด
-            const discountedPrice = getDiscountedPrice(product.Price, product.Discount);
-
             if (product[size] < quantity) {
-                Swal.fire('แจ้งเตือน', 'สินค้าในขนาดนี้หมดแล้ว', 'warning');
+                alert('สินค้าในขนาดนี้หมดแล้ว');
                 return;
             }
 
             product[size] -= quantity;
-            */
-
-            const quantity = 1;
-
-            // คำนวณราคาหลังลด
-            const discountedPrice = getDiscountedPrice(product.Price, product.Discount);
 
             const productInCart = cart.find(function (item) {
-                return item.id === productId;
+                return item.id === productId && item.size === size;
             });
-
             if (productInCart) {
                 productInCart.quantity += quantity;
             } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    Price: discountedPrice,
-                    originalPrice: product.Discount ? product.Price : null, // เก็บราคาปกติถ้ามีส่วนลด
-                    quantity: quantity,
-                    'Img-product': product['Img-product']
-                });
+                cart.push(Object.assign({}, product, { size: size, quantity: quantity }));
             }
 
             updateCartCount();
@@ -1002,18 +951,6 @@ function createProductElement(product) {
             setTimeout(function () {
                 goToCartBtn.classList.remove('go-to-cart');
             }, 500);
-
-            // แจ้งเตือนเมื่อเพิ่มสินค้าในตะกร้าเรียบร้อยแล้ว
-            Swal.fire({
-                icon: 'success',
-                title: 'เพิ่มสินค้าเรียบร้อย',
-                text: `${product.name} ถูกเพิ่มลงในตะกร้าแล้ว`,
-                showConfirmButton: false,
-                timer: 1500
-            });
-
-            // บันทึกตะกร้าใน localStorage
-            saveCart();
         }
 
         // ฟังก์ชันอัปเดตจำนวนสินค้าในตะกร้า
@@ -1023,8 +960,10 @@ function createProductElement(product) {
             }, 0);
             goToCartBtn.innerHTML = `
                 <!-- ไอคอนตะกร้าสินค้า -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#000000" fill="none">
-                    <!-- ... (svg path) ... -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#FFFFFF" fill="none">
+                    <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7205 10.6235 21.621 10.747 21.4816 10.8132C20.9033 11.0876 20.4982 11.6081 20.3919 12.2134L19.7993 15.5878C19.5386 17.0725 19.4495 19.1943 18.1484 20.2402C17.1938 21 15.8184 21 13.0675 21H10.9325C8.18162 21 6.8062 21 5.8516 20.2402C4.55052 19.1942 4.46138 17.0725 4.20066 15.5878L3.60807 12.2134C3.50177 11.6081 3.09673 11.0876 2.51841 10.8132C2.37896 10.747 2.27952 10.6235 2.24894 10.4784C2.07874 9.67075 1.6264 8.5469 2.63812 8.10084C2.86684 8 3.17922 8 3.80397 8H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M14 12L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M6.5 11L10 3M15 3L17.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                 </svg> ${cartCount}`;
         }
 
@@ -1049,13 +988,12 @@ function createProductElement(product) {
                     <img src="${item['Img-product']}" alt="${item.name}" class="w-20 h-20 rounded-xl mr-4">
                     <div class="flex-1">
                         <h3 class="text-md font-semibold">${item.name}</h3>
-                        ${item.originalPrice ? `<p class="text-xs text-gray-500 line-through">${item.originalPrice.toFixed(2)} บาท</p>` : ''}
-                        <p class="text-md font-semibold text-main">${item.Price.toFixed(2)} บาท</p>
+                        <p class="text-gray-600 item-price" data-price="${item.Price}">${item.Price.toFixed(2)} บาท</p>
                     </div>
                     <div class="flex flex-col items-center">
-                        <button data-index="${index}" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1 increment-btn">+</button>
+                        <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
                         <span class="w-8 text-center item-quantity">${item.quantity}</span>
-                        <button data-index="${index}" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1 decrement-btn">-</button>
+                        <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
                     </div>
                 `;
                 fragment.appendChild(cartItemEl);
@@ -1072,14 +1010,10 @@ function createProductElement(product) {
                 return p.id === item.id;
             });
 
-            if (product) {
-                // **ถ้าไม่มีการจัดการสต็อก, สามารถเพิ่มได้โดยไม่มีเงื่อนไข**
+            if (product[item.size] > item.quantity) {
                 cart[index].quantity += 1;
                 renderCart();
                 updateCartCount();
-                saveCart();
-            } else {
-                Swal.fire('แจ้งเตือน', 'ไม่พบสินค้านี้ในระบบ', 'warning');
             }
         }
 
@@ -1092,17 +1026,22 @@ function createProductElement(product) {
             }
             renderCart();
             updateCartCount();
-            saveCart();
         }
 
         // ฟังก์ชันอัปเดตราคารวม
         function updateTotalPrice() {
             const productTotal = cart.reduce(function (total, item) {
-                return total + (item.Price * item.quantity);
+                // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
+                if (!shippingOptions.some(option => option.id === item.id)) {
+                    return total + (item.Price * item.quantity);
+                }
+                return total;
             }, 0);
 
             const shippingDropdown = document.getElementById('shipping-options');
-            selectedShipping = shippingOptions.find(option => option.id === shippingDropdown.value) || shippingOptions[0];
+            selectedShipping = shippingOptions.find(function (option) {
+                return option.id === shippingDropdown.value;
+            });
 
             let shippingCost = parseFloat(selectedShipping.Price) || 0;
             if (selectedShipping.freeThreshold && productTotal >= selectedShipping.freeThreshold) {
@@ -1111,11 +1050,15 @@ function createProductElement(product) {
 
             const grandTotal = productTotal + shippingCost;
 
-            document.getElementById('total-price').textContent = `${productTotal.toFixed(2)} บาท`;
-            document.getElementById('shipping-cost').textContent = shippingCost > 0 ? `${shippingCost.toFixed(2)} บาท` : 'ฟรี';
-            document.getElementById('grand-total').textContent = `${grandTotal.toFixed(2)} บาท`;
+            document.getElementById('total-price').textContent = productTotal.toFixed(2) + ' บาท';
+            document.getElementById('shipping-cost').textContent = shippingCost.toFixed(2) + ' บาท';
+            document.getElementById('grand-total').textContent = grandTotal.toFixed(2) + ' บาท';
 
-            goToShippingBtn.classList.toggle('hidden', productTotal <= 0);
+            if (productTotal > 0) {
+                goToShippingBtn.classList.remove('hidden');
+            } else {
+                goToShippingBtn.classList.add('hidden');
+            }
         }
 
         // เพิ่ม event listener ให้ dropdown
@@ -1125,8 +1068,11 @@ function createProductElement(product) {
 
         // ฟังก์ชันเพื่อลบค่าจัดส่งเดิมออกจากตะกร้า
         function resetShippingCost() {
-            // **ลบโค้ดที่เกี่ยวกับ Shipping Cost ในการจัดการตะกร้า**
-            // เนื่องจากเราไม่มีการจัดการ size และ stock
+            cart = cart.filter(function (item) {
+                return !shippingOptions.some(function (option) {
+                    return option.id === item.id;
+                });
+            });
         }
 
         // เมื่อย้อนกลับไปยังหน้าร้านค้า ให้รีเซ็ตค่าจัดส่ง
@@ -1136,7 +1082,6 @@ function createProductElement(product) {
             document.getElementById('shipping-options').value = selectedShipping.id;
             cartView.classList.add('hidden');
             productSelection.classList.remove('hidden');
-            updateTotalPrice();
         });
 
         // ฟังก์ชันแสดงข้อมูลจัดส่ง
@@ -1165,8 +1110,14 @@ function createProductElement(product) {
             const userlineid = document.getElementById('userlineid').value;
             const saveInfo = document.getElementById('save-info').checked;
 
+            // ไม่ต้องเรียกใช้ addShippingCost() ที่นี่
+
             const productTotal = cart.reduce(function (total, item) {
-                return total + (item.Price * item.quantity);
+                // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
+                if (!shippingOptions.some(option => option.id === item.id)) {
+                    return total + (item.Price * item.quantity);
+                }
+                return total;
             }, 0);
 
             let shippingCost = parseFloat(selectedShipping.Price) || 0;
@@ -1182,7 +1133,9 @@ function createProductElement(product) {
                 contact: contact,
                 note: note,
                 userlineid: userlineid,
-                items: cart, // เก็บข้อมูลสินค้าทั้งหมด รวมทั้งราคาที่ลดแล้ว
+                items: cart.filter(function (item) {
+                    return !shippingOptions.some(option => option.id === item.id);
+                }), // ไม่รวมค่าจัดส่งใน items
                 shippingType: selectedShipping.name,
                 shippingCost: shippingCost,
                 total: grandTotal,
@@ -1200,9 +1153,8 @@ function createProductElement(product) {
                 return `
                     <div class="flex justify-between items-center my-2">
                         <div>
-                            <p class="text-sm font-medium">${item.name}</p>
-                            ${item.originalPrice ? `<p class="text-xs text-gray-500 line-through">${item.originalPrice.toFixed(2)} บาท</p>` : ''}
-                            <p class="text-xs text-gray-500">ราคา: ${item.Price.toFixed(2)} บาท</p>
+                            <p class="text-sm font-medium">${item.name} (${item.size})</p>
+                            <p class="text-xs text-gray-500">ราคา: ${item.Price} บาท</p>
                             <p class="text-xs text-gray-500">จำนวน: ${item.quantity}</p>
                         </div>
                         <p class="text-sm">${(item.Price * item.quantity).toFixed(2)} บาท</p>
@@ -1262,7 +1214,7 @@ function createProductElement(product) {
             productSelection.classList.remove('hidden');
             orderDetailsModal.classList.add('hidden');
             shippingForm.reset();
-            //liff.closeWindow(); // ปิด LIFF หลังจากเสร็จสิ้น
+            liff.closeWindow(); // ปิด LIFF หลังจากเสร็จสิ้น
         });
         closeModalBtn.addEventListener('click', function () {
             orderDetailsModal.classList.add('hidden');
@@ -1278,9 +1230,6 @@ function createProductElement(product) {
 
                 const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify(newOrder)
                 });
                 const result = await response.text();
@@ -1339,12 +1288,6 @@ function createProductElement(product) {
                     <button class="swiper-button-next-custom">⟩</button>
                 </div>
                 <p class="text-left text-sm p-4 mt-4">${formattedDetail}</p>
-                ${product.Discount ? `
-                    <div class="mt-2">
-                        <p class="text-red-500 font-semibold">ส่วนลด: ${product.Discount}</p>
-                        <p class="text-main font-semibold">ราคาหลังลด: ${getDiscountedPrice(product.Price, product.Discount).toFixed(2)} บาท</p>
-                    </div>
-                ` : ''}
             `;
 
             // แสดง SweetAlert พร้อมกับ Swiper และรายละเอียดสินค้า
@@ -1382,23 +1325,6 @@ function createProductElement(product) {
             currentPage += 1;
             renderProducts(productsCache, true);
         });
-
-        // ฟังก์ชันบันทึกตะกร้าใน localStorage
-        function saveCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-
-        // ฟังก์ชันโหลดตะกร้าจาก localStorage
-        function loadCart() {
-            const savedCart = localStorage.getItem('cart');
-            if (savedCart) {
-                cart = JSON.parse(savedCart);
-                renderCart();
-                updateCartCount();
-                updateTotalPrice();
-            }
-        }
-
     </script>
     <!-- LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js" defer></script>
