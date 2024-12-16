@@ -805,8 +805,6 @@
             }
         }
 
-// ฟังก์ชันสร้างองค์ประกอบสินค้า
-// ในฟังก์ชัน createProductElement(product) ก่อนปิด return productDiv ให้เพิ่มปุ่มแชร์
 function createProductElement(product) {
     const productDiv = document.createElement('div');
     productDiv.classList.add('bg-main', 'flex', 'flex-col', 'rounded-xl', 'border-2', 'shadow-sm', 'relative');
@@ -817,10 +815,19 @@ function createProductElement(product) {
     const productImg = document.createElement('img');
     productImg.src = product['Img-product'];
     productImg.alt = product.name;
-    productImg.loading = 'lazy'; 
+    productImg.loading = 'lazy';
     productImg.classList.add('w-full', 'h-40', 'object-cover', 'rounded-t-lg', 'product-img');
     productImg.setAttribute('data-id', product.id);
     imgContainer.appendChild(productImg);
+
+    // ปุ่มแชร์ แสดงทับมุมขวาบนของภาพ
+    const shareBtn = document.createElement('button');
+    shareBtn.classList.add('bg-main-black', 'text-white', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
+    shareBtn.textContent = 'แชร์';
+    shareBtn.addEventListener('click', function() {
+        shareProduct(product);
+    });
+    imgContainer.appendChild(shareBtn);
 
     productDiv.appendChild(imgContainer);
 
@@ -867,15 +874,6 @@ function createProductElement(product) {
     addToCartBtn.textContent = 'ซื้อ';
     addToCartBtn.setAttribute('data-id', product.id);
     actionContainer.appendChild(addToCartBtn);
-
-    // เพิ่มปุ่มแชร์สินค้า
-    const shareBtn = document.createElement('button');
-    shareBtn.classList.add('bg-main-black', 'text-white', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'ml-2');
-    shareBtn.textContent = 'แชร์';
-    shareBtn.addEventListener('click', function() {
-        shareProduct(product);
-    });
-    actionContainer.appendChild(shareBtn);
 
     productInfoContainer.appendChild(actionContainer);
     productDiv.appendChild(productInfoContainer);
