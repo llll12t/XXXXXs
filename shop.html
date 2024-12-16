@@ -160,6 +160,12 @@
         .swal2-title {
             font-size: 1rem !important;
         }
+
+        /* ปุ่มที่ถูกปิดใช้งาน */
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -363,7 +369,7 @@
                 </div>
                 <div class="rounded-xl overflow-hidden max-w-sm mx-auto  transform transition-all w-full">
                     <div class="bg-main px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-medium text-main" id="modal-title">รายละเอียดสั่งซื้อ</h3>
+                        <h3 class="text-lg leading-6 font-medium text-main2" id="modal-title">รายละเอียดสั่งซื้อ</h3>
                         <div class="mt-2">
                             <div id="order-details-content" class="bg-gray-100 p-4 rounded-xl"></div>
                         </div>
@@ -379,7 +385,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- สคริปต์หลัก -->
     <script defer>
@@ -910,74 +915,116 @@
                 await liff.login();
             }
 
-            const message = {
-                type: 'flex',
-                altText: 'รายละเอียดสินค้า',
-                contents: {
-                    type: 'bubble',
-                    hero: {
-                        type: 'image',
-                        url: product['Img-product'],
-                        size: 'full',
-                        aspectRatio: '20:13',
-                        aspectMode: 'cover'
-                    },
-                    body: {
-                        type: 'box',
-                        layout: 'vertical',
-                        contents: [
-                            {
-                                type: 'text',
-                                text: product.name,
-                                weight: 'bold',
-                                size: 'lg',
-                                wrap: true
-                            },
-                            {
-                                type: 'text',
-                                text: `${product.Price} บาท`,
-                                size: 'xl',
-                                color: '#4bc56b',
-                                weight: 'bold',
-                                margin: 'md'
-                            },
-                            {
-                                type: 'text',
-                                text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
-                                wrap: true,
-                                color: '#666666',
-                                size: 'sm',
-                                margin: 'md'
-                            }
-                        ]
+            // แสดงหน้าต่างยืนยันการแชร์
+            const result = await Swal.fire({
+                title: 'ยืนยันการแชร์สินค้า',
+                text: `คุณต้องการแชร์สินค้าชื่อ "${product.name}" หรือไม่?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก',
+            });
+
+            if (result.isConfirmed) {
+                const message = {
+                    type: 'flex',
+                    altText: 'รายละเอียดสินค้า',
+                    contents: {
+                        type: 'bubble',
+                        hero: {
+                            type: 'image',
+                            url: product['Img-product'],
+                            size: 'full',
+                            aspectRatio: '20:13',
+                            aspectMode: 'cover'
+                        },
+                        body: {
+                            type: 'box',
+                            layout: 'vertical',
+                            contents: [
+                                {
+                                    type: 'text',
+                                    text: product.name,
+                                    weight: 'bold',
+                                    size: 'lg',
+                                    wrap: true
+                                },
+                                {
+                                    type: 'text',
+                                    text: `${product.Price} บาท`,
+                                    size: 'xl',
+                                    color: '#4bc56b',
+                                    weight: 'bold',
+                                    margin: 'md'
+                                },
+                                {
+                                    type: 'text',
+                                    text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
+                                    wrap: true,
+                                    color: '#666666',
+                                    size: 'sm',
+                                    margin: 'md'
+                                }
+                            ]
+                        }
+                    }
+                };
+
+                // หาก shareTargetPicker ใช้งานได้ จะสามารถให้ผู้ใช้เลือกผู้รับได้
+                if (liff.isApiAvailable('shareTargetPicker')) {
+                    try {
+                        await liff.shareTargetPicker([message]);
+                        // แสดงข้อความแจ้งเตือนว่าการแชร์สำเร็จ
+                        await Swal.fire({
+                            title: 'แชร์สำเร็จ',
+                            text: 'สินค้าของคุณถูกแชร์ไปยัง LINE เรียบร้อยแล้ว',
+                            icon: 'success',
+                            confirmButtonText: 'ตกลง'
+                        });
+                        // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
+                        liff.closeWindow();
+                    } catch (error) {
+                        console.error('Error using shareTargetPicker:', error);
+                        // แสดงข้อความแสดงข้อผิดพลาดให้กับผู้ใช้
+                        await Swal.fire({
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถแชร์สินค้าได้ กรุณาลองใหม่อีกครั้ง',
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    }
+                } else {
+                    // ถ้าหาก shareTargetPicker ใช้ไม่ได้ ให้ส่งหาตัวเองแทน หรือส่งไปยังแชทปัจจุบัน
+                    try {
+                        await liff.sendMessages([message]);
+                        console.log('Message sent successfully');
+                        // แสดงข้อความแจ้งเตือนว่าการแชร์สำเร็จ
+                        await Swal.fire({
+                            title: 'แชร์สำเร็จ',
+                            text: 'สินค้าของคุณถูกแชร์ไปยัง LINE เรียบร้อยแล้ว',
+                            icon: 'success',
+                            confirmButtonText: 'ตกลง'
+                        });
+                        // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
+                        liff.closeWindow();
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                        // แสดงข้อความแสดงข้อผิดพลาดให้กับผู้ใช้
+                        await Swal.fire({
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถแชร์สินค้าได้ กรุณาลองใหม่อีกครั้ง',
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        });
                     }
                 }
-            };
-
-
-            // หาก shareTargetPicker ใช้งานได้ จะสามารถให้ผู้ใช้เลือกผู้รับได้
-            if (liff.isApiAvailable('shareTargetPicker')) {
-                try {
-                    await liff.shareTargetPicker([message]);
-                    // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
-                    liff.closeWindow();
-                } catch (error) {
-                    console.error('Error using shareTargetPicker:', error);
-                    // คุณสามารถแสดงข้อความแสดงข้อผิดพลาดให้กับผู้ใช้ได้ที่นี่
-                }
             } else {
-                // ถ้าหาก shareTargetPicker ใช้ไม่ได้ ให้ส่งหาตัวเองแทน หรือส่งไปยังแชทปัจจุบัน
-                try {
-                    await liff.sendMessages([message]);
-                    console.log('Message sent successfully');
-                    // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
-                    liff.closeWindow();
-                } catch (error) {
-                    console.error('Error sending message:', error);
-                    // คุณสามารถแสดงข้อความแสดงข้อผิดพลาดให้กับผู้ใช้ได้ที่นี่
-                }
+                // หากผู้ใช้ยกเลิก ไม่ดำเนินการแชร์
+                console.log('User canceled sharing.');
             }
         }
+
+
 
         // ฟังก์ชันเพิ่มสินค้าในตะกร้า
         document.addEventListener('click', function (event) {
