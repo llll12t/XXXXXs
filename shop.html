@@ -829,7 +829,7 @@
 
             // ปุ่มแชร์ตัวอย่าง (จากโค้ดก่อนหน้า)
             const shareBtn = document.createElement('button');
-            shareBtn.classList.add('bg-main-black', 'text-white', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
+            shareBtn.classList.add('bg-main', 'text-white', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
             shareBtn.textContent = 'แชร์';
             shareBtn.addEventListener('click', function () {
                 shareProduct(product);
@@ -880,17 +880,17 @@
                 finalPrice = product.Discount;
 
                 // แสดงราคาก่อนลดเป็นข้อความขีดทับ
-                const originalPriceText = document.createElement('span');
-                originalPriceText.classList.add('text-gray-500', 'text-sm', 'mr-2', 'line-through');
+                const originalPriceText = document.createElement('div');
+                originalPriceText.classList.add('text-gray-500', 'text-xs', 'mr-2', 'line-through');
                 originalPriceText.textContent = `${product.Price} บาท`;
 
                 // แสดงราคาลดแล้วเป็นตัวหนา, สีเขียว
-                const discountedPriceText = document.createElement('span');
+                const discountedPriceText = document.createElement('div');
                 discountedPriceText.classList.add('text-[#4bc56b]', 'font-semibold', 'text-md');
                 discountedPriceText.textContent = `${finalPrice} บาท`;
 
                 const priceContainer = document.createElement('div');
-                priceContainer.classList.add('flex', 'items-center', 'gap-1');
+                priceContainer.classList.add('flex', 'flex-col');
                 priceContainer.appendChild(originalPriceText);
                 priceContainer.appendChild(discountedPriceText);
 
