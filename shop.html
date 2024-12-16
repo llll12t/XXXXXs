@@ -906,7 +906,7 @@
         text: 'คุณต้องการแชร์สินค้านี้หรือไม่?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'แชร์',
+        confirmButtonText: 'ส่งไปยังแชท',
         cancelButtonText: 'ยกเลิก'
     });
 
@@ -1237,12 +1237,16 @@
             // ไม่ต้องเรียกใช้ addShippingCost() ที่นี่
 
             const productTotal = cart.reduce(function (total, item) {
-                // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
-                if (!shippingOptions.some(option => option.id === item.id)) {
-                    return total + (item.Price * item.quantity);
-                }
-                return total;
-            }, 0);
+            // เลือกใช้ราคา Discount ถ้ามีส่วนลด
+            const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+
+            // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
+            if (!shippingOptions.some(option => option.id === item.id)) {
+                return total + (itemPrice * item.quantity);
+            }
+            return total;
+        }, 0);
+
 
             let shippingCost = parseFloat(selectedShipping.Price) || 0;
             if (selectedShipping.freeThreshold && productTotal >= selectedShipping.freeThreshold) {
@@ -1274,17 +1278,26 @@
         // ฟังก์ชันแสดงรายละเอียดคำสั่งซื้อ
         function renderOrderDetails(order) {
             const itemsHtml = order.items.map(function (item) {
+                const hasDiscount = (item.Discount && item.Discount > 0 && item.Discount < item.Price);
+                const itemPrice = hasDiscount ? item.Discount : item.Price;
+
                 return `
                     <div class="flex justify-between items-center my-2">
                         <div>
                             <p class="text-sm font-medium">${item.name} (${item.size})</p>
-                            <p class="text-xs text-gray-500">ราคา: ${item.Price} บาท</p>
+                            ${
+                                hasDiscount
+                                ? `<p class="text-xs text-gray-500 line-through">ราคาเต็ม: ${item.Price} บาท</p>
+                                <p class="text-xs text-[#4bc56b] font-semibold">ราคาลด: ${itemPrice} บาท</p>`
+                                : `<p class="text-xs text-gray-500">ราคา: ${itemPrice} บาท</p>`
+                            }
                             <p class="text-xs text-gray-500">จำนวน: ${item.quantity}</p>
                         </div>
-                        <p class="text-sm">${(item.Price * item.quantity).toFixed(2)} บาท</p>
+                        <p class="text-sm">${(itemPrice * item.quantity).toFixed(2)} บาท</p>
                     </div>
                 `;
             }).join('');
+
 
             // แสดงค่าจัดส่งในรายละเอียดคำสั่งซื้อ
             const shippingHtml = order.shippingCost > 0 ? `
