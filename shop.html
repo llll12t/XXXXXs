@@ -899,99 +899,99 @@
             return productDiv;
         }
 
-       async function shareProduct(product) {
-    // แสดง popup ยืนยันก่อนแชร์
-    const result = await Swal.fire({
-        title: 'ยืนยันการแชร์สินค้า',
-        text: 'คุณต้องการแชร์สินค้านี้หรือไม่?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'ส่งไปยังแชท',
-        cancelButtonText: 'ยกเลิก'
-    });
+        async function shareProduct(product) {
+            // แสดง popup ยืนยันก่อนแชร์
+            const result = await Swal.fire({
+                title: 'ยืนยันการแชร์สินค้า',
+                text: 'คุณต้องการแชร์สินค้านี้หรือไม่?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'ส่งไปยังแชท',
+                cancelButtonText: 'ยกเลิก'
+            });
 
-    if (!result.isConfirmed) {
-        return;
-    }
+            if (!result.isConfirmed) {
+                return;
+            }
 
-    if (!liff.isLoggedIn()) {
-        await liff.login();
-    }
+            if (!liff.isLoggedIn()) {
+                await liff.login();
+            }
 
-    // ตรวจสอบส่วนลด
-    let priceText;
-    if (product.Discount && product.Discount > 0 && product.Discount < product.Price) {
-        // มีส่วนลด
-        priceText = 
-        `ราคาปกติ: ${product.Price} บาท\n` + 
-        `ราคาลด: ${product.Discount} บาท`;
-    } else {
-        // ไม่มีส่วนลด
-        priceText = `${product.Price} บาท`;
-    }
+            // ตรวจสอบส่วนลด
+            let priceText;
+            if (product.Discount && product.Discount > 0 && product.Discount < product.Price) {
+                // มีส่วนลด
+                priceText =
+                    `ราคาปกติ: ${product.Price} บาท\n` +
+                    `ราคาลด: ${product.Discount} บาท`;
+            } else {
+                // ไม่มีส่วนลด
+                priceText = `${product.Price} บาท`;
+            }
 
-    const message = {
-        type: 'flex',
-        altText: 'รายละเอียดสินค้า',
-        contents: {
-            type: 'bubble',
-            hero: {
-                type: 'image',
-                url: product['Img-product'],
-                size: 'full',
-                aspectRatio: '20:13',
-                aspectMode: 'cover'
-            },
-            body: {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                    {
-                        type: 'text',
-                        text: product.name,
-                        weight: 'bold',
-                        size: 'lg',
-                        wrap: true
+            const message = {
+                type: 'flex',
+                altText: 'รายละเอียดสินค้า',
+                contents: {
+                    type: 'bubble',
+                    hero: {
+                        type: 'image',
+                        url: product['Img-product'],
+                        size: 'full',
+                        aspectRatio: '20:13',
+                        aspectMode: 'cover'
                     },
-                    {
-                        type: 'text',
-                        text: priceText,
-                        size: 'sm',
-                        color: '#4bc56b',
-                        weight: 'bold',
-                        margin: 'md',
-                        wrap: true
-                    },
-                    {
-                        type: 'text',
-                        text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
-                        wrap: true,
-                        color: '#666666',
-                        size: 'sm',
-                        margin: 'md'
+                    body: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            {
+                                type: 'text',
+                                text: product.name,
+                                weight: 'bold',
+                                size: 'lg',
+                                wrap: true
+                            },
+                            {
+                                type: 'text',
+                                text: priceText,
+                                size: 'sm',
+                                color: '#4bc56b',
+                                weight: 'bold',
+                                margin: 'md',
+                                wrap: true
+                            },
+                            {
+                                type: 'text',
+                                text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
+                                wrap: true,
+                                color: '#666666',
+                                size: 'sm',
+                                margin: 'md'
+                            }
+                        ]
                     }
-                ]
+                }
+            };
+
+            if (liff.isApiAvailable('shareTargetPicker')) {
+                try {
+                    await liff.shareTargetPicker([message]);
+                    liff.closeWindow();
+                } catch (error) {
+                    console.error('Error using shareTargetPicker:', error);
+                }
+            } else {
+                try {
+                    await liff.sendMessages([message]);
+                    console.log('Message sent successfully');
+                    liff.closeWindow();
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                }
             }
         }
-    };
-
-    if (liff.isApiAvailable('shareTargetPicker')) {
-        try {
-            await liff.shareTargetPicker([message]);
-            liff.closeWindow();
-        } catch (error) {
-            console.error('Error using shareTargetPicker:', error);
-        }
-    } else {
-        try {
-            await liff.sendMessages([message]);
-            console.log('Message sent successfully');
-            liff.closeWindow();
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
-    }
-}
 
         // ฟังก์ชันเพิ่มสินค้าในตะกร้า
         document.addEventListener('click', function (event) {
@@ -1237,15 +1237,15 @@
             // ไม่ต้องเรียกใช้ addShippingCost() ที่นี่
 
             const productTotal = cart.reduce(function (total, item) {
-            // เลือกใช้ราคา Discount ถ้ามีส่วนลด
-            const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+                // เลือกใช้ราคา Discount ถ้ามีส่วนลด
+                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
 
-            // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
-            if (!shippingOptions.some(option => option.id === item.id)) {
-                return total + (itemPrice * item.quantity);
-            }
-            return total;
-        }, 0);
+                // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
+                if (!shippingOptions.some(option => option.id === item.id)) {
+                    return total + (itemPrice * item.quantity);
+                }
+                return total;
+            }, 0);
 
 
             let shippingCost = parseFloat(selectedShipping.Price) || 0;
@@ -1255,20 +1255,33 @@
 
             const grandTotal = productTotal + shippingCost;
 
+            const finalItems = cart
+                .filter(item => !shippingOptions.some(option => option.id === item.id))
+                .map(item => {
+                    // คำนวณราคาสุดท้ายของสินค้านั้น ๆ
+                    const finalPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+                        ? item.Discount
+                        : item.Price;
+
+                    return {
+                        ...item,
+                        finalPrice: finalPrice  // เพิ่มฟิลด์ finalPrice เข้าไปในข้อมูลสินค้า
+                    };
+                });
+
             const order = {
                 username: username,
                 address: address,
                 contact: contact,
                 note: note,
                 userlineid: userlineid,
-                items: cart.filter(function (item) {
-                    return !shippingOptions.some(option => option.id === item.id);
-                }), // ไม่รวมค่าจัดส่งใน items
+                items: finalItems,
                 shippingType: selectedShipping.name,
                 shippingCost: shippingCost,
                 total: grandTotal,
                 saveInfo: saveInfo
             };
+
 
             currentOrder = order;
             orderDetailsContent.innerHTML = renderOrderDetails(order);
@@ -1285,12 +1298,11 @@
                     <div class="flex justify-between items-center my-2">
                         <div>
                             <p class="text-sm font-medium">${item.name} (${item.size})</p>
-                            ${
-                                hasDiscount
-                                ? `<p class="text-xs text-gray-500 line-through">ราคาเต็ม: ${item.Price} บาท</p>
+                            ${hasDiscount
+                        ? `<p class="text-xs text-gray-500 line-through">ราคาเต็ม: ${item.Price} บาท</p>
                                 <p class="text-xs text-[#4bc56b] font-semibold">ราคาลด: ${itemPrice} บาท</p>`
-                                : `<p class="text-xs text-gray-500">ราคา: ${itemPrice} บาท</p>`
-                            }
+                        : `<p class="text-xs text-gray-500">ราคา: ${itemPrice} บาท</p>`
+                    }
                             <p class="text-xs text-gray-500">จำนวน: ${item.quantity}</p>
                         </div>
                         <p class="text-sm">${(itemPrice * item.quantity).toFixed(2)} บาท</p>
