@@ -24,24 +24,12 @@
             /* ซ่อนในตอนเริ่มต้น */
         }
 
-        .bg-main-green {
-            background-color: #192028;
-        }
-
-        .bg-main-green2 {
-            background-color: #F5F8FD;
-        }
-
-        .bg-main-black {
-            background-color: #192028;
-        }
-
-        .bg-main-black2 {
-            background-color: #F5F8FD;
-        }
-
         .bg-main {
             background-color: #FFF;
+        }
+
+        .bg-main2 {
+            background-color: #192028;
         }
 
         .bg-main-cart {
@@ -53,16 +41,17 @@
         }
 
         .text-main {
-            color: #000000;
+            color: #F5F8FD;
         }
 
         .text-main2 {
-            color: #ffffff;
+            color: #192028;
         }
 
         .border-2 {
             border-color: #FFFFFF;
         }
+
 
         /* สไตล์เพิ่มเติม */
         @keyframes go-to-cart {
@@ -81,7 +70,7 @@
 
         .go-to-cart {
             animation: go-to-cart 0.5s ease-in-out;
-            background-color: #4bc56b;
+            background-color: #474747;
             transform: scale(1.1);
         }
 
@@ -174,9 +163,9 @@
     </style>
 </head>
 
-<body class="bg-main-black2">
+<body class="bg-slate-100">
     <!-- Loading Screen -->
-    <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-[#192028] z-50">
+    <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-[#F5F8FD] z-50">
         <div class="text-center">
             <div class="relative flex w-64 animate-pulse gap-2 p-4">
                 <div class="h-12 w-12 rounded-full bg-slate-400"></div>
@@ -200,17 +189,17 @@
                         <div class="flex items-center">
                             <div class="w-12 h-12 rounded-xl items-center">
                                 <img src="https://via.placeholder.com/40?text=PROFILE" alt="Profile Image"
-                                    id="profileImage" class="w-12 h-12 bg-white rounded-xl">
+                                    id="profileImage" class="w-12 h-12 bg-main rounded-xl">
                             </div>
                             <div class="pl-4">
-                                <p class="text-main text-xs">ยินดีต้อนรับ</p>
+                                <p class="text-main2 text-xs">ยินดีต้อนรับ</p>
                                 <input type="text"
-                                    class="input-field bg-main w-32 text-main text-lg font-bold bg-opacity-0"
+                                    class="input-field bg-main w-32 text-main2 text-lg font-bold bg-opacity-0"
                                     id="displayName" name="displayName" readonly>
                             </div>
                         </div>
                         <div class="flex items-center">
-                            <p class="bg-main-gray mx-1 rounded-xl w-full max-w-24 p-2 text-main text-md font-bold flex items-center gap-2"
+                            <p class="bg-main-gray mx-1 rounded-xl w-full max-w-24 p-2 text-main2 text-md font-bold flex items-center gap-2"
                                 id="userPoints">
                                 <!-- ไอคอนคะแนน -->
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
@@ -226,7 +215,7 @@
                                 0
                             </p>
                             <button id="go-to-cart"
-                                class="bg-main-cart text-main2 text-md py-2 px-4 flex items-center gap-2 rounded-xl ml-4">
+                                class="bg-main-cart text-main text-md py-2 px-4 flex items-center gap-2 rounded-xl ml-4">
                                 <!-- ไอคอนตะกร้าสินค้า -->
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"
                                     color="#FFFFFF" fill="none">
@@ -268,7 +257,7 @@
                     </div>
                     <!-- ปุ่มโหลดเพิ่มเติม -->
                     <div id="load-more-container" class="text-center w-full m-4 hidden">
-                        <button id="load-more" class="bg-main-green2  text-main px-4 py-2 rounded-xl">เพิ่มเติม</button>
+                        <button id="load-more" class="bg-main text-main2 px-4 py-2 rounded-xl">เพิ่มเติม</button>
                     </div>
                 </div>
             </div>
@@ -276,24 +265,24 @@
 
         <!-- ฟังก์ชันการแสดงตะกร้าสินค้า -->
         <div id="cart-view" class="max-w-md mx-auto pt-20 hidden">
-            <div class="bg-white rounded-xl p-4 m-2">
+            <div class="bg-main rounded-xl p-4 m-2">
                 <!-- ส่วนหัวของตะกร้าสินค้า -->
                 <div class="fixed top-0 left-0 w-full bg-main shadow-sm z-50">
                     <div class="flex justify-between items-center p-4">
-                        <h2 class="text-main text-md font-semibold">ตะกร้าสินค้า</h2>
+                        <h2 class="text-main2 text-md font-semibold">ตะกร้าสินค้า</h2>
                         <div id="back-to-products"
-                            class="bg-white opacitywhite text-center font-bold py-2 w-36 border rounded-xl">กลับ ร้านค้า
+                            class="bg-main opacitywhite text-center font-bold py-2 w-36 border rounded-xl">กลับ ร้านค้า
                         </div>
                     </div>
                 </div>
 
-                <div id="cart-items" class="bg-white rounded-xl"></div>
+                <div id="cart-items" class="bg-main rounded-xl"></div>
 
                 <div class="pt-4">
                     <div class="flex justify-between items-center mb-4">
                         <label for="shipping-options" class="text-sm">การจัดส่ง</br>
                         </label>
-                        <select id="shipping-options" class="bg-white border border-gray-400 rounded-xl p-2">
+                        <select id="shipping-options" class="bg-main border border-gray-400 rounded-xl p-2">
                             <!-- ตัวเลือกการจัดส่งจะถูกเติมโดย JavaScript -->
                         </select>
                     </div>
@@ -314,7 +303,7 @@
                 </div>
 
                 <button id="go-to-shipping"
-                    class="w-full bg-main-black text-main2 p-4 rounded-xl font-semibold hidden">ถัดไป</button>
+                    class="w-full bg-main2 text-main p-4 rounded-xl font-semibold hidden">ถัดไป</button>
             </div>
         </div>
 
@@ -324,9 +313,9 @@
                 <!-- ส่วนหัวของการจัดส่ง -->
                 <div class="fixed top-0 left-0 w-full bg-main shadow-sm z-50">
                     <div class="flex justify-between items-center p-4">
-                        <h2 class="text-main text-md font-semibold">การจัดส่ง</h2>
+                        <h2 class="text-main2 text-md font-semibold">การจัดส่ง</h2>
                         <button id="back-to-cart"
-                            class="bg-white opacitywhite text-center font-bold py-2 w-36 border rounded-xl">กลับ
+                            class="bg-main opacitywhite text-center font-bold py-2 w-36 border rounded-xl">กลับ
                             ตะกร้าสินค้า</button>
                     </div>
                 </div>
@@ -334,22 +323,22 @@
                     <!-- ฟอร์มการจัดส่ง -->
                     <div id="form-container">
                         <div class="mb-4">
-                            <label for="username" class="block text-main">ชื่อ:</label>
+                            <label for="username" class="block text-main2">ชื่อ:</label>
                             <input type="text" id="username" placeholder="Name"
                                 class="block w-full mb-2 p-2 border rounded-xl" required />
                         </div>
                         <div class="mb-4">
-                            <label for="contact" class="block text-main">เบอร์ติดต่อ:</label>
+                            <label for="contact" class="block text-main2">เบอร์ติดต่อ:</label>
                             <input type="text" id="contact" placeholder="Contact"
                                 class="block w-full mb-2 p-2 border rounded-xl" required />
                         </div>
                         <div class="mb-4">
-                            <label for="address" class="block text-main">ที่อยู่:</label>
+                            <label for="address" class="block text-main2">ที่อยู่:</label>
                             <textarea id="address" placeholder="Address" class="block w-full mb-2 p-2 border rounded-xl"
                                 style="height: 150px;" required></textarea>
                         </div>
                         <div class="mb-4">
-                            <label for="note" class="block text-main">หมายเหตุ:</label>
+                            <label for="note" class="block text-main2">หมายเหตุ:</label>
                             <textarea id="note" placeholder="Note" class="block w-full mb-2 p-2 border rounded-xl"
                                 style="height: 100px;"></textarea>
                         </div>
@@ -357,12 +346,11 @@
                         <div class="mb-4">
                             <input type="checkbox" id="save-info" class="mr-2">
                             <label for="save-info"
-                                class="text-main">บันทึกชื่อและที่อยู่สำหรับการใช้งานครั้งถัดไป</label>
+                                class="text-main2">บันทึกชื่อและที่อยู่สำหรับการใช้งานครั้งถัดไป</label>
                         </div>
                         <input type="hidden" id="userlineid" name="userlineid">
                     </div>
-                    <button type="submit"
-                        class="bg-slate-950 text-main2 p-4 w-full rounded-xl mt-4">สั่งซื้อสินค้า</button>
+                    <button type="submit" class="bg-main2 text-main p-4 w-full rounded-xl mt-4">สั่งซื้อสินค้า</button>
                 </form>
             </div>
         </div>
@@ -374,7 +362,7 @@
                     <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
                 </div>
                 <div class="rounded-xl overflow-hidden max-w-sm mx-auto  transform transition-all w-full">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="bg-main px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <h3 class="text-lg leading-6 font-medium text-main" id="modal-title">รายละเอียดสั่งซื้อ</h3>
                         <div class="mt-2">
                             <div id="order-details-content" class="bg-gray-100 p-4 rounded-xl"></div>
@@ -382,9 +370,9 @@
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                         <button id="confirm-order"
-                            class="w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-4 bg-main-black text-base font-medium text-main hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 sm:ml-3 sm:w-auto sm:text-sm">ยืนยันการสั่งซื้อ</button>
+                            class="w-full inline-flex justify-center rounded-xl border border-transparent px-4 py-4 bg-main2 text-main font-medium text-main hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 sm:ml-3 sm:w-auto sm:text-sm">ยืนยันการสั่งซื้อ</button>
                         <button id="close-modal"
-                            class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 px-4 py-2 bg-white text-base font-medium text-main2 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">ยกเลิก</button>
+                            class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 px-4 py-2 bg-main text-base font-medium text-main2 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">ยกเลิก</button>
                         <div id="order-status" class="px-4 py-3 sm:px-6 text-center text-sm hidden"></div>
                     </div>
                 </div>
@@ -694,9 +682,9 @@
                 tabButton.setAttribute('data-category', category);
 
                 if (category === currentTab) {
-                    tabButton.classList.add('active', 'bg-main-green', 'text-main2');
+                    tabButton.classList.add('active', 'bg-main-gray', 'text-main2');
                 } else {
-                    tabButton.classList.add('bg-main', 'text-main');
+                    tabButton.classList.add('bg-main', 'text-main2');
                 }
                 const categoryImage = document.createElement('img');
                 categoryImage.src = getCategoryImage(category, products);
@@ -829,7 +817,7 @@
 
             // ปุ่มแชร์ตัวอย่าง (จากโค้ดก่อนหน้า)
             const shareBtn = document.createElement('button');
-            shareBtn.classList.add('bg-main', 'text-white', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
+            shareBtn.classList.add('bg-main', 'text-main2', 'text-xs', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
             shareBtn.textContent = 'แชร์';
             shareBtn.addEventListener('click', function () {
                 shareProduct(product);
@@ -842,7 +830,7 @@
             productInfoContainer.classList.add('flex-grow', 'text-left', 'p-2', 'text-sm', 'mt-2');
 
             const productName = document.createElement('h3');
-            productName.classList.add('py-2', 'font-semibold', 'text-main');
+            productName.classList.add('py-2', 'font-semibold', 'text-main2');
             productName.textContent = product.name;
             productInfoContainer.appendChild(productName);
 
@@ -850,7 +838,7 @@
             actionContainer.classList.add('flex', 'justify-between', 'items-center');
 
             const sizeSelect = document.createElement('select');
-            sizeSelect.classList.add('bg-main-green2', 'text-main', 'rounded-xl', 'p-2', 'product-size', 'hidden');
+            sizeSelect.classList.add('bg-main', 'text-main2', 'rounded-xl', 'p-2', 'product-size', 'hidden');
             sizeSelect.setAttribute('data-id', product.id);
 
             const defaultOption = document.createElement('option');
@@ -903,7 +891,7 @@
             }
 
             const addToCartBtn = document.createElement('button');
-            addToCartBtn.classList.add('bg-main-green', 'text-main2', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'add-to-cart');
+            addToCartBtn.classList.add('bg-main2', 'text-main', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'add-to-cart');
             addToCartBtn.style.width = '35%';
             addToCartBtn.textContent = 'ซื้อ';
             addToCartBtn.setAttribute('data-id', product.id);
@@ -959,23 +947,6 @@
                                 color: '#666666',
                                 size: 'sm',
                                 margin: 'md'
-                            }
-                        ]
-                    },
-                    footer: {
-                        type: 'box',
-                        layout: 'horizontal',
-                        spacing: 'sm',
-                        contents: [
-                            {
-                                type: 'button',
-                                style: 'primary',
-                                color: '#4bc56b',
-                                action: {
-                                    type: 'uri',
-                                    label: 'ดูสินค้าเพิ่มเติม',
-                                    uri: 'https://your-shop-url.com/product/' + product.id // ใส่ลิงก์หน้าสินค้าจริงของคุณ
-                                }
                             }
                         ]
                     }
