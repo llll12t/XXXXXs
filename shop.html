@@ -363,7 +363,7 @@
                 </div>
                 <div class="rounded-xl overflow-hidden max-w-sm mx-auto  transform transition-all w-full">
                     <div class="bg-main px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <h3 class="text-lg leading-6 font-medium text-main2" id="modal-title">รายละเอียดสั่งซื้อ</h3>
+                        <h3 class="text-lg leading-6 font-medium text-main" id="modal-title">รายละเอียดสั่งซื้อ</h3>
                         <div class="mt-2">
                             <div id="order-details-content" class="bg-gray-100 p-4 rounded-xl"></div>
                         </div>
@@ -379,6 +379,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- สคริปต์หลัก -->
     <script defer>
@@ -958,21 +959,25 @@
             if (liff.isApiAvailable('shareTargetPicker')) {
                 try {
                     await liff.shareTargetPicker([message]);
+                    // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
+                    liff.closeWindow();
                 } catch (error) {
                     console.error('Error using shareTargetPicker:', error);
+                    // คุณสามารถแสดงข้อความแสดงข้อผิดพลาดให้กับผู้ใช้ได้ที่นี่
                 }
             } else {
                 // ถ้าหาก shareTargetPicker ใช้ไม่ได้ ให้ส่งหาตัวเองแทน หรือส่งไปยังแชทปัจจุบัน
                 try {
                     await liff.sendMessages([message]);
                     console.log('Message sent successfully');
+                    // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
+                    liff.closeWindow();
                 } catch (error) {
                     console.error('Error sending message:', error);
+                    // คุณสามารถแสดงข้อความแสดงข้อผิดพลาดให้กับผู้ใช้ได้ที่นี่
                 }
             }
         }
-
-
 
         // ฟังก์ชันเพิ่มสินค้าในตะกร้า
         document.addEventListener('click', function (event) {
@@ -1085,7 +1090,7 @@
                 <h3 class="text-md font-semibold">${item.name}</h3>
                 ${(item.Discount && item.Discount > 0 && item.Discount < item.Price)
                         ? `<p class="text-gray-600 text-sm line-through">${item.Price} บาท</p>
-                       <p class="text-[#4bc56b] text-md font-semibold">${itemPrice.toFixed(2)} บาท</p>`
+                           <p class="text-[#4bc56b] text-md font-semibold">${itemPrice.toFixed(2)} บาท</p>`
                         : `<p class="text-gray-600 item-price" data-price="${itemPrice}">${itemPrice.toFixed(2)} บาท</p>`
                     }
             </div>
@@ -1129,7 +1134,6 @@
             updateCartCount();
         }
 
-        // ฟังก์ชันอัปเดตราคารวม
         // ฟังก์ชันอัปเดตราคารวม
         function updateTotalPrice() {
             const productTotal = cart.reduce(function (total, item) {
@@ -1311,6 +1315,10 @@
         backToCartBtn.addEventListener('click', backToCart);
         shippingForm.addEventListener('submit', handleShippingFormSubmit);
         confirmOrderBtn.addEventListener('click', async function () {
+            // ปิดใช้งานปุ่มก่อนเริ่มกระบวนการบันทึก
+            confirmOrderBtn.disabled = true;
+            confirmOrderBtn.textContent = 'กำลังบันทึก...';
+
             await saveOrder(currentOrder);
             await sendTextMessage();
 
@@ -1320,6 +1328,7 @@
             productSelection.classList.remove('hidden');
             orderDetailsModal.classList.add('hidden');
             shippingForm.reset();
+
             liff.closeWindow(); // ปิด LIFF หลังจากเสร็จสิ้น
         });
         closeModalBtn.addEventListener('click', function () {
