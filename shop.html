@@ -890,84 +890,79 @@ function createProductElement(product) {
     return productDiv;
 }
 
-// ฟังก์ชันส่ง Flex Message ไปยัง LINE
 async function sendFlexMessage(product) {
-    if (!liff.isLoggedIn()) {
-        liff.login();
+    if (!liff.isInClient()) {
+        alert('โปรดเปิดลิงก์ใน LINE App');
         return;
     }
 
     const flexMessage = {
-        "type": "flex",
-        "altText": "รายละเอียดสินค้า",
-        "contents": {
-          "type": "bubble",
-          "hero": {
-            "type": "image",
-            "url": product['Img-product'],
-            "size": "full",
-            "aspectRatio": "20:13",
-            "aspectMode": "cover",
-          },
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": product.name,
-                "weight": "bold",
-                "size": "lg"
-              },
-              {
-                "type": "text",
-                "text": product.detail || "ไม่มีรายละเอียดเพิ่มเติม",
-                "wrap": true,
-                "size": "sm",
-                "color": "#555555"
-              },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "text",
-                    "text": `ราคา: ${product.Price} บาท`,
-                    "size": "sm",
-                    "color": "#111111"
-                  }
-                ],
-                "margin": "md"
+      "type": "flex",
+      "altText": "รายละเอียดสินค้า",
+      "contents": {
+        "type": "bubble",
+        "hero": {
+          "type": "image",
+          "url": product['Img-product'],
+          "size": "full",
+          "aspectRatio": "20:13",
+          "aspectMode": "cover"
+        },
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": product.name,
+              "weight": "bold",
+              "size": "lg"
+            },
+            {
+              "type": "text",
+              "text": product.detail || "ไม่มีรายละเอียดเพิ่มเติม",
+              "wrap": true,
+              "size": "sm",
+              "color": "#555555"
+            },
+            {
+              "type": "text",
+              "text": `ราคา: ${product.Price} บาท`,
+              "size": "sm",
+              "color": "#111111",
+              "wrap": true,
+              "margin": "md"
+            }
+          ]
+        },
+        "footer": {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "sm",
+          "contents": [
+            {
+              "type": "button",
+              "style": "primary",
+              "color": "#4bc56b",
+              "action": {
+                "type": "uri",
+                "label": "ดูสินค้าเพิ่มเติม",
+                "uri": "https://your-shop-url.com/"
               }
-            ]
-          },
-          "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "button",
-                "style": "primary",
-                "color": "#4bc56b",
-                "action": {
-                  "type": "uri",
-                  "label": "ดูสินค้าเพิ่มเติม",
-                  "uri": "https://your-shop-url.com/" // ใส่ลิงก์ไปยังหน้าสินค้า
-                }
-              }
-            ]
-          }
+            }
+          ]
         }
+      }
     };
 
     try {
         await liff.sendMessages([flexMessage]);
-        console.log('Flex Message ส่งเรียบร้อย');
+        alert('ส่งข้อความสำเร็จ');
     } catch (error) {
-        console.error('ส่ง Flex Message ผิดพลาด: ', error);
+        console.error('เกิดข้อผิดพลาดในการส่งข้อความ:', error);
     }
 }
+
 
 
         // ฟังก์ชันเพิ่มสินค้าในตะกร้า
