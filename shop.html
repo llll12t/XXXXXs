@@ -890,9 +890,66 @@ async function shareProduct(product) {
     }
 
     const message = {
-        type: 'text',
-        text: `ฉันอยากจะแชร์สินค้านี้ให้คุณดู:\nชื่อสินค้า: ${product.name}\nราคา: ${product.Price} บาท\n${product.detail ? product.detail : ''}`
-    };
+  type: 'flex',
+  altText: 'รายละเอียดสินค้า',
+  contents: {
+    type: 'bubble',
+    hero: {
+      type: 'image',
+      url: product['Img-product'],
+      size: 'full',
+      aspectRatio: '20:13',
+      aspectMode: 'cover'
+    },
+    body: {
+      type: 'box',
+      layout: 'vertical',
+      contents: [
+        {
+          type: 'text',
+          text: product.name,
+          weight: 'bold',
+          size: 'lg',
+          wrap: true
+        },
+        {
+          type: 'text',
+          text: `${product.Price} บาท`,
+          size: 'xl',
+          color: '#4bc56b',
+          weight: 'bold',
+          margin: 'md'
+        },
+        {
+          type: 'text',
+          text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
+          wrap: true,
+          color: '#666666',
+          size: 'sm',
+          margin: 'md'
+        }
+      ]
+    },
+    footer: {
+      type: 'box',
+      layout: 'horizontal',
+      spacing: 'sm',
+      contents: [
+        {
+          type: 'button',
+          style: 'primary',
+          color: '#4bc56b',
+          action: {
+            type: 'uri',
+            label: 'ดูสินค้าเพิ่มเติม',
+            uri: 'https://your-shop-url.com/product/' + product.id // ใส่ลิงก์หน้าสินค้าจริงของคุณ
+          }
+        }
+      ]
+    }
+  }
+};
+
 
     // หาก shareTargetPicker ใช้งานได้ จะสามารถให้ผู้ใช้เลือกผู้รับได้
     if (liff.isApiAvailable('shareTargetPicker')) {
