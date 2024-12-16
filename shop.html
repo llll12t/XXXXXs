@@ -836,6 +836,8 @@ function createProductElement(product) {
     const actionContainer = document.createElement('div');
     actionContainer.classList.add('flex', 'justify-between', 'items-center');
 
+   
+
     const sizeSelect = document.createElement('select');
     sizeSelect.classList.add('bg-main-green2', 'text-main', 'rounded-xl', 'p-2', 'product-size', 'hidden');
     sizeSelect.setAttribute('data-id', product.id);
@@ -844,6 +846,7 @@ function createProductElement(product) {
     defaultOption.value = 'Stock';
     defaultOption.disabled = true;
     defaultOption.selected = true;
+
     sizeSelect.appendChild(defaultOption);
 
     ['Stock'].forEach(function (size) {
@@ -856,59 +859,26 @@ function createProductElement(product) {
     });
 
     actionContainer.appendChild(sizeSelect);
+  
 
+    // เพิ่มการแสดงราคาสินค้าใน actionContainer
     const priceDisplay = document.createElement('span');
     priceDisplay.classList.add('text-[#4bc56b]', 'font-semibold');
     priceDisplay.textContent = `${product.Price} บาท`;
     actionContainer.appendChild(priceDisplay);
-
-    const buttonContainer = document.createElement('div');
-    buttonContainer.classList.add('flex', 'gap-1');
 
     const addToCartBtn = document.createElement('button');
     addToCartBtn.classList.add('bg-main-green', 'text-main2', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'add-to-cart');
     addToCartBtn.style.width = '35%';
     addToCartBtn.textContent = 'ซื้อ';
     addToCartBtn.setAttribute('data-id', product.id);
-    buttonContainer.appendChild(addToCartBtn);
 
-    // ปุ่มแชร์สินค้า
-    const shareBtn = document.createElement('button');
-    shareBtn.classList.add('bg-main-green', 'text-main2', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2');
-    shareBtn.style.width = '35%';
-    shareBtn.textContent = 'แชร์';
-    shareBtn.setAttribute('data-id', product.id);
-    shareBtn.addEventListener('click', async function() {
-      await sendFlexMessage(product);
-    });
-    buttonContainer.appendChild(shareBtn);
-
-    actionContainer.appendChild(buttonContainer);
+    actionContainer.appendChild(addToCartBtn);
     productInfoContainer.appendChild(actionContainer);
     productDiv.appendChild(productInfoContainer);
 
     return productDiv;
 }
-
-async function sendFlexMessage(product) {
-    if (!liff.isInClient()) {
-        alert('โปรดเปิดลิงก์นี้จากแอป LINE');
-        return;
-    }
-
-    try {
-        await liff.sendMessages([
-            {
-                type: 'text',
-                text: 'แชร์สินค้า'
-            }
-        ]);
-        alert('ส่งข้อความ "แชร์สินค้า" เรียบร้อย');
-    } catch (error) {
-        console.error('เกิดข้อผิดพลาดในการส่งข้อความ:', error);
-    }
-}
-
 
 
         // ฟังก์ชันเพิ่มสินค้าในตะกร้า
