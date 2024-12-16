@@ -179,12 +179,12 @@
     <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-[#192028] z-50">
         <div class="text-center">
             <div class="relative flex w-64 animate-pulse gap-2 p-4">
-              <div class="h-12 w-12 rounded-full bg-slate-400"></div>
-              <div class="flex-1">
-                <div class="mb-1 h-5 w-3/5 rounded-lg bg-slate-400 text-lg"></div>
-                <div class="h-5 w-[90%] rounded-lg bg-slate-400 text-sm"></div>
-              </div>
-              <div class="absolute bottom-5 right-0 h-4 w-4 rounded-full bg-slate-400"></div>
+                <div class="h-12 w-12 rounded-full bg-slate-400"></div>
+                <div class="flex-1">
+                    <div class="mb-1 h-5 w-3/5 rounded-lg bg-slate-400 text-lg"></div>
+                    <div class="h-5 w-[90%] rounded-lg bg-slate-400 text-sm"></div>
+                </div>
+                <div class="absolute bottom-5 right-0 h-4 w-4 rounded-full bg-slate-400"></div>
             </div>
         </div>
     </div>
@@ -812,167 +812,194 @@
             }
         }
 
-function createProductElement(product) {
-    const productDiv = document.createElement('div');
-    productDiv.classList.add('bg-main', 'flex', 'flex-col', 'rounded-xl', 'border-2', 'shadow-sm', 'relative');
+        function createProductElement(product) {
+            const productDiv = document.createElement('div');
+            productDiv.classList.add('bg-main', 'flex', 'flex-col', 'rounded-xl', 'border-2', 'shadow-sm', 'relative');
 
-    const imgContainer = document.createElement('div');
-    imgContainer.classList.add('relative');
+            const imgContainer = document.createElement('div');
+            imgContainer.classList.add('relative');
 
-    const productImg = document.createElement('img');
-    productImg.src = product['Img-product'];
-    productImg.alt = product.name;
-    productImg.loading = 'lazy';
-    productImg.classList.add('w-full', 'h-40', 'object-cover', 'rounded-t-lg', 'product-img');
-    productImg.setAttribute('data-id', product.id);
-    imgContainer.appendChild(productImg);
+            const productImg = document.createElement('img');
+            productImg.src = product['Img-product'];
+            productImg.alt = product.name;
+            productImg.loading = 'lazy';
+            productImg.classList.add('w-full', 'h-40', 'object-cover', 'rounded-t-lg', 'product-img');
+            productImg.setAttribute('data-id', product.id);
+            imgContainer.appendChild(productImg);
 
-    // ปุ่มแชร์ แสดงทับมุมขวาบนของภาพ
-    const shareBtn = document.createElement('button');
-    shareBtn.classList.add('bg-main2', 'text-main', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
-    shareBtn.textContent = 'แชร์';
-    shareBtn.addEventListener('click', function() {
-        shareProduct(product);
-    });
-    imgContainer.appendChild(shareBtn);
+            // ปุ่มแชร์ตัวอย่าง (จากโค้ดก่อนหน้า)
+            const shareBtn = document.createElement('button');
+            shareBtn.classList.add('bg-main-black', 'text-white', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
+            shareBtn.textContent = 'แชร์';
+            shareBtn.addEventListener('click', function () {
+                shareProduct(product);
+            });
+            imgContainer.appendChild(shareBtn);
 
-    productDiv.appendChild(imgContainer);
+            productDiv.appendChild(imgContainer);
 
-    const productInfoContainer = document.createElement('div');
-    productInfoContainer.classList.add('flex-grow', 'text-left', 'p-2', 'text-sm', 'mt-2');
+            const productInfoContainer = document.createElement('div');
+            productInfoContainer.classList.add('flex-grow', 'text-left', 'p-2', 'text-sm', 'mt-2');
 
-    const productName = document.createElement('h3');
-    productName.classList.add('py-2', 'font-semibold', 'text-main');
-    productName.textContent = product.name;
-    productInfoContainer.appendChild(productName);
+            const productName = document.createElement('h3');
+            productName.classList.add('py-2', 'font-semibold', 'text-main');
+            productName.textContent = product.name;
+            productInfoContainer.appendChild(productName);
 
-    const actionContainer = document.createElement('div');
-    actionContainer.classList.add('flex', 'justify-between', 'items-center');
+            const actionContainer = document.createElement('div');
+            actionContainer.classList.add('flex', 'justify-between', 'items-center');
 
-    const sizeSelect = document.createElement('select');
-    sizeSelect.classList.add('bg-main-green2', 'text-main', 'rounded-xl', 'p-2', 'product-size', 'hidden');
-    sizeSelect.setAttribute('data-id', product.id);
+            const sizeSelect = document.createElement('select');
+            sizeSelect.classList.add('bg-main-green2', 'text-main', 'rounded-xl', 'p-2', 'product-size', 'hidden');
+            sizeSelect.setAttribute('data-id', product.id);
 
-    const defaultOption = document.createElement('option');
-    defaultOption.value = 'Stock';
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    sizeSelect.appendChild(defaultOption);
+            const defaultOption = document.createElement('option');
+            defaultOption.value = 'Stock';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            sizeSelect.appendChild(defaultOption);
 
-    ['Stock'].forEach(function (size) {
-        if (product[size] > 0) {
-            const option = document.createElement('option');
-            option.value = size;
-            option.textContent = size + ' (' + product[size] + ')';
-            sizeSelect.appendChild(option);
+            ['Stock'].forEach(function (size) {
+                if (product[size] > 0) {
+                    const option = document.createElement('option');
+                    option.value = size;
+                    option.textContent = size + ' (' + product[size] + ')';
+                    sizeSelect.appendChild(option);
+                }
+            });
+
+            actionContainer.appendChild(sizeSelect);
+
+            // ตรวจสอบว่ามีส่วนลดหรือไม่
+            let finalPrice = product.Price;
+            let priceDisplay = document.createElement('span');
+            priceDisplay.classList.add('font-semibold');
+
+            if (product.Discount && product.Discount > 0 && product.Discount < product.Price) {
+                // มีส่วนลด
+                finalPrice = product.Discount;
+
+                // แสดงราคาก่อนลดเป็นข้อความขีดทับ
+                const originalPriceText = document.createElement('span');
+                originalPriceText.classList.add('text-gray-500', 'text-sm', 'mr-2', 'line-through');
+                originalPriceText.textContent = `${product.Price} บาท`;
+
+                // แสดงราคาลดแล้วเป็นตัวหนา, สีเขียว
+                const discountedPriceText = document.createElement('span');
+                discountedPriceText.classList.add('text-[#4bc56b]', 'font-semibold', 'text-md');
+                discountedPriceText.textContent = `${finalPrice} บาท`;
+
+                const priceContainer = document.createElement('div');
+                priceContainer.classList.add('flex', 'items-center', 'gap-1');
+                priceContainer.appendChild(originalPriceText);
+                priceContainer.appendChild(discountedPriceText);
+
+                actionContainer.appendChild(priceContainer);
+            } else {
+                // ไม่มีส่วนลด
+                priceDisplay.classList.add('text-[#4bc56b]');
+                priceDisplay.textContent = `${finalPrice} บาท`;
+                actionContainer.appendChild(priceDisplay);
+            }
+
+            const addToCartBtn = document.createElement('button');
+            addToCartBtn.classList.add('bg-main-green', 'text-main2', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'add-to-cart');
+            addToCartBtn.style.width = '35%';
+            addToCartBtn.textContent = 'ซื้อ';
+            addToCartBtn.setAttribute('data-id', product.id);
+            actionContainer.appendChild(addToCartBtn);
+
+            productInfoContainer.appendChild(actionContainer);
+            productDiv.appendChild(productInfoContainer);
+
+            return productDiv;
         }
-    });
 
-    actionContainer.appendChild(sizeSelect);
+        // ฟังก์ชันสำหรับแชร์สินค้าไปยัง LINE
+        async function shareProduct(product) {
+            if (!liff.isLoggedIn()) {
+                await liff.login();
+            }
 
-    const priceDisplay = document.createElement('span');
-    priceDisplay.classList.add('text-[#4bc56b]', 'font-semibold');
-    priceDisplay.textContent = `${product.Price} บาท`;
-    actionContainer.appendChild(priceDisplay);
+            const message = {
+                type: 'flex',
+                altText: 'รายละเอียดสินค้า',
+                contents: {
+                    type: 'bubble',
+                    hero: {
+                        type: 'image',
+                        url: product['Img-product'],
+                        size: 'full',
+                        aspectRatio: '20:13',
+                        aspectMode: 'cover'
+                    },
+                    body: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            {
+                                type: 'text',
+                                text: product.name,
+                                weight: 'bold',
+                                size: 'lg',
+                                wrap: true
+                            },
+                            {
+                                type: 'text',
+                                text: `${product.Price} บาท`,
+                                size: 'xl',
+                                color: '#4bc56b',
+                                weight: 'bold',
+                                margin: 'md'
+                            },
+                            {
+                                type: 'text',
+                                text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
+                                wrap: true,
+                                color: '#666666',
+                                size: 'sm',
+                                margin: 'md'
+                            }
+                        ]
+                    },
+                    footer: {
+                        type: 'box',
+                        layout: 'horizontal',
+                        spacing: 'sm',
+                        contents: [
+                            {
+                                type: 'button',
+                                style: 'primary',
+                                color: '#4bc56b',
+                                action: {
+                                    type: 'uri',
+                                    label: 'ดูสินค้าเพิ่มเติม',
+                                    uri: 'https://your-shop-url.com/product/' + product.id // ใส่ลิงก์หน้าสินค้าจริงของคุณ
+                                }
+                            }
+                        ]
+                    }
+                }
+            };
 
-    const addToCartBtn = document.createElement('button');
-    addToCartBtn.classList.add('bg-main-green', 'text-main2', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'add-to-cart');
-    addToCartBtn.style.width = '35%';
-    addToCartBtn.textContent = 'ซื้อ';
-    addToCartBtn.setAttribute('data-id', product.id);
-    actionContainer.appendChild(addToCartBtn);
 
-    productInfoContainer.appendChild(actionContainer);
-    productDiv.appendChild(productInfoContainer);
-
-    return productDiv;
-}
-
-// ฟังก์ชันสำหรับแชร์สินค้าไปยัง LINE
-async function shareProduct(product) {
-    if (!liff.isLoggedIn()) {
-        await liff.login();
-    }
-
-    const message = {
-  type: 'flex',
-  altText: 'รายละเอียดสินค้า',
-  contents: {
-    type: 'bubble',
-    hero: {
-      type: 'image',
-      url: product['Img-product'],
-      size: 'full',
-      aspectRatio: '20:13',
-      aspectMode: 'cover'
-    },
-    body: {
-      type: 'box',
-      layout: 'vertical',
-      contents: [
-        {
-          type: 'text',
-          text: product.name,
-          weight: 'bold',
-          size: 'lg',
-          wrap: true
-        },
-        {
-          type: 'text',
-          text: `${product.Price} บาท`,
-          size: 'xl',
-          color: '#4bc56b',
-          weight: 'bold',
-          margin: 'md'
-        },
-        {
-          type: 'text',
-          text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
-          wrap: true,
-          color: '#666666',
-          size: 'sm',
-          margin: 'md'
+            // หาก shareTargetPicker ใช้งานได้ จะสามารถให้ผู้ใช้เลือกผู้รับได้
+            if (liff.isApiAvailable('shareTargetPicker')) {
+                try {
+                    await liff.shareTargetPicker([message]);
+                } catch (error) {
+                    console.error('Error using shareTargetPicker:', error);
+                }
+            } else {
+                // ถ้าหาก shareTargetPicker ใช้ไม่ได้ ให้ส่งหาตัวเองแทน หรือส่งไปยังแชทปัจจุบัน
+                try {
+                    await liff.sendMessages([message]);
+                    console.log('Message sent successfully');
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                }
+            }
         }
-      ]
-    },
-    footer: {
-      type: 'box',
-      layout: 'horizontal',
-      spacing: 'sm',
-      contents: [
-        {
-          type: 'button',
-          style: 'primary',
-          color: '#4bc56b',
-          action: {
-            type: 'uri',
-            label: 'ดูสินค้าเพิ่มเติม',
-            uri: 'https://your-shop-url.com/product/' + product.id // ใส่ลิงก์หน้าสินค้าจริงของคุณ
-          }
-        }
-      ]
-    }
-  }
-};
-
-
-    // หาก shareTargetPicker ใช้งานได้ จะสามารถให้ผู้ใช้เลือกผู้รับได้
-    if (liff.isApiAvailable('shareTargetPicker')) {
-        try {
-            await liff.shareTargetPicker([message]);
-        } catch (error) {
-            console.error('Error using shareTargetPicker:', error);
-        }
-    } else {
-        // ถ้าหาก shareTargetPicker ใช้ไม่ได้ ให้ส่งหาตัวเองแทน หรือส่งไปยังแชทปัจจุบัน
-        try {
-            await liff.sendMessages([message]);
-            console.log('Message sent successfully');
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
-    }
-}
 
 
 
@@ -1079,24 +1106,32 @@ async function shareProduct(product) {
                 const cartItemEl = document.createElement('div');
                 cartItemEl.classList.add('flex', 'items-center', 'justify-between', 'border-b', 'p-2');
 
+                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+
                 cartItemEl.innerHTML = `
-                    <img src="${item['Img-product']}" alt="${item.name}" class="w-20 h-20 rounded-xl mr-4">
-                    <div class="flex-1">
-                        <h3 class="text-md font-semibold">${item.name}</h3>
-                        <p class="text-gray-600 item-price" data-price="${item.Price}">${item.Price.toFixed(2)} บาท</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
-                        <span class="w-8 text-center item-quantity">${item.quantity}</span>
-                        <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
-                    </div>
-                `;
+            <img src="${item['Img-product']}" alt="${item.name}" class="w-20 h-20 rounded-xl mr-4">
+            <div class="flex-1">
+                <h3 class="text-md font-semibold">${item.name}</h3>
+                ${(item.Discount && item.Discount > 0 && item.Discount < item.Price)
+                        ? `<p class="text-gray-600 text-sm line-through">${item.Price} บาท</p>
+                       <p class="text-[#4bc56b] text-md font-semibold">${itemPrice.toFixed(2)} บาท</p>`
+                        : `<p class="text-gray-600 item-price" data-price="${itemPrice}">${itemPrice.toFixed(2)} บาท</p>`
+                    }
+            </div>
+            <div class="flex flex-col items-center">
+                <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
+                <span class="w-8 text-center item-quantity">${item.quantity}</span>
+                <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
+            </div>
+        `;
+
                 fragment.appendChild(cartItemEl);
             });
 
             cartItems.appendChild(fragment);
             updateTotalPrice();
         }
+
 
         // ฟังก์ชันเพิ่มจำนวนสินค้าในตะกร้า
         function increment(index) {
@@ -1124,11 +1159,15 @@ async function shareProduct(product) {
         }
 
         // ฟังก์ชันอัปเดตราคารวม
+        // ฟังก์ชันอัปเดตราคารวม
         function updateTotalPrice() {
             const productTotal = cart.reduce(function (total, item) {
+                // เลือกราคา (ถ้ามีส่วนลดให้ใช้ราคาหลังลด)
+                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+
                 // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
                 if (!shippingOptions.some(option => option.id === item.id)) {
-                    return total + (item.Price * item.quantity);
+                    return total + (itemPrice * item.quantity);
                 }
                 return total;
             }, 0);
@@ -1155,6 +1194,7 @@ async function shareProduct(product) {
                 goToShippingBtn.classList.add('hidden');
             }
         }
+
 
         // เพิ่ม event listener ให้ dropdown
         document.getElementById('shipping-options').addEventListener('change', function () {
