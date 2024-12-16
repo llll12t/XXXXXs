@@ -899,94 +899,99 @@
             return productDiv;
         }
 
-        async function shareProduct(product) {
-            // แสดง popup ยืนยันก่อนแชร์
-            const result = await Swal.fire({
-                title: 'ยืนยันการแชร์สินค้า',
-                text: 'คุณต้องการแชร์สินค้านี้หรือไม่?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'แชร์',
-                cancelButtonText: 'ยกเลิก'
-            });
+       async function shareProduct(product) {
+    // แสดง popup ยืนยันก่อนแชร์
+    const result = await Swal.fire({
+        title: 'ยืนยันการแชร์สินค้า',
+        text: 'คุณต้องการแชร์สินค้านี้หรือไม่?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'แชร์',
+        cancelButtonText: 'ยกเลิก'
+    });
 
+    if (!result.isConfirmed) {
+        return;
+    }
 
-            // หากผู้ใช้กดยกเลิก ให้ return ออกไป ไม่ต้องแชร์
-            if (!result.isConfirmed) {
-                return;
-            }
+    if (!liff.isLoggedIn()) {
+        await liff.login();
+    }
 
-            // หากผู้ใช้กดยืนยันจึงดำเนินการต่อ
-            if (!liff.isLoggedIn()) {
-                await liff.login();
-            }
+    // ตรวจสอบส่วนลด
+    let priceText;
+    if (product.Discount && product.Discount > 0 && product.Discount < product.Price) {
+        // มีส่วนลด
+        priceText = 
+        `ราคาปกติ: ${product.Price} บาท\n` + 
+        `ราคาลด: ${product.Discount} บาท`;
+    } else {
+        // ไม่มีส่วนลด
+        priceText = `${product.Price} บาท`;
+    }
 
-            const message = {
-                type: 'flex',
-                altText: 'รายละเอียดสินค้า',
-                contents: {
-                    type: 'bubble',
-                    hero: {
-                        type: 'image',
-                        url: product['Img-product'],
-                        size: 'full',
-                        aspectRatio: '20:13',
-                        aspectMode: 'cover'
+    const message = {
+        type: 'flex',
+        altText: 'รายละเอียดสินค้า',
+        contents: {
+            type: 'bubble',
+            hero: {
+                type: 'image',
+                url: product['Img-product'],
+                size: 'full',
+                aspectRatio: '20:13',
+                aspectMode: 'cover'
+            },
+            body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [
+                    {
+                        type: 'text',
+                        text: product.name,
+                        weight: 'bold',
+                        size: 'lg',
+                        wrap: true
                     },
-                    body: {
-                        type: 'box',
-                        layout: 'vertical',
-                        contents: [
-                            {
-                                type: 'text',
-                                text: product.name,
-                                weight: 'bold',
-                                size: 'lg',
-                                wrap: true
-                            },
-                            {
-                                type: 'text',
-                                text: `${product.Price} บาท`,
-                                size: 'xl',
-                                color: '#4bc56b',
-                                weight: 'bold',
-                                margin: 'md'
-                            },
-                            {
-                                type: 'text',
-                                text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
-                                wrap: true,
-                                color: '#666666',
-                                size: 'sm',
-                                margin: 'md'
-                            }
-                        ]
+                    {
+                        type: 'text',
+                        text: priceText,
+                        size: 'sm',
+                        color: '#4bc56b',
+                        weight: 'bold',
+                        margin: 'md',
+                        wrap: true
+                    },
+                    {
+                        type: 'text',
+                        text: product.detail ? product.detail : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม',
+                        wrap: true,
+                        color: '#666666',
+                        size: 'sm',
+                        margin: 'md'
                     }
-                }
-            };
-
-            // หาก shareTargetPicker ใช้งานได้ จะสามารถให้ผู้ใช้เลือกผู้รับได้
-            if (liff.isApiAvailable('shareTargetPicker')) {
-                try {
-                    await liff.shareTargetPicker([message]);
-                    // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
-                    liff.closeWindow();
-                } catch (error) {
-                    console.error('Error using shareTargetPicker:', error);
-                }
-            } else {
-                // ถ้าหาก shareTargetPicker ใช้ไม่ได้ ให้ส่งหาตัวเองแทน หรือส่งไปยังแชทปัจจุบัน
-                try {
-                    await liff.sendMessages([message]);
-                    console.log('Message sent successfully');
-                    // ปิดหน้าต่าง LIFF หลังจากแชร์สำเร็จ
-                    liff.closeWindow();
-                } catch (error) {
-                    console.error('Error sending message:', error);
-                }
+                ]
             }
         }
+    };
 
+    if (liff.isApiAvailable('shareTargetPicker')) {
+        try {
+            await liff.shareTargetPicker([message]);
+            liff.closeWindow();
+        } catch (error) {
+            console.error('Error using shareTargetPicker:', error);
+        }
+    } else {
+        try {
+            await liff.sendMessages([message]);
+            console.log('Message sent successfully');
+            liff.closeWindow();
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    }
+}
 
         // ฟังก์ชันเพิ่มสินค้าในตะกร้า
         document.addEventListener('click', function (event) {
