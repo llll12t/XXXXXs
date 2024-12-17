@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แสดงข้อมูลการสั่งซื้อ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+</head>
+
+<body class="bg-gradient-to-br from-slate-600 to-slate-900 min-h-screen">
+    <!-- Product Selection -->
+    <div id="product-selection" class="max-w-md mx-auto pt-20">
+        <div class="fixed top-0 left-0 w-full bg-white shadow z-50">
+            <div class="flex justify-between items-center p-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-xl items-center">
+                        <img src="https://via.placeholder.com/40?text=LOGO"
+                            alt="Profile Image" id="profileImage" class="w-12 h-12 bg-white rounded-xl">
+                    </div>
+                    <div class="pl-4">
+                        <p class="text-slate-400 text-xs">ประวัติการสั่งสั่งซื้อของคุณ</p>
+                        <input type="text" class="input-field bg-slate-800 w-32 text-slate-800 text-lg font-bold bg-opacity-0" id="displayName" name="displayName" readonly>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                <div class="w-12 h-12 rounded-xl items-center">
+                <img src="https://via.placeholder.com/40?text=LOGO" alt="LOGO Image"  class="w-12 h-12 bg-white rounded-xl">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="userlineid" name="userlineid">
+
+    <!-- ตารางแสดงข้อมูลที่ดึงจาก Google Sheets -->
+    <div class="max-w-md m-auto p-4">
+        <table id="data-table" class="min-w-full text-xs bg-white rounded-xl">
+            <thead>
+                <tr class="text-slate-800 text-sm mt-4">
+                    <th class="py-2 px-4 shadow">ออเดอร์</th>
+                    <th class="py-2 px-4 shadow">ราคา</th>
+                    <th class="py-2 px-4 shadow">เวลาสั่งซื้อ</th>
+                    <th class="py-2 px-4 shadow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#000000" fill="none">
+                        <path d="M20.016 2C18.9026 2 18 4.68629 18 8H20.016C20.9876 8 21.4734 8 21.7741 7.66455C22.0749 7.32909 22.0225 6.88733 21.9178 6.00381C21.6414 3.67143 20.8943 2 20.016 2Z" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M18 8.05426V18.6458C18 20.1575 18 20.9133 17.538 21.2108C16.7831 21.6971 15.6161 20.6774 15.0291 20.3073C14.5441 20.0014 14.3017 19.8485 14.0325 19.8397C13.7417 19.8301 13.4949 19.9768 12.9709 20.3073L11.06 21.5124C10.5445 21.8374 10.2868 22 10 22C9.71321 22 9.45546 21.8374 8.94 21.5124L7.02913 20.3073C6.54415 20.0014 6.30166 19.8485 6.03253 19.8397C5.74172 19.8301 5.49493 19.9768 4.97087 20.3073C4.38395 20.6774 3.21687 21.6971 2.46195 21.2108C2 20.9133 2 20.1575 2 18.6458V8.05426C2 5.20025 2 3.77325 2.87868 2.88663C3.75736 2 5.17157 2 8 2H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M6 6H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M8 10H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12.5 10.875C11.6716 10.875 11 11.4626 11 12.1875C11 12.9124 11.6716 13.5 12.5 13.5C13.3284 13.5 14 14.0876 14 14.8125C14 15.5374 13.3284 16.125 12.5 16.125M12.5 10.875C13.1531 10.875 13.7087 11.2402 13.9146 11.75M12.5 10.875V10M12.5 16.125C11.8469 16.125 11.2913 15.7598 11.0854 15.25M12.5 16.125V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg></th> <!-- เพิ่มคอลัมน์การชำระเงิน -->
+                    <th class="py-2 px-4 shadow">บิล</th>
+                </tr>
+            </thead>
+            
+            <tbody class="text-sm">
+                <!-- ข้อมูลจะถูกเพิ่มที่นี่โดย JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center mt-4"></div>
+        <div id="loading-message" class="text-center text-gray-100 mb-4" style="display: none;">กำลังโหลดรายการ...</div>
+    </div>
+
+    <script>
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzRF6plY3kobQzVM0UBS74wkFd04FJxs6e2dicNNZkc1oLftMM1-TbYMZPVoxASxNx7EQ/exec';
+        const LIFF_ID = '2005629952-QrAW2X6D';         
+        const ROWS_PER_PAGE = 15;
+        let currentPage = 1;
+        let tableData = [];
+        let filteredData = [];
+
+        window.onload = () => initializeLiff();
+
+        async function initializeLiff() {
+            try {
+                await liff.init({ liffId: `${LIFF_ID}` });
+                liff.isLoggedIn() ? await handleLoggedInUser() : liff.login();
+            } catch (error) {
+                console.error('Error initializing LIFF:', error);
+            }
+        }
+
+        async function handleLoggedInUser() {
+            await getUserProfile(); // ดึงข้อมูลผู้ใช้และโหลดข้อมูลสินค้าทันที
+        }
+
+        async function getUserProfile() {
+            try {
+                const profile = await liff.getProfile();
+                document.getElementById('userlineid').value = profile.userId;
+                document.getElementById('displayName').value = profile.displayName;
+                document.getElementById('profileImage').src = profile.pictureUrl || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+                
+                // เมื่อได้ userId แล้วให้ดึงข้อมูลทันที
+                await fetchData();
+            } catch (error) {
+                console.error('Error getting profile data:', error);
+            }
+        }
+
+        async function fetchData() {
+            document.getElementById('loading-message').style.display = 'block';
+            try {
+                const userId = document.getElementById('userlineid').value;
+                const response = await fetch(WEB_APP_URL);
+                const data = await response.json();
+                tableData = processOrders(data.slice(1));
+                filteredData = tableData.filter(order => order.userId === userId);
+                applyFilters();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'ไม่สามารถโหลดข้อมูลได้' });
+            } finally {
+                document.getElementById('loading-message').style.display = 'none';
+            }
+        }
+
+        function processOrders(data) {
+    const orderMap = {};
+    data.forEach(row => {
+        const [orderId, name, address, contact, note, userId, , , , , totalOrder, totalPrice, rawTimestamp, paymentStatus] = row;
+        const timestamp = new Date(rawTimestamp);
+
+        if (!orderMap[orderId]) {
+            orderMap[orderId] = { 
+                orderId, 
+                userId, 
+                name, 
+                address, 
+                contact, 
+                note, 
+                totalOrder: +totalOrder, 
+                totalPrice: +totalPrice, 
+                timestamp, 
+                paymentStatus, // เพิ่มสถานะการชำระเงิน
+                products: [] 
+            };
+        } else {
+            orderMap[orderId].totalOrder += +totalOrder;
+            orderMap[orderId].totalPrice += +totalPrice;
+        }
+
+        orderMap[orderId].products.push({ 
+            productId: row[6], 
+            product: row[7], 
+            price: row[8], 
+            size: row[9], 
+            value: row[10], 
+            express: row[12], 
+            totalOrder: +totalOrder 
+        });
+    });
+    return Object.values(orderMap);
+}
+
+        function applyFilters() {
+            filteredData.sort((a, b) => b.timestamp - a.timestamp);
+            currentPage = 1;
+            displayTable(filteredData);
+            renderPagination(filteredData.length);
+        }
+
+        function displayTable(data) {
+    const tableBody = document.querySelector('#data-table tbody');
+    tableBody.innerHTML = '';
+    const paginatedData = data.slice((currentPage - 1) * ROWS_PER_PAGE, currentPage * ROWS_PER_PAGE);
+    paginatedData.forEach(order => {
+        // เลือกไอคอนตามสถานะการชำระเงิน
+        let paymentIcon = '';
+        if (order.paymentStatus === 'ชำระเงินสำเร็จ') {
+            paymentIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>`; // ไอคอนเครื่องหมายถูก
+        } else if (order.paymentStatus === 'กำลังตรวจสอบ') {
+            paymentIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                          </svg>`; // ไอคอนนาฬิกาสำหรับสถานะกำลังตรวจสอบ
+        } else {
+            paymentIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>`; // ไอคอนเครื่องหมายกากบาทสำหรับการชำระเงินไม่สำเร็จ
+        }
+
+        tableBody.insertAdjacentHTML('beforeend', `
+            <tr>
+                <td class="py-2 px-4 shadow">${order.orderId}</td>
+                <td class="py-2 px-4 shadow">${order.totalPrice.toFixed(2)}</td>
+                <td class="py-2 px-4 shadow">${formatDate(order.timestamp)}</td>
+                <td class="py-2 px-4 shadow">${paymentIcon}</td> <!-- แสดงไอคอนแทนข้อความ -->
+                <td class="py-2 px-4 shadow">
+                    <button class="bg-slate-900 text-white py-1 px-3 rounded-xl hover:bg-slate-700" onclick="showDetails('${order.orderId}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                            <path d="M8 7L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8 11L12 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M13 21.5V21C13 18.1716 13 16.7574 13.8787 15.8787C14.7574 15 16.1716 15 19 15H19.5M20 13.3431V10C20 6.22876 20 4.34315 18.8284 3.17157C17.6569 2 15.7712 2 12 2C8.22877 2 6.34315 2 5.17157 3.17157C4 4.34314 4 6.22876 4 10L4 14.5442C4 17.7892 4 19.4117 4.88607 20.5107C5.06508 20.7327 5.26731 20.9349 5.48933 21.1139C6.58831 22 8.21082 22 11.4558 22C12.1614 22 12.5141 22 12.8372 21.886C12.9044 21.8623 12.9702 21.835 13.0345 21.8043C13.3436 21.6564 13.593 21.407 14.0919 20.9081L18.8284 16.1716C19.4065 15.5935 19.6955 15.3045 19.8478 14.9369C20 14.5694 20 14.1606 20 13.3431Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        `);
+    });
+}
+
+
+        function renderPagination(totalRows) {
+            const totalPages = Math.ceil(totalRows / ROWS_PER_PAGE);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            const maxPages = 3;
+            const startPage = Math.max(1, currentPage - 1);
+            const endPage = Math.min(totalPages, startPage + maxPages - 1);
+            if (startPage > 1) addPaginationButton('Prev', startPage - 1);
+            for (let i = startPage; i <= endPage; i++) {
+                addPaginationButton(i, i === currentPage ? i : i);
+            }
+            if (endPage < totalPages) addPaginationButton('Next', endPage + 1);
+        }
+
+        function addPaginationButton(text, page) {
+            const pagination = document.getElementById('pagination');
+            const button = document.createElement('button');
+            button.className = `mx-1 px-3 py-1 rounded-xl ${page === currentPage ? 'bg-slate-800 text-white' : 'bg-slate-300'}`;
+            button.innerText = text;
+            button.onclick = () => {
+                currentPage = page;
+                displayTable(filteredData);
+                renderPagination(filteredData.length);
+            };
+            pagination.appendChild(button);
+        }
+
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        }
+
+        function showDetails(orderId) {
+            const order = tableData.find(order => order.orderId === orderId);
+            if (!order) {
+                Swal.fire({ icon: 'error', title: 'ไม่พบข้อมูล', text: `ไม่พบข้อมูลสำหรับ Order ID: ${orderId}` });
+                return;
+            }
+            let productDetails = `
+                <div style="margin-bottom: 10px; font-size:14px; text-align: start;">
+                    <strong>ข้อมูลการสั่งซื้อ</strong>
+                    <p><strong>Order ID:</strong> ${order.orderId}</p>
+                    <p><strong>ชื่อผู้สั่ง:</strong> ${order.name}</p>
+                    <p><strong>ที่อยู่:</strong> ${order.address}</p>
+                    <p><strong>เบอร์ติดต่อ:</strong> ${order.contact}</p>
+                    <p><strong>หมายเหตุ:</strong> ${order.note}</p>
+
+                </div>
+                <div style="margin-bottom: 10px; font-size:14px; text-align: start;">
+                    <strong>รายการสินค้า</strong>
+                </div>`;
+            order.products.forEach(product => {
+                productDetails += `
+                    <div style="margin-bottom: 10px;font-size:14px;text-align: start;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div style="flex: 1; padding-right: 10px;">
+                                <p><strong>สินค้า:</strong> ${product.product}</p>
+                                <p><strong>ราคา:</strong> ${product.price} บาท</p>
+                            </div>
+                            <div style="flex: 1; padding-left: 10px;">
+                                <p><strong>ไซต์:</strong> ${product.size}</p>
+                                <p><strong>จำนวน:</strong> ${product.totalOrder} ชิ้น</p>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            productDetails += `
+                <div style="margin-top: 20px; font-size:14px; text-align: start;">
+                    <strong>รวมเป็นเงิน:</strong> ${order.totalPrice.toFixed(2)} บาท
+                </div>
+                <div style="margin-top: 10px; font-size:14px; text-align: start;">
+                    <strong>เวลาสั่งซื้อ:</strong> ${formatDate(order.timestamp)}
+                </div>`;
+            Swal.fire({ title: `<div class="text-sm">รายละเอียดบิล Order ${orderId}</div>`, html: productDetails, confirmButtonText: 'ปิด' });
+        }
+    </script>
+</body>
+
+</html>
