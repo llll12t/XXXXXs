@@ -838,12 +838,12 @@
             sizeSelect.setAttribute('data-id', product.id);
 
             const defaultOption = document.createElement('option');
-            defaultOption.value = 'Stock';
+            defaultOption.value = 'online';
             defaultOption.disabled = true;
             defaultOption.selected = true;
             sizeSelect.appendChild(defaultOption);
 
-            ['Stock'].forEach(function (size) {
+            ['online'].forEach(function (size) {
                 if (product[size] > 0) {
                     const option = document.createElement('option');
                     option.value = size;
