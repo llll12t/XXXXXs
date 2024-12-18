@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>อัปโหลดใบเสร็จ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+
+<body style="font-family: Noto Sans Thai;">
+    <div class="h-screen bg-slate-100 flex justify-center items-center">
+        <div class="max-w-md mx-auto px-4 py-4 bg-white rounded-lg shadow-md">
+            <form id="uploadForm">
+                <div class="relative p-4 rounded-lg mx-auto">
+                    <div class="text-center">
+                        <div class="text-slate-800 text-xl font-semibold mb-6">
+                            อัพโหลด ใบเสร็จชำระเงิน
+                        </div>
+                        <!-- Image preview and upload button side by side -->
+                        <div class="flex justify-between items-center mb-4">
+                            <!-- Image preview on the left -->
+                            <div class="w-40 h-52 bg-gray-200 flex items-center justify-center rounded-lg">
+                                <img id="preview" src="https://via.placeholder.com/600?text=preview" alt="Default Image" class="object-cover w-full h-full rounded-lg" />
+                            </div>
+                            <!-- Upload button on the right -->
+                            <label for="file" class="cursor-pointer inline-flex justify-center items-center w-80 h-52 py-4 px-8 rounded-lg text-lg text-white bg-indigo-900 font-medium ml-6">
+                                อัพโหลดสลิปโอนเงิน
+                                <input type="file" id="file" name="file" accept="image/*" class="hidden">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="text-center text-sm text-slate-500 mt-4">
+                        ขอบคุณ กรณี ล่าช้าหรือมีปัญหา แอดมินจะทำการตรวจสอบอีกครั้ง<br>
+                        กรุณารอการตรวจสอบสลิปหลังการโอนประมาณ 5-10 นาที
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+
+<script>
+    // Function triggered when the page loads
+    window.onload = function () {
+        displayFormData();
+    };
+
+    // Function to display the data passed via URL
+    function displayFormData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const liffState = urlParams.get('liff.state');
+        if (liffState) {
+            const decodedLiffState = decodeURIComponent(liffState);
+            const nestedParams = new URLSearchParams(decodedLiffState);
+
+            const orderId = nestedParams.get('orderId');
+            const totalOrder = nestedParams.get('totalOrder');
+            const username = nestedParams.get('username');
+            const userlineid = nestedParams.get('userlineid');
+
+            // Set hidden form inputs with extracted data
+            document.getElementById('uploadForm').orderId = orderId;
+            document.getElementById('uploadForm').totalOrder = totalOrder;
+            document.getElementById('uploadForm').username = username;
+            document.getElementById('uploadForm').userlineid = userlineid;
+        }
+    }
+
+    let url = "https://script.google.com/macros/s/AKfycbwDA-uMnqI_YCiBY_MRXhbVAGKE9j7fT52c1yo2qes_nRt_kGc4puVuMlXNX6KkvmI7/exec"; // Replace with actual URL
+    let fileInput = document.getElementById("file");
+    let imgPreview = document.getElementById("preview");
+
+    // Function to convert the file to base64
+    function getBase64(file) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Function to show the selected image preview
+    function previewImage() {
+        if (fileInput.files.length > 0) {
+            let file = fileInput.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                imgPreview.src = e.target.result;
+                submitData(file);
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            imgPreview.src = "https://via.placeholder.com/40?text=Ship";
+        }
+    }
+
+    // Function to submit the data
+    async function submitData(file) {
+        const isConfirmed = await showConfirmationDialog();
+
+        if (isConfirmed) {
+            try {
+                let base64 = await getBase64(file);
+                imgPreview.src = `data:${file.type};base64,${base64}`;
+
+                const formData = document.getElementById('uploadForm');
+                let obj = {
+                    base64: base64,
+                    type: file.type,
+                    name: file.name,
+                    orderId: formData.orderId,
+                    userlineId: formData.userlineid,
+                    totalOrder: formData.totalOrder,
+                    customerName: formData.username
+                };
+
+                Swal.fire({
+                    title: 'กำลังบันทึก, กรุณารอสักครู่...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    html: '<div class="swal2-loading text-md"></div>',
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                let response = await fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(obj)
+                });
+
+                let data = await response.text();
+
+                Swal.fire({
+                    title: 'สำเร็จ!',
+                    text: 'อัปโหลดใบเสร็จเรียบร้อยแล้ว!',
+                    icon: 'success',
+                    confirmButtonText: 'ปิด',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        liff.closeWindow();
+                    }
+                });
+                console.log(data);
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ข้อผิดพลาด',
+                    text: 'เกิดข้อผิดพลาดขณะส่งข้อมูล',
+                });
+
+                console.error(error);
+            }
+        } else {
+            Swal.fire('ยกเลิกการส่งข้อมูล', 'ข้อมูลของคุณยังไม่ถูกส่ง', 'info');
+        }
+    }
+
+    // Set event listener when a new file is selected
+    fileInput.addEventListener('change', () => {
+        previewImage();
+    });
+
+    // Function to display confirmation dialog before submitting
+    async function showConfirmationDialog() {
+        const confirmation = await Swal.fire({
+            title: 'ยืนยันการส่งข้อมูล',
+            text: 'คุณแน่ใจหรือว่าต้องการส่งข้อมูลนี้?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'ใช่, ส่งข้อมูล!',
+            cancelButtonText: 'ไม่, ยกเลิก'
+        });
+
+        return confirmation.isConfirmed;
+    }
+
+</script>
+</html>
