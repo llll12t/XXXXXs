@@ -63,12 +63,16 @@
             const totalOrder = nestedParams.get('totalOrder');
             const username = nestedParams.get('username');
             const userlineid = nestedParams.get('userlineid');
+            const contact = nestedParams.get('contact');
+
 
             // Set hidden form inputs with extracted data
             document.getElementById('uploadForm').orderId = orderId;
             document.getElementById('uploadForm').totalOrder = totalOrder;
             document.getElementById('uploadForm').username = username;
             document.getElementById('uploadForm').userlineid = userlineid;
+            document.getElementById('uploadForm').contact = contact;
+
         }
     }
 
@@ -120,7 +124,9 @@
                     orderId: formData.orderId,
                     userlineId: formData.userlineid,
                     totalOrder: formData.totalOrder,
-                    customerName: formData.username
+                    customerName: formData.username,
+                    contact: formData.contact
+
                 };
 
                 Swal.fire({
