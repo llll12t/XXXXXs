@@ -12,6 +12,8 @@
 
 <body class="bg-slate-100 min-h-screen p-6">
     <div class="max-w-md m-auto">
+
+
         <div class="mb-4">
             <!-- Sort Field -->
             <div class="flex justify-between">
@@ -53,7 +55,7 @@
 
     </div>
 
-
+    
 
     <!-- Script -->
     <script>
@@ -90,22 +92,21 @@
 
             data.forEach(row => {
                 const orderId = row[0];
-                const totalOrder = parseFloat(row[10]);
-                const totalPrice = parseFloat(row[11]);
-                const rawTimestamp = row[12];
+                const totalOrder = parseFloat(row[9]);
+                const totalPrice = parseFloat(row[10]);
+                const rawTimestamp = row[11];
                 const timestamp = new Date(rawTimestamp); // เก็บเป็น Date object เพื่อการเรียงลำดับ
-                const paymentStatus = row[13];
-                const express = row[14];
-                const tax = row[15];
-                const send = row[16] ? formatDate(row[16]) : ''; // Check if SEND is available
+                const paymentStatus = row[12];
+                const express = row[13];
+                const tax = row[14];
+                const send = row[15] ? formatDate(row[15]) : ''; // Check if SEND is available
 
                 if (!orderMap[orderId]) {
                     orderMap[orderId] = {
                         orderId: orderId,
                         name: row[1],
-                        address: row[2],
-                        contact: row[3],
-                        note: row[4],
+                        contact: row[2],
+                        note: row[3],
                         totalOrder: totalOrder,
                         totalPrice: totalPrice,
                         timestamp: timestamp,
@@ -198,6 +199,14 @@
         viewButton.onclick = () => showDetails(order.orderId);
         actionCell.appendChild(viewButton);
 
+      
+        // ปุ่ม พิมพ์
+        const printButton = document.createElement('button');
+        printButton.textContent = 'พิมพ์';
+        printButton.className = 'bg-green-500 text-white py-1 px-3 rounded-xl hover:bg-green-700 mr-2';
+        printButton.onclick = () => confirmCreateDocument(order.orderId);
+        actionCell.appendChild(printButton);
+
         // ปุ่ม การชำระเงิน
         const paymentButton = document.createElement('button');
         paymentButton.textContent = 'การชำระเงิน';
@@ -288,6 +297,7 @@
                     <strong>ข้อมูลการสั่งซื้อ</strong>
                     <p><strong>Order ID:</strong> ${order.orderId}</p>
                     <p><strong>ชื่อผู้สั่ง:</strong> ${order.name}</p>
+                    <p><strong>ที่อยู่:</strong> ${order.address}</p>
                     <p><strong>เบอร์ติดต่อ:</strong> ${order.contact}</p>
                     <p><strong>หมายเหตุ:</strong> ${order.note}</p>
 
@@ -368,47 +378,7 @@
             });
         }
 
-        function openEditModal(orderId) {
-            const order = tableData.find(order => order.orderId === orderId);
-
-            if (!order) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ไม่พบข้อมูล',
-                    text: `ไม่พบข้อมูลสำหรับ Order ID: ${orderId}`
-                });
-                return;
-            }
-
-            document.getElementById('edit-order-id').value = order.orderId;
-            document.getElementById('edit-express').value = order.express;
-            document.getElementById('edit-tax').value = order.tax;
-            document.getElementById('edit-send').value = order.send ? convertToDateTimeLocal(order.send) : '';
-
-            document.getElementById('edit-modal').classList.remove('hidden');
-        }
-
-        document.getElementById('edit-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
-
-            const orderId = document.getElementById('edit-order-id').value;
-            const express = document.getElementById('edit-express').value;
-            const tax = document.getElementById('edit-tax').value;
-            const send = document.getElementById('edit-send').value;
-
-            if (!orderId) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด',
-                    text: 'ไม่พบ Order ID'
-                });
-                return;
-            }
-
-            await updateData(orderId, express, tax, send);
-            closeModal();
-        });
-
+       
         async function updateData(orderId, express, tax, send) {
             Swal.fire({
                 title: 'กำลังบันทึกข้อมูล...',
