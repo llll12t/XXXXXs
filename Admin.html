@@ -12,8 +12,6 @@
 
 <body class="bg-slate-100 min-h-screen p-6">
     <div class="max-w-md m-auto">
-
-
         <div class="mb-4">
             <!-- Sort Field -->
             <div class="flex justify-between">
@@ -55,40 +53,7 @@
 
     </div>
 
-    <!-- Modal สำหรับแก้ไข Express, TAX และ SEND -->
-    <div id="edit-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white p-4 rounded-xl w-full max-w-md">
-            <h2 class="text-xl mb-4">แก้ไข การจัดส่ง, เลขพัสดุ, เวลาจัดส่ง</h2>
-            <form id="edit-form">
-                <input type="hidden" id="edit-order-id">
-                <div class="mb-4">
-                    <label for="edit-express" class="block text-sm">บริการจัดส่ง</label>
-                    <select id="edit-express" class="w-full border px-2 py-1 rounded-xl">
-                        <option value="kerry">Kerry</option>
-                        <option value="flash">Flash</option>
-                        <option value="thaipost">ThaiPost</option>
-                    </select>
-                </div>
 
-                <div class="mb-4">
-                    <label for="edit-tax" class="block text-sm">เลขพัสดุ</label>
-                    <input type="text" id="edit-tax" class="w-full border px-2 py-1 rounded-xl">
-                </div>
-
-                <div class="mb-4">
-                    <label for="edit-send" class="block text-sm">เวลาจัดส่ง</label>
-                    <input type="datetime-local" id="edit-send" class="w-full border px-2 py-1 rounded-xl">
-                </div>
-
-                <div class="flex justify-end">
-                    <button type="button" class="bg-red-500 text-white py-1 px-3 rounded-xl hover:bg-red-700 mr-2"
-                        onclick="closeModal()">ยกเลิก</button>
-                    <button type="submit"
-                        class="bg-blue-500 text-white py-1 px-3 rounded-xl hover:bg-blue-700">บันทึก</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Script -->
     <script>
@@ -233,20 +198,6 @@
         viewButton.onclick = () => showDetails(order.orderId);
         actionCell.appendChild(viewButton);
 
-        // ปุ่ม ส่งของ
-        const sendButton = document.createElement('button');
-        sendButton.textContent = 'ส่งของ';
-        sendButton.className = 'bg-yellow-500 text-white py-1 px-3 rounded-xl hover:bg-yellow-700 mr-2';
-        sendButton.onclick = () => openEditModal(order.orderId);
-        actionCell.appendChild(sendButton);
-
-        // ปุ่ม พิมพ์
-        const printButton = document.createElement('button');
-        printButton.textContent = 'พิมพ์';
-        printButton.className = 'bg-green-500 text-white py-1 px-3 rounded-xl hover:bg-green-700 mr-2';
-        printButton.onclick = () => confirmCreateDocument(order.orderId);
-        actionCell.appendChild(printButton);
-
         // ปุ่ม การชำระเงิน
         const paymentButton = document.createElement('button');
         paymentButton.textContent = 'การชำระเงิน';
@@ -337,7 +288,6 @@
                     <strong>ข้อมูลการสั่งซื้อ</strong>
                     <p><strong>Order ID:</strong> ${order.orderId}</p>
                     <p><strong>ชื่อผู้สั่ง:</strong> ${order.name}</p>
-                    <p><strong>ที่อยู่:</strong> ${order.address}</p>
                     <p><strong>เบอร์ติดต่อ:</strong> ${order.contact}</p>
                     <p><strong>หมายเหตุ:</strong> ${order.note}</p>
 
