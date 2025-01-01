@@ -11,9 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    <style>.hidden {
-    display: none;
-}</style>
 </head>
 
 <body class="bg-slate-50 min-h-screen">
@@ -29,7 +26,7 @@
                 </div>
             </div>
         </div>
-    
+    </div>
     <!-- Product Selection -->
     <div id="product-selection" class="max-w-md mx-auto pt-20">
         <div class="fixed top-0 left-0 w-full bg-white shadow z-50">
@@ -105,7 +102,6 @@
                 document.getElementById('loading-screen').style.display = 'none';
             }
         };
-
         async function initializeLiff() {
             try {
                 await liff.init({ liffId: `${LIFF_ID}` });
