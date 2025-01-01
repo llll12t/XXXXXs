@@ -590,21 +590,21 @@
                 return;
             }
 
-            banners.forEach(function (banner) {
+           banners.forEach(function (banner) {
                 const slide = document.createElement('div');
                 slide.classList.add('swiper-slide');
 
                 // สร้างลิงก์ถ้ามี
                 if (banner.link_url) {
-                    const link = document.createElement('a');
-                    link.href = banner.link_url;
+                    const link = document.createElement('div');
+                    link.classList.add('pt-4');
                     link.target = '_blank'; // เปิดในแท็บใหม่
 
                     const img = document.createElement('img');
                     img.src = banner.image_url;
                     img.alt = banner.alt_text || 'Banner';
                     img.loading = 'lazy'; // เพิ่ม Lazy Loading
-                    img.classList.add('w-full', 'h-auto','pt-2','object-cover', 'rounded-xl');
+                    img.classList.add('w-full', 'h-auto','object-cover', 'rounded-xl');
 
                     link.appendChild(img);
                     slide.appendChild(link);
@@ -613,12 +613,13 @@
                     img.src = banner.image_url;
                     img.alt = banner.alt_text || 'Banner';
                     img.loading = 'lazy'; // เพิ่ม Lazy Loading
-                    img.classList.add('w-full', 'h-auto','pt-2','object-cover', 'rounded-xl');
+                    img.classList.add('w-full', 'h-auto','object-cover', 'rounded-xl');
                     slide.appendChild(img);
                 }
 
                 swiperWrapper.appendChild(slide);
             });
+
 
             initializeSwiper(); // เรียกใช้งาน Swiper หลังจากแบนเนอร์ถูกเพิ่ม
         }
