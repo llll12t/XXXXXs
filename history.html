@@ -11,6 +11,13 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <style>
+     /* สไตล์ที่มีอยู่... (ไม่เปลี่ยนแปลง) */
+        .main-shop {
+            display: none;
+            /* ซ่อนในตอนเริ่มต้น */
+        }
+    </style>
 </head>
 
 <body class="bg-slate-50 min-h-screen">
@@ -27,6 +34,8 @@
             </div>
         </div>
     </div>
+     <div class="main-shop">
+
     <!-- Product Selection -->
     <div id="product-selection" class="max-w-md mx-auto pt-20">
         <div class="fixed top-0 left-0 w-full bg-white shadow z-50">
@@ -78,7 +87,7 @@
         <div id="pagination" class="flex justify-center mt-4"></div>
         <div id="loading-message" class="text-center text-gray-100 mb-4" style="display: none;">กำลังโหลดรายการ...</div>
     </div>
-
+</div></div>
     <script>
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxQGyHzJ4BoHzozjwGEaa8qMOgQXUIqYZNQ2X2VnWqGtf_TbM_-Rd6cd-1vssn3WIw/exec';
         const LIFF_ID = '2006699683-No1LXDa9';         
@@ -89,8 +98,7 @@
 
         window.onload = async () => {
             // Show the loading screen
-            document.getElementById('loading-screen').style.display = 'flex';
-
+            showLoading(true);
             try {
                 await initializeLiff();
                 await fetchData();
@@ -98,10 +106,22 @@
                 console.error('Error:', error);
                 Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถโหลดข้อมูลได้', 'error');
             } finally {
-                // Hide the loading screen
-                document.getElementById('loading-screen').style.display = 'none';
+                showLoading(false);
             }
         };
+             // ฟังก์ชันแสดงหน้าจอโหลดข้อมูล
+        function showLoading(isLoading) {
+            const loadingScreen = document.getElementById('loading-screen');
+            const mainShop = document.querySelector('.main-shop');
+
+            if (isLoading) {
+                loadingScreen.style.display = 'flex';
+                mainShop.style.display = 'none'; // ซ่อน main-shop ระหว่างโหลด
+            } else {
+                loadingScreen.style.display = 'none';
+                mainShop.style.display = 'block'; // แสดง main-shop หลังจากโหลดเสร็จ
+            }
+        }
         async function initializeLiff() {
             try {
                 await liff.init({ liffId: `${LIFF_ID}` });
