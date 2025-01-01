@@ -31,7 +31,7 @@
                 <thead class="bg-gray-300">
                     <tr>
                         <th class="px-4 py-2 text-left">วันที่</th>
-                        <th class="px-4 py-2 text-left">ชื่อ ลูกค้า</th>
+                        <th class="px-4 py-2 text-left">ชื่อ</th>
                         <th class="px-4 py-2 text-left">ราคา</th>
                         <th class="px-4 py-2 text-left">สถานะ</th>
                     </tr>
@@ -200,12 +200,12 @@
         actionCell.appendChild(viewButton);
 
       
-        // ปุ่ม พิมพ์
-        const printButton = document.createElement('button');
-        printButton.textContent = 'พิมพ์';
-        printButton.className = 'bg-green-500 text-white py-1 px-3 rounded-xl hover:bg-green-700 mr-2';
-        printButton.onclick = () => confirmCreateDocument(order.orderId);
-        actionCell.appendChild(printButton);
+        // // ปุ่ม พิมพ์
+        // const printButton = document.createElement('button');
+        // printButton.textContent = 'พิมพ์';
+        // printButton.className = 'bg-green-500 text-white py-1 px-3 rounded-xl hover:bg-green-700 mr-2';
+        // printButton.onclick = () => confirmCreateDocument(order.orderId);
+        // actionCell.appendChild(printButton);
 
         // ปุ่ม การชำระเงิน
         const paymentButton = document.createElement('button');
@@ -313,7 +313,7 @@
                                 <p><strong>ราคา:</strong> ${product.price} บาท</p>
                             </div>
                             <div style="flex: 1; padding-left: 10px;">
-                                <p><strong>จำนวน:</strong> ${product.totalOrder} ชิ้น</p>
+                                <p><strong>จำนวน:</strong> ${product.totalOrder} </p>
                             </div>
                         </div>
                     </div>`;
