@@ -19,56 +19,42 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
 
     <style>
-        /* สไตล์ที่มีอยู่... (ไม่เปลี่ยนแปลง) */
         .main-shop {
-            display: none;
-            /* ซ่อนในตอนเริ่มต้น */
+            display: none; /* ซ่อนในตอนเริ่มต้น */
         }
-
         .bg-main {
             background-color: #FFF;
         }
-
         .bg-main2 {
             background-color: #192028;
         }
-
         .bg-main-cart {
             background-color: #192028;
         }
-
         .bg-main-gray {
             background-color: #e9e2e2;
         }
-
         .text-main {
             color: #F5F8FD;
         }
-
         .text-main2 {
             color: #192028;
         }
-
         .border-2 {
             border-color: #FFFFFF;
         }
 
-
-        /* สไตล์เพิ่มเติม */
         @keyframes go-to-cart {
             0% {
                 transform: scale(1);
             }
-
             50% {
                 transform: scale(1.2);
             }
-
             100% {
                 transform: scale(1);
             }
         }
-
         .go-to-cart {
             animation: go-to-cart 0.5s ease-in-out;
             background-color: #474747;
@@ -79,20 +65,16 @@
             0% {
                 content: "โหลด..รายการสินค้า";
             }
-
             33% {
                 content: "โหลด...รายการสินค้า";
             }
-
             66% {
                 content: "โหลด....รายการสินค้า";
             }
-
             100% {
                 content: "โหลด.....รายการสินค้า";
             }
         }
-
         .loading-animation::after {
             content: "โหลด..รายการสินค้า";
             animation: loading-text 1.5s infinite;
@@ -101,7 +83,6 @@
             width: 100%
         }
 
-        /* สไตล์เพิ่มเติม */
         .swiper-container {
             width: 100%;
             max-height: 300px;
@@ -109,7 +90,6 @@
             overflow: hidden;
             border-radius: 10px;
         }
-
         .swiper-slide img {
             width: 100%;
             height: auto;
@@ -117,7 +97,6 @@
             transform: translateY(-10px);
             border-radius: 10px;
         }
-
         .swiper-button-prev-custom,
         .swiper-button-next-custom {
             position: absolute;
@@ -137,23 +116,18 @@
             align-items: center;
             z-index: 10;
         }
-
         .swiper-button-prev-custom {
             left: 10px;
         }
-
         .swiper-button-next-custom {
             right: 10px;
         }
-
         .custom-swal-popup {
             padding: 0 !important;
         }
-
         .swal2-popup {
             overflow: hidden !important;
         }
-
         .swal2-title {
             font-size: 1rem !important;
         }
@@ -176,7 +150,6 @@
     </div>
 
     <div class="main-shop">
-
         <!-- ฟังก์ชันการแสดงรายการสินค้า -->
         <div id="product-selection" class="max-w-md mx-auto pt-20">
             <div class="p-4 rounded-xl">
@@ -239,9 +212,7 @@
                 <div>
                     <!-- ส่วนแสดงหมวดหมู่สินค้า -->
                     <div class="flex">
-                        <div id="tab-nav" class="flex overflow-x-auto space-x-4 py-2">
-                            <!-- หมวดหมู่สินค้า -->
-                        </div>
+                        <div id="tab-nav" class="flex overflow-x-auto space-x-4 py-2"></div>
                     </div>
                     <!-- ช่องค้นหาสินค้า -->
                     <div class="relative ">
@@ -249,8 +220,7 @@
                             class="w-full px-4 py-2 bg-main text-main border rounded-xl shadow-sm ">
                     </div>
                     <!-- รายการสินค้า -->
-                    <div id="product-list" class="grid grid-cols-2 gap-4 py-4">
-                    </div>
+                    <div id="product-list" class="grid grid-cols-2 gap-4 py-4"></div>
                     <!-- ปุ่มโหลดเพิ่มเติม -->
                     <div id="load-more-container" class="text-center w-full m-4 hidden">
                         <button id="load-more" class="bg-main text-main2 px-4 py-2 rounded-xl">เพิ่มเติม</button>
@@ -274,27 +244,11 @@
 
                 <div id="cart-items" class="bg-main rounded-xl"></div>
 
+                <!-- ตรงนี้เหลือเฉพาะราคารวมสินค้า -->
                 <div class="pt-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <label for="shipping-options" class="text-sm">การจัดส่ง</br>
-                        </label>
-                        <select id="shipping-options" class="bg-main border border-gray-400 rounded-xl p-2">
-                            <!-- ตัวเลือกการจัดส่งจะถูกเติมโดย JavaScript -->
-                        </select>
-                    </div>
-
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-md font-semibold">ค่าจัดส่ง</span>
-                        <span id="shipping-cost" class="text-md text-gray-400">0.00 บาท</span>
-                    </div>
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-md font-semibold">ราคารวมสินค้า</span>
                         <span id="total-price" class="text-md text-gray-400">0.00 บาท</span>
-                    </div>
-
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-md font-semibold">ราคารวมทั้งหมด</span>
-                        <span id="grand-total" class="text-lg text-main2 font-semibold">0.00 บาท</span>
                     </div>
                 </div>
 
@@ -303,7 +257,7 @@
             </div>
         </div>
 
-        <!-- ฟังก์ชันการแสดงข้อมูลจัดส่ง -->
+        <!-- หน้าการจัดส่ง (ฟอร์มชื่อ อีเมล หมายเหตุ) -->
         <div id="shipping-info" class="max-w-md mx-auto pt-20 hidden">
             <div class="p-4">
                 <!-- ส่วนหัวของการจัดส่ง -->
@@ -328,13 +282,11 @@
                             <input type="email" id="contact" placeholder="Email"
                                 class="block w-full mb-2 p-2 border rounded-xl" required />
                         </div>
-                        <!-- เอา address ออกแล้ว -->
                         <div class="mb-4">
                             <label for="note" class="block text-main2">หมายเหตุ:</label>
                             <textarea id="note" placeholder="Note" class="block w-full mb-2 p-2 border rounded-xl"
                                 style="height: 100px;"></textarea>
                         </div>
-
                         <div class="mb-4">
                             <input type="checkbox" id="save-info" class="mr-2">
                             <label for="save-info"
@@ -374,14 +326,10 @@
 
     <!-- สคริปต์หลัก -->
     <script defer>
-        // ฟังก์ชันตั้งค่า
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzRF6plY3kobQzVM0UBS74wkFd04FJxs6e2dicNNZkc1oLftMM1-TbYMZPVoxASxNx7EQ/exec";
         const WEB_MEMBER_APP_URL = "https://script.google.com/macros/s/AKfycbz8ArUt6Hj1E06QoeLYMRImPRrvcvSUnWyk1nVj07ryWkWdjbGw6NDJXcZsqchAH3Pw/exec";
         const LIFF_ID = '2006699683-qJrjZWAM'; // เปลี่ยนเป็น LIFF ID ของคุณ
 
-        // ตัวแปรหลัก
-        let shippingOptions = [];
-        let selectedShipping = null;
         let cart = [];
         let currentOrder = null;
         let currentTab = 'All';
@@ -391,7 +339,7 @@
         let filteredProducts = [];
         let productsCache = [];
 
-        // การเข้าถึง DOM
+        // DOM
         const productList = document.getElementById('product-list');
         const tabNav = document.getElementById('tab-nav');
         const goToCartBtn = document.getElementById('go-to-cart');
@@ -400,40 +348,37 @@
         const backToProductsBtn = document.getElementById('back-to-products');
         const cartItems = document.getElementById('cart-items');
         const totalPriceEl = document.getElementById('total-price');
+        const loadMoreBtn = document.getElementById('load-more');
+        const loadMoreContainer = document.getElementById('load-more-container');
+
+        // ปุ่มไปหน้า Shipping
         const goToShippingBtn = document.getElementById('go-to-shipping');
         const shippingInfo = document.getElementById('shipping-info');
         const backToCartBtn = document.getElementById('back-to-cart');
         const shippingForm = document.getElementById('shipping-form');
+
+        // Order details modal
         const orderDetailsModal = document.getElementById('order-details-modal');
         const orderDetailsContent = document.getElementById('order-details-content');
         const confirmOrderBtn = document.getElementById('confirm-order');
         const closeModalBtn = document.getElementById('close-modal');
         const orderStatusEl = document.getElementById('order-status');
-        const loadMoreBtn = document.getElementById('load-more');
-        const loadMoreContainer = document.getElementById('load-more-container');
 
-        // ฟังก์ชันเริ่มต้นเมื่อ DOM โหลดเสร็จ
         document.addEventListener('DOMContentLoaded', initializeApp);
 
         async function initializeApp() {
             showLoading(true);
-
-            await initializeLiff(); // เรียกใช้งาน LIFF และดึงข้อมูลผู้ใช้
+            await initializeLiff();
 
             try {
-                const [productsData, shippingData, bannersData] = await Promise.all([
+                const [productsData, bannersData] = await Promise.all([
                     fetchProducts(),
-                    fetchShippingOptions(),
                     fetchBanners()
                 ]);
 
-                // ดำเนินการต่อเมื่อข้อมูลทั้งหมดถูกดึงมาแล้ว
                 productsCache = productsData;
                 renderProducts(productsCache);
                 renderTabs(productsCache);
-
-                shippingOptions = shippingData;
-                populateShippingOptions();
 
                 renderBanners(bannersData);
             } catch (error) {
@@ -443,134 +388,77 @@
             }
         }
 
-        // ฟังก์ชันเริ่มต้นการใช้งาน LIFF
         async function initializeLiff() {
             try {
-                await liff.init({ liffId: `${LIFF_ID}` }); // ใช้ Liff ID ของคุณ
+                await liff.init({ liffId: LIFF_ID });
                 if (liff.isLoggedIn()) {
-                    getUserProfile(); // ดึงข้อมูลโปรไฟล์ผู้ใช้
+                    getUserProfile();
                 } else {
-                    liff.login(); // หากผู้ใช้ยังไม่ได้เข้าสู่ระบบให้เข้าสู่ระบบ
+                    liff.login();
                 }
             } catch (error) {
-                console.error('Error initializing LIFF:', error); // แสดงข้อผิดพลาดถ้า LIFF เริ่มต้นไม่สำเร็จ
+                console.error('Error initializing LIFF:', error);
             }
         }
 
-        // ฟังก์ชันสำหรับดึงข้อมูลโปรไฟล์ผู้ใช้
         async function getUserProfile() {
             try {
-                const profile = await liff.getProfile(); // ดึงข้อมูลโปรไฟล์ผู้ใช้
+                const profile = await liff.getProfile();
                 const userId = profile.userId;
-                document.getElementById('userlineid').value = userId; // เก็บค่า user ID
                 document.getElementById('displayName').value = profile.displayName;
-                document.getElementById('profileImage').src = profile.pictureUrl || 'https://via.placeholder.com/40?text=PROFILE';
+                document.getElementById('profileImage').src =
+                    profile.pictureUrl || 'https://via.placeholder.com/40?text=PROFILE';
 
-                // ดึงข้อมูลผู้ใช้เพิ่มเติมจาก WEB_MEMBER_APP_URL
                 await fetchData(userId);
             } catch (error) {
-                console.error('Error getting profile data:', error); // หากเกิดข้อผิดพลาดในการดึงข้อมูลโปรไฟล์
+                console.error('Error getting profile data:', error);
             }
         }
 
-        // ฟังก์ชันดึงข้อมูลจาก API
         async function fetchData(userId) {
             try {
                 const response = await fetch(WEB_MEMBER_APP_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'fetchData', userId: userId }) // ส่ง userId เพื่อดึงข้อมูล
+                    body: JSON.stringify({ action: 'fetchData', userId })
                 });
                 const data = await response.json();
-
-                // ตรวจสอบข้อมูลที่ดึงมา
-                console.log('Data fetched:', data);
-
-                if (data) { // หากมีข้อมูลให้แสดง
+                if (data) {
                     displayData(data);
-                } else {
-                    console.log('No data found for userId:', userId); // หากไม่พบข้อมูล
                 }
             } catch (error) {
-                console.error('Error fetching data:', error); // แสดงข้อผิดพลาดหากการดึงข้อมูลล้มเหลว
+                console.error('Error fetching data:', error);
             }
         }
 
-        // ฟังก์ชันแสดงข้อมูลผู้ใช้
         function displayData(row) {
-            console.log('Displaying data:', row);
-
-            document.getElementById('username').value = row.Name || ''; // ชื่อผู้ใช้
-            // document.getElementById('address').value = row.Address || '';  // ที่อยู่ ถูกเอาออกแล้ว
-            document.getElementById('contact').value = row.Contact || '';  // อีเมล
             document.getElementById('userPoints').innerHTML = `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#000000" fill="none">
                     <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="currentColor" stroke-width="1.5" />
                     <path d="M12.8638 7.72209L13.7437 9.49644C13.8637 9.74344 14.1837 9.98035 14.4536 10.0257L16.0485 10.2929C17.0684 10.4643 17.3083 11.2103 16.5734 11.9462L15.3335 13.1964C15.1236 13.4081 15.0086 13.8164 15.0736 14.1087L15.4285 15.6562C15.7085 16.8812 15.0636 17.355 13.9887 16.7148L12.4939 15.8226C12.2239 15.6613 11.7789 15.6613 11.504 15.8226L10.0091 16.7148C8.93925 17.355 8.28932 16.8761 8.56929 15.6562L8.92425 14.1087C8.98925 13.8164 8.87426 13.4081 8.66428 13.1964L7.42442 11.9462C6.6945 11.2103 6.92947 10.4643 7.94936 10.2929L9.54419 10.0257C9.80916 9.98035 10.1291 9.74344 10.2491 9.49644L11.129 7.72209C11.609 6.7593 12.3889 6.7593 12.8638 7.72209Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg> ${row.Points || 0}`;
-
+                </svg> ${row.Points || 0}
+            `;
         }
 
-        // ฟังก์ชันแสดงหน้าจอโหลดข้อมูล
         function showLoading(isLoading) {
             const loadingScreen = document.getElementById('loading-screen');
             const mainShop = document.querySelector('.main-shop');
-
             if (isLoading) {
                 loadingScreen.style.display = 'flex';
-                mainShop.style.display = 'none'; // ซ่อน main-shop ระหว่างโหลด
+                mainShop.style.display = 'none';
             } else {
                 loadingScreen.style.display = 'none';
-                mainShop.style.display = 'block'; // แสดง main-shop หลังจากโหลดเสร็จ
+                mainShop.style.display = 'block';
             }
         }
 
-
-        // ฟังก์ชันดึงข้อมูลการจัดส่ง
-        async function fetchShippingOptions() {
-            try {
-                const response = await fetch(`${WEB_APP_URL}?type=shipping`);
-                const shippingData = await response.json();
-
-                if (shippingData.error) {
-                    console.error('Error fetching shipping options:', shippingData.error);
-                    return [];
-                }
-
-                return shippingData;
-            } catch (error) {
-                console.error('Error fetching shipping options:', error);
-                return [];
-            }
-        }
-
-        // ฟังก์ชันเติมตัวเลือกการจัดส่งลงใน dropdown
-        function populateShippingOptions() {
-            const shippingDropdown = document.getElementById('shipping-options');
-            shippingDropdown.innerHTML = ''; // ล้างตัวเลือกเดิม
-
-            shippingOptions.forEach(function (option) {
-                const opt = document.createElement('option');
-                opt.value = option.id;
-                opt.textContent = `${option.name} (${option.Price} บาท)`;
-                shippingDropdown.appendChild(opt);
-            });
-
-            // ตั้งค่าการจัดส่งเริ่มต้น
-            selectedShipping = shippingOptions[0];
-            updateTotalPrice();
-        }
-
-        // ฟังก์ชันดึงข้อมูลแบนเนอร์
         async function fetchBanners() {
             try {
                 const response = await fetch(`${WEB_APP_URL}?type=banners`);
                 const banners = await response.json();
-
                 if (banners.error) {
                     console.error('Error fetching banners:', banners.error);
                     return [];
                 }
-
                 return banners;
             } catch (error) {
                 console.error('Error fetching banners:', error);
@@ -578,10 +466,8 @@
             }
         }
 
-        // ฟังก์ชันแสดงแบนเนอร์ใน Swiper.js
         function renderBanners(banners) {
             const swiperWrapper = document.querySelector('#banner-slider .swiper-wrapper');
-
             if (banners.length === 0) {
                 const noBanner = document.createElement('div');
                 noBanner.classList.add('swiper-slide');
@@ -589,22 +475,20 @@
                 swiperWrapper.appendChild(noBanner);
                 return;
             }
-
-           banners.forEach(function (banner) {
+            banners.forEach(function (banner) {
                 const slide = document.createElement('div');
                 slide.classList.add('swiper-slide');
 
-                // สร้างลิงก์ถ้ามี
                 if (banner.link_url) {
                     const link = document.createElement('div');
                     link.classList.add('pt-4');
-                    link.target = '_blank'; // เปิดในแท็บใหม่
+                    link.target = '_blank';
 
                     const img = document.createElement('img');
                     img.src = banner.image_url;
                     img.alt = banner.alt_text || 'Banner';
-                    img.loading = 'lazy'; // เพิ่ม Lazy Loading
-                    img.classList.add('w-full', 'h-auto','object-cover', 'rounded-xl');
+                    img.loading = 'lazy';
+                    img.classList.add('w-full', 'h-auto', 'object-cover', 'rounded-xl');
 
                     link.appendChild(img);
                     slide.appendChild(link);
@@ -612,19 +496,15 @@
                     const img = document.createElement('img');
                     img.src = banner.image_url;
                     img.alt = banner.alt_text || 'Banner';
-                    img.loading = 'lazy'; // เพิ่ม Lazy Loading
-                    img.classList.add('w-full', 'h-auto','object-cover', 'rounded-xl');
+                    img.loading = 'lazy';
+                    img.classList.add('w-full', 'h-auto', 'object-cover', 'rounded-xl');
                     slide.appendChild(img);
                 }
-
                 swiperWrapper.appendChild(slide);
             });
-
-
-            initializeSwiper(); // เรียกใช้งาน Swiper หลังจากแบนเนอร์ถูกเพิ่ม
+            initializeSwiper();
         }
 
-        // ฟังก์ชันเริ่มต้น Swiper.js
         function initializeSwiper() {
             new Swiper('#banner-slider', {
                 loop: true,
@@ -643,17 +523,14 @@
             });
         }
 
-        // ฟังก์ชันดึงข้อมูลสินค้า
         async function fetchProducts() {
             try {
                 const response = await fetch(WEB_APP_URL);
                 const products = await response.json();
-
                 if (!products || products.length === 0) {
                     console.error("No products data received.");
                     return [];
                 }
-
                 return products;
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -661,16 +538,10 @@
             }
         }
 
-        // ฟังก์ชันแสดงแท็บหมวดหมู่สินค้า
         function renderTabs(products) {
             tabNav.innerHTML = '';
-            let categories = [...new Set(products.map(function (product) {
-                return product.category || 'Uncategorized';
-            }))];
-
-            categories = ['All'].concat(categories.filter(function (category) {
-                return category !== 'All';
-            }));
+            let categories = [...new Set(products.map(product => product.category || 'Uncategorized'))];
+            categories = ['All'].concat(categories.filter(category => category !== 'All'));
 
             const tabContainer = document.createElement('div');
             tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto', 'pb-2');
@@ -685,10 +556,11 @@
                 } else {
                     tabButton.classList.add('bg-main', 'text-main2');
                 }
+
                 const categoryImage = document.createElement('img');
                 categoryImage.src = getCategoryImage(category, products);
                 categoryImage.alt = category;
-                categoryImage.loading = 'lazy'; // เพิ่ม Lazy Loading
+                categoryImage.loading = 'lazy';
                 categoryImage.classList.add('w-12', 'h-12', 'rounded-lg');
 
                 const categoryLabel = document.createElement('span');
@@ -707,18 +579,14 @@
             tabNav.appendChild(tabContainer);
         }
 
-        // ฟังก์ชันดึงรูปหมวดหมู่สินค้า
         function getCategoryImage(category, products) {
             if (category === 'All') {
                 return 'https://via.placeholder.com/40?text=All';
             }
-            const product = products.find(function (p) {
-                return p.category === category;
-            });
+            const product = products.find(p => p.category === category);
             return product ? product['Img-product'] : 'https://via.placeholder.com/40?text=Other';
         }
 
-        // ฟังก์ชันเปลี่ยนหมวดหมู่สินค้า
         function switchTab(category) {
             currentTab = category;
             currentPage = 0;
@@ -729,9 +597,7 @@
             renderTabs(productsCache);
         }
 
-        // ฟังก์ชันสำหรับค้นหาสินค้า
         document.getElementById('search-input').addEventListener('input', debounce(searchProducts, 300));
-
         function debounce(func, wait) {
             let timeout;
             return function () {
@@ -749,9 +615,9 @@
             const query = document.getElementById('search-input').value.toLowerCase();
             if (query) {
                 isSearching = true;
-                filteredProducts = productsCache.filter(function (product) {
-                    return product.name.toLowerCase().includes(query);
-                });
+                filteredProducts = productsCache.filter(product =>
+                    product.name.toLowerCase().includes(query)
+                );
             } else {
                 isSearching = false;
                 filteredProducts = [];
@@ -759,37 +625,26 @@
             renderProducts(productsCache);
         }
 
-        // ฟังก์ชันแสดงสินค้าตามหมวดหมู่
-        function renderProducts(products, append) {
-            if (append === undefined) {
-                append = false;
-            }
-
+        function renderProducts(products, append = false) {
             if (!append) {
                 productList.innerHTML = '';
             }
-
             let filtered = [];
             if (isSearching) {
                 filtered = filteredProducts;
             } else {
-                filtered = currentTab === 'All' ? products : products.filter(function (product) {
-                    return product.category === currentTab;
-                });
+                filtered = currentTab === 'All' ? products : products.filter(product => product.category === currentTab);
             }
 
             const startIndex = currentPage * productsPerPage;
             const endIndex = (currentPage + 1) * productsPerPage;
-
             const productsToDisplay = filtered.slice(startIndex, endIndex);
 
             const fragment = document.createDocumentFragment();
-
             productsToDisplay.forEach(function (product) {
                 const productElement = createProductElement(product);
                 fragment.appendChild(productElement);
             });
-
             productList.appendChild(fragment);
 
             if (filtered.length > endIndex) {
@@ -814,7 +669,7 @@
             productImg.setAttribute('data-id', product.id);
             imgContainer.appendChild(productImg);
 
-            // ปุ่มแชร์ตัวอย่าง (จากโค้ดก่อนหน้า)
+            // ปุ่มแชร์
             const shareBtn = document.createElement('button');
             shareBtn.classList.add('bg-main', 'text-main2', 'text-xs', 'p-2', 'rounded-xl', 'focus:outline-none', 'focus:ring-2', 'absolute', 'top-2', 'right-2');
             shareBtn.textContent = 'แชร์';
@@ -836,6 +691,7 @@
             const actionContainer = document.createElement('div');
             actionContainer.classList.add('flex', 'justify-between', 'items-center');
 
+            // ขนาดสินค้า (ถ้าใช้รูปแบบเดียวกัน เช่น "online")
             const sizeSelect = document.createElement('select');
             sizeSelect.classList.add('bg-main', 'text-main2', 'rounded-xl', 'p-2', 'product-size', 'hidden');
             sizeSelect.setAttribute('data-id', product.id);
@@ -857,21 +713,17 @@
 
             actionContainer.appendChild(sizeSelect);
 
-            // ตรวจสอบว่ามีส่วนลดหรือไม่
             let finalPrice = product.Price;
             let priceDisplay = document.createElement('span');
             priceDisplay.classList.add('font-semibold');
 
             if (product.Discount && product.Discount > 0 && product.Discount < product.Price) {
-                // มีส่วนลด
                 finalPrice = product.Discount;
 
-                // แสดงราคาก่อนลดเป็นข้อความขีดทับ
                 const originalPriceText = document.createElement('div');
                 originalPriceText.classList.add('text-gray-500', 'text-xs', 'mr-2', 'line-through');
                 originalPriceText.textContent = `${product.Price} บาท`;
 
-                // แสดงราคาลดแล้วเป็นตัวหนา, สีเขียว
                 const discountedPriceText = document.createElement('div');
                 discountedPriceText.classList.add('text-[#4bc56b]', 'font-semibold', 'text-md');
                 discountedPriceText.textContent = `${finalPrice} บาท`;
@@ -883,7 +735,6 @@
 
                 actionContainer.appendChild(priceContainer);
             } else {
-                // ไม่มีส่วนลด
                 priceDisplay.classList.add('text-[#4bc56b]');
                 priceDisplay.textContent = `${finalPrice} บาท`;
                 actionContainer.appendChild(priceDisplay);
@@ -894,6 +745,7 @@
             addToCartBtn.style.width = '35%';
             addToCartBtn.textContent = 'ซื้อ';
             addToCartBtn.setAttribute('data-id', product.id);
+
             actionContainer.appendChild(addToCartBtn);
 
             productInfoContainer.appendChild(actionContainer);
@@ -903,7 +755,6 @@
         }
 
         async function shareProduct(product) {
-            // แสดง popup ยืนยันก่อนแชร์
             const result = await Swal.fire({
                 title: 'ยืนยันการแชร์สินค้า',
                 text: 'คุณต้องการแชร์สินค้านี้หรือไม่?',
@@ -913,23 +764,18 @@
                 cancelButtonText: 'ยกเลิก'
             });
 
-            if (!result.isConfirmed) {
-                return;
-            }
+            if (!result.isConfirmed) return;
 
             if (!liff.isLoggedIn()) {
                 await liff.login();
             }
 
-            // ตรวจสอบส่วนลด
             let priceText;
             if (product.Discount && product.Discount > 0 && product.Discount < product.Price) {
-                // มีส่วนลด
                 priceText =
                     `ราคาปกติ: ${product.Price} บาท\n` +
                     `ราคาลด: ${product.Discount} บาท`;
             } else {
-                // ไม่มีส่วนลด
                 priceText = `${product.Price} บาท`;
             }
 
@@ -988,7 +834,6 @@
             } else {
                 try {
                     await liff.sendMessages([message]);
-                    console.log('Message sent successfully');
                     liff.closeWindow();
                 } catch (error) {
                     console.error('Error sending message:', error);
@@ -996,18 +841,13 @@
             }
         }
 
-        // ฟังก์ชันเพิ่มสินค้าในตะกร้า
         document.addEventListener('click', function (event) {
             if (event.target.classList.contains('add-to-cart')) {
                 addToCart(event);
             }
-
             if (event.target.classList.contains('product-img')) {
                 const productId = event.target.dataset.id;
-                const product = productsCache.find(function (p) {
-                    return p.id === productId;
-                });
-
+                const product = productsCache.find(p => p.id === productId);
                 if (product) {
                     showProductDetails(product);
                 }
@@ -1016,9 +856,7 @@
 
         function addToCart(event) {
             const productId = event.target.dataset.id;
-            const product = productsCache.find(function (p) {
-                return p.id === productId;
-            });
+            const product = productsCache.find(p => p.id === productId);
 
             if (!product) {
                 console.error('Product with ID ' + productId + ' not found.');
@@ -1036,25 +874,20 @@
                 sizeElement.style.border = "1px solid red";
                 return;
             }
-
             sizeElement.style.border = "";
 
             const quantity = 1;
-
             if (product[size] < quantity) {
                 alert('สินค้าในขนาดนี้หมดแล้ว');
                 return;
             }
-
             product[size] -= quantity;
 
-            const productInCart = cart.find(function (item) {
-                return item.id === productId && item.size === size;
-            });
+            const productInCart = cart.find(item => item.id === productId && item.size === size);
             if (productInCart) {
                 productInCart.quantity += quantity;
             } else {
-                cart.push(Object.assign({}, product, { size: size, quantity: quantity }));
+                cart.push({ ...product, size, quantity });
             }
 
             updateCartCount();
@@ -1062,77 +895,65 @@
             goToCartBtn.classList.remove('go-to-cart');
             void goToCartBtn.offsetWidth;
             goToCartBtn.classList.add('go-to-cart');
-
             setTimeout(function () {
                 goToCartBtn.classList.remove('go-to-cart');
             }, 500);
         }
 
-        // ฟังก์ชันอัปเดตจำนวนสินค้าในตะกร้า
         function updateCartCount() {
-            const cartCount = cart.reduce(function (total, item) {
-                return total + item.quantity;
-            }, 0);
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
             goToCartBtn.innerHTML = `
-                <!-- ไอคอนตะกร้าสินค้า -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#FFFFFF" fill="none">
                     <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7205 10.6235 21.621 10.747 21.4816 10.8132C20.9033 11.0876 20.4982 11.6081 20.3919 12.2134L19.7993 15.5878C19.5386 17.0725 19.4495 19.1943 18.1484 20.2402C17.1938 21 15.8184 21 13.0675 21H10.9325C8.18162 21 6.8062 21 5.8516 20.2402C4.55052 19.1942 4.46138 17.0725 4.20066 15.5878L3.60807 12.2134C3.50177 11.6081 3.09673 11.0876 2.51841 10.8132C2.37896 10.747 2.27952 10.6235 2.24894 10.4784C2.07874 9.67075 1.6264 8.5469 2.63812 8.10084C2.86684 8 3.17922 8 3.80397 8H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                     <path d="M14 12L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     <path d="M6.5 11L10 3M15 3L17.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                </svg> ${cartCount}`;
+                </svg> ${cartCount}
+            `;
         }
 
-        // ฟังก์ชันแสดงตะกร้าสินค้า
         function showCart() {
             productSelection.classList.add('hidden');
             cartView.classList.remove('hidden');
             renderCart();
-            updateTotalPrice();
         }
 
-        // ฟังก์ชันการแสดงตะกร้าสินค้า
         function renderCart() {
             cartItems.innerHTML = '';
             const fragment = document.createDocumentFragment();
-
-            cart.forEach(function (item, index) {
+            cart.forEach((item, index) => {
                 const cartItemEl = document.createElement('div');
                 cartItemEl.classList.add('flex', 'items-center', 'justify-between', 'border-b', 'p-2');
 
-                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+                    ? item.Discount
+                    : item.Price;
 
                 cartItemEl.innerHTML = `
-            <img src="${item['Img-product']}" alt="${item.name}" class="w-20 h-20 rounded-xl mr-4">
-            <div class="flex-1">
-                <h3 class="text-md font-semibold">${item.name}</h3>
-                ${(item.Discount && item.Discount > 0 && item.Discount < item.Price)
-                        ? `<p class="text-gray-600 text-sm line-through">${item.Price} บาท</p>
-                           <p class="text-[#4bc56b] text-md font-semibold">${itemPrice.toFixed(2)} บาท</p>`
-                        : `<p class="text-gray-600 item-price" data-price="${itemPrice}">${itemPrice.toFixed(2)} บาท</p>`
-                    }
-            </div>
-            <div class="flex flex-col items-center">
-                <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
-                <span class="w-8 text-center item-quantity">${item.quantity}</span>
-                <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
-            </div>
-        `;
-
+                    <img src="${item['Img-product']}" alt="${item.name}" class="w-20 h-20 rounded-xl mr-4">
+                    <div class="flex-1">
+                        <h3 class="text-md font-semibold">${item.name}</h3>
+                        ${
+                            (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+                            ? `<p class="text-gray-600 text-sm line-through">${item.Price} บาท</p>
+                               <p class="text-[#4bc56b] text-md font-semibold">${itemPrice.toFixed(2)} บาท</p>`
+                            : `<p class="text-gray-600 item-price" data-price="${itemPrice}">${itemPrice.toFixed(2)} บาท</p>`
+                        }
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
+                        <span class="w-8 text-center item-quantity">${item.quantity}</span>
+                        <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
+                    </div>
+                `;
                 fragment.appendChild(cartItemEl);
             });
-
             cartItems.appendChild(fragment);
             updateTotalPrice();
         }
 
-
-        // ฟังก์ชันเพิ่มจำนวนสินค้าในตะกร้า
         function increment(index) {
             const item = cart[index];
-            const product = productsCache.find(function (p) {
-                return p.id === item.id;
-            });
-
+            const product = productsCache.find(p => p.id === item.id);
             if (product[item.size] > item.quantity) {
                 cart[index].quantity += 1;
                 renderCart();
@@ -1140,7 +961,6 @@
             }
         }
 
-        // ฟังก์ชันลดจำนวนสินค้าในตะกร้า
         function decrement(index) {
             if (cart[index].quantity > 1) {
                 cart[index].quantity -= 1;
@@ -1151,35 +971,18 @@
             updateCartCount();
         }
 
-        // ฟังก์ชันอัปเดตราคารวม
+        // ไม่มีการคำนวณค่าจัดส่งแล้ว
         function updateTotalPrice() {
-            const productTotal = cart.reduce(function (total, item) {
-                // เลือกราคา (ถ้ามีส่วนลดให้ใช้ราคาหลังลด)
-                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
-
-                // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
-                if (!shippingOptions.some(option => option.id === item.id)) {
-                    return total + (itemPrice * item.quantity);
-                }
-                return total;
+            const productTotal = cart.reduce((total, item) => {
+                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+                    ? item.Discount
+                    : item.Price;
+                return total + (itemPrice * item.quantity);
             }, 0);
 
-            const shippingDropdown = document.getElementById('shipping-options');
-            selectedShipping = shippingOptions.find(function (option) {
-                return option.id === shippingDropdown.value;
-            });
+            totalPriceEl.textContent = productTotal.toFixed(2) + ' บาท';
 
-            let shippingCost = parseFloat(selectedShipping.Price) || 0;
-            if (selectedShipping.freeThreshold && productTotal >= selectedShipping.freeThreshold) {
-                shippingCost = 0;
-            }
-
-            const grandTotal = productTotal + shippingCost;
-
-            document.getElementById('total-price').textContent = productTotal.toFixed(2) + ' บาท';
-            document.getElementById('shipping-cost').textContent = shippingCost.toFixed(2) + ' บาท';
-            document.getElementById('grand-total').textContent = grandTotal.toFixed(2) + ' บาท';
-
+            // ถ้ามีสินค้าในตะกร้า ให้แสดงปุ่ม "ถัดไป" ไปหน้าจัดส่ง
             if (productTotal > 0) {
                 goToShippingBtn.classList.remove('hidden');
             } else {
@@ -1187,113 +990,67 @@
             }
         }
 
-
-        // เพิ่ม event listener ให้ dropdown
-        document.getElementById('shipping-options').addEventListener('change', function () {
-            updateTotalPrice();
-        });
-
-        // ฟังก์ชันเพื่อลบค่าจัดส่งเดิมออกจากตะกร้า
-        function resetShippingCost() {
-            cart = cart.filter(function (item) {
-                return !shippingOptions.some(function (option) {
-                    return option.id === item.id;
-                });
-            });
-        }
-
-        // เมื่อย้อนกลับไปยังหน้าร้านค้า ให้รีเซ็ตค่าจัดส่ง
+        // การไปหน้าจัดส่ง
+        goToCartBtn.addEventListener('click', showCart);
         backToProductsBtn.addEventListener('click', function () {
-            resetShippingCost();
-            selectedShipping = shippingOptions[0];
-            document.getElementById('shipping-options').value = selectedShipping.id;
             cartView.classList.add('hidden');
             productSelection.classList.remove('hidden');
         });
-
-        // ฟังก์ชันแสดงข้อมูลจัดส่ง
-        function showShippingInfo() {
+        goToShippingBtn.addEventListener('click', function () {
             cartView.classList.add('hidden');
             shippingInfo.classList.remove('hidden');
-        }
-
-        // ฟังก์ชันย้อนกลับไปหน้าตะกร้า
-        backToCartBtn.addEventListener('click', backToCart);
-
-        function backToCart() {
+        });
+        backToCartBtn.addEventListener('click', function () {
             shippingInfo.classList.add('hidden');
             cartView.classList.remove('hidden');
-        }
+        });
 
-        // ฟังก์ชันจัดการเมื่อส่งฟอร์มการจัดส่ง
+        // เมื่อกดยืนยันฟอร์มการจัดส่ง
         shippingForm.addEventListener('submit', handleShippingFormSubmit);
 
         function handleShippingFormSubmit(event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
-            // const address = document.getElementById('address').value; // เอาออกแล้ว
             const contact = document.getElementById('contact').value;
             const note = document.getElementById('note').value;
             const userlineid = document.getElementById('userlineid').value;
             const saveInfo = document.getElementById('save-info').checked;
 
-            // ไม่ต้องเรียกใช้ addShippingCost() ที่นี่
-
-            const productTotal = cart.reduce(function (total, item) {
-                // เลือกใช้ราคา Discount ถ้ามีส่วนลด
-                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
-
-                // ไม่รวมค่าจัดส่งในคำนวณราคารวมสินค้า
-                if (!shippingOptions.some(option => option.id === item.id)) {
-                    return total + (itemPrice * item.quantity);
-                }
-                return total;
+            // ราคารวมเฉพาะสินค้า (ไม่มีค่าจัดส่ง)
+            const productTotal = cart.reduce((total, item) => {
+                const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+                    ? item.Discount
+                    : item.Price;
+                return total + (itemPrice * item.quantity);
             }, 0);
 
-
-            let shippingCost = parseFloat(selectedShipping.Price) || 0;
-            if (selectedShipping.freeThreshold && productTotal >= selectedShipping.freeThreshold) {
-                shippingCost = 0;
-            }
-
-            const grandTotal = productTotal + shippingCost;
-
-            const finalItems = cart
-                .filter(item => !shippingOptions.some(option => option.id === item.id))
-                .map(item => {
-                    // คำนวณราคาสุดท้ายของสินค้านั้น ๆ
-                    const finalPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
-                        ? item.Discount
-                        : item.Price;
-
-                    return {
-                        ...item,
-                        finalPrice: finalPrice  // เพิ่มฟิลด์ finalPrice เข้าไปในข้อมูลสินค้า
-                    };
-                });
+            // finalItems
+            const finalItems = cart.map(item => {
+                const finalPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+                    ? item.Discount
+                    : item.Price;
+                return {
+                    ...item,
+                    finalPrice: finalPrice
+                };
+            });
 
             const order = {
-                username: username,
-                // address: address, // เอาออกแล้ว
-                contact: contact,
-                note: note,
-                userlineid: userlineid,
+                username,
+                contact,
+                note,
+                userlineid,
+                saveInfo,
                 items: finalItems,
-                shippingType: selectedShipping.name,
-                shippingCost: shippingCost,
-                total: grandTotal,
-                saveInfo: saveInfo
+                total: productTotal
             };
-
-
             currentOrder = order;
             orderDetailsContent.innerHTML = renderOrderDetails(order);
             orderDetailsModal.classList.remove('hidden');
         }
 
-        // ฟังก์ชันแสดงรายละเอียดคำสั่งซื้อ
         function renderOrderDetails(order) {
-            const itemsHtml = order.items.map(function (item) {
+            const itemsHtml = order.items.map(item => {
                 const hasDiscount = (item.Discount && item.Discount > 0 && item.Discount < item.Price);
                 const itemPrice = hasDiscount ? item.Discount : item.Price;
 
@@ -1301,11 +1058,12 @@
                     <div class="flex justify-between items-center my-2">
                         <div>
                             <p class="text-sm font-medium">${item.name} (${item.size})</p>
-                            ${hasDiscount
-                        ? `<p class="text-xs text-gray-500 line-through">ราคาเต็ม: ${item.Price} บาท</p>
-                                <p class="text-xs text-[#4bc56b] font-semibold">ราคาลด: ${itemPrice} บาท</p>`
-                        : `<p class="text-xs text-gray-500">ราคา: ${itemPrice} บาท</p>`
-                    }
+                            ${
+                                hasDiscount
+                                ? `<p class="text-xs text-gray-500 line-through">ราคาเต็ม: ${item.Price} บาท</p>
+                                   <p class="text-xs text-[#4bc56b] font-semibold">ราคาลด: ${itemPrice} บาท</p>`
+                                : `<p class="text-xs text-gray-500">ราคา: ${itemPrice} บาท</p>`
+                            }
                             <p class="text-xs text-gray-500">จำนวน: ${item.quantity}</p>
                         </div>
                         <p class="text-sm">${(itemPrice * item.quantity).toFixed(2)} บาท</p>
@@ -1313,32 +1071,13 @@
                 `;
             }).join('');
 
-
-            // แสดงค่าจัดส่งในรายละเอียดคำสั่งซื้อ
-            const shippingHtml = order.shippingCost > 0 ? `
-                <div class="flex justify-between items-center my-2">
-                    <div>
-                        <p class="text-sm font-medium">ค่าจัดส่ง (${order.shippingType})</p>
-                    </div>
-                    <p class="text-sm">${order.shippingCost.toFixed(2)} บาท</p>
-                </div>
-            ` : `
-                <div class="flex justify-between items-center my-2">
-                    <div>
-                        <p class="text-sm font-medium">ค่าจัดส่ง (${order.shippingType})</p>
-                    </div>
-                    <p class="text-sm">ฟรี</p>
-                </div>
-            `;
-
             return `
                 <div>
                     <p class="text-md font-semibold mb-2">ชื่อ: ${order.username}</p>
-                    <!-- <p class="text-md font-semibold mb-2">ที่อยู่จัดส่ง: ${order.address}</p> --> <!-- เอาออกแล้ว -->
                     <p class="text-md font-semibold mb-2">อีเมล: ${order.contact}</p>
+                    <p class="text-md mb-2">หมายเหตุ: ${order.note || '-'}</p>
                     <div class="border-t mt-4 pt-4">
                         ${itemsHtml}
-                        ${shippingHtml}
                     </div>
                     <div class="border-t mt-4 pt-4">
                         <p class="text-lg font-semibold">ราคารวมทั้งหมด: ${order.total.toFixed(2)} บาท</p>
@@ -1347,17 +1086,7 @@
             `;
         }
 
-        // กำหนดการทำงานให้ปุ่มต่างๆ
-        goToCartBtn.addEventListener('click', showCart);
-        backToProductsBtn.addEventListener('click', function () {
-            cartView.classList.add('hidden');
-            productSelection.classList.remove('hidden');
-        });
-        goToShippingBtn.addEventListener('click', showShippingInfo);
-        backToCartBtn.addEventListener('click', backToCart);
-        shippingForm.addEventListener('submit', handleShippingFormSubmit);
         confirmOrderBtn.addEventListener('click', async function () {
-            // ปิดใช้งานปุ่มก่อนเริ่มกระบวนการบันทึก
             confirmOrderBtn.disabled = true;
             confirmOrderBtn.textContent = 'กำลังบันทึก...';
 
@@ -1371,90 +1100,82 @@
             orderDetailsModal.classList.add('hidden');
             shippingForm.reset();
 
-            liff.closeWindow(); // ปิด LIFF หลังจากเสร็จสิ้น
+            liff.closeWindow(); // ถ้าไม่ต้องการปิด LIFF สามารถคอมเมนต์บรรทัดนี้ได้
         });
+
         closeModalBtn.addEventListener('click', function () {
             orderDetailsModal.classList.add('hidden');
         });
 
-        // ฟังก์ชันบันทึกคำสั่งซื้อ
         async function saveOrder(order) {
             orderStatusEl.classList.remove('hidden');
             orderStatusEl.textContent = 'กำลังบันทึกคำสั่งซื้อของคุณ...🛒';
 
             try {
-                const newOrder = Object.assign({}, order);
-
+                // ไม่มีการบันทึกค่าจัดส่งแล้ว
+                const newOrder = { ...order };
                 const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
                     body: JSON.stringify(newOrder)
                 });
                 const result = await response.text();
                 orderStatusEl.textContent = result;
-                console.log(result);
             } catch (error) {
                 console.error('Error saving order:', error);
                 orderStatusEl.textContent = 'เกิดข้อผิดพลาดในการบันทึกคำสั่งซื้อ';
             }
         }
 
-        // ฟังก์ชันส่งข้อความแจ้งเตือนทาง LINE
         async function sendTextMessage() {
             try {
                 if (!liff.isLoggedIn()) {
                     liff.login();
                     return;
                 }
-
                 await liff.sendMessages([
-                    {
-                        'type': 'text',
-                        'text': 'รายการสั่งซื้อสำเร็จ'
-                    }
+                    { type: 'text', text: 'รายการสั่งซื้อสำเร็จ' }
                 ]);
-                console.log('Message sent successfully');
             } catch (error) {
                 console.error('Error sending message:', error);
             }
         }
 
-        // ฟังก์ชันสำหรับแสดงรายละเอียดสินค้าและรูปภาพเพิ่มเติมใน SweetAlert
         function showProductDetails(product) {
-            // ตรวจสอบว่ามี product.detail หรือไม่ หากไม่มีให้กำหนดเป็นข้อความเริ่มต้น
-            const formattedDetail = product.detail ? product.detail.replace(/\n/g, '<br>') : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม';
+            const formattedDetail = product.detail
+                ? product.detail.replace(/\n/g, '<br>')
+                : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม';
 
-            // สร้างอาร์เรย์ของรูปภาพ โดยตรวจสอบว่ามีรูปภาพเพิ่มเติมหรือไม่
             const images = [product['Img-product']];
             if (product['more-pic1']) images.push(product['more-pic1']);
             if (product['more-pic2']) images.push(product['more-pic2']);
             if (product['more-pic3']) images.push(product['more-pic3']);
 
-            // สร้าง HTML สำหรับ Swiper โดยใช้รูปภาพที่มีอยู่
             const imageSlides = `
                 <div id="product-carousel" class="swiper-container" style="position: relative;">
                     <div class="swiper-wrapper">
-                        ${images.map(image => `
+                        ${images
+                            .map(
+                                image => `
                             <div class="swiper-slide">
                                 <img src="${image}" alt="${product.name}" class="swiper-image" loading="lazy" style="width: 100%; height: 200px; object-fit: cover; border-radius:20px;">
                             </div>
-                        `).join('')}
+                        `
+                            )
+                            .join('')}
                     </div>
                     <div class="swiper-pagination"></div>
-                    <!-- ปุ่มควบคุม -->
                     <button class="swiper-button-prev-custom">⟨</button>
                     <button class="swiper-button-next-custom">⟩</button>
                 </div>
                 <p class="text-left text-sm p-4 mt-4">${formattedDetail}</p>
             `;
-
-            // แสดง SweetAlert พร้อมกับ Swiper และรายละเอียดสินค้า
             Swal.fire({
                 title: product.name,
                 html: imageSlides,
                 showCloseButton: true,
                 focusConfirm: false,
                 didOpen: function () {
-                    const swiper = new Swiper('#product-carousel', {
+                    new Swiper('#product-carousel', {
                         loop: true,
                         slidesPerView: 1,
                         spaceBetween: 10,
@@ -1477,7 +1198,6 @@
             });
         }
 
-        // ฟังก์ชันโหลดเพิ่มเติม
         loadMoreBtn.addEventListener('click', function () {
             currentPage += 1;
             renderProducts(productsCache, true);
