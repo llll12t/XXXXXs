@@ -274,23 +274,19 @@
                     <div id="form-container">
                         <div class="mb-4">
                             <label for="username" class="block text-main2">ชื่อ:</label>
-                            <input type="text" id="username" placeholder="Name"
-                                class="block w-full mb-2 p-2 border rounded-xl" required />
+                            <input type="text" id="username" placeholder="Name" class="block w-full mb-2 p-2 border rounded-xl" required />
                         </div>
                         <div class="mb-4">
                             <label for="contact" class="block text-main2">อีเมล:</label>
-                            <input type="email" id="contact" placeholder="Email"
-                                class="block w-full mb-2 p-2 border rounded-xl" required />
+                            <input type="email" id="contact" placeholder="Email" class="block w-full mb-2 p-2 border rounded-xl" required />
                         </div>
                         <div class="mb-4">
                             <label for="note" class="block text-main2">หมายเหตุ:</label>
-                            <textarea id="note" placeholder="Note" class="block w-full mb-2 p-2 border rounded-xl"
-                                style="height: 100px;"></textarea>
+                            <textarea id="note" placeholder="Note" class="block w-full mb-2 p-2 border rounded-xl" style="height: 100px;"></textarea>
                         </div>
                         <div class="mb-4">
                             <input type="checkbox" id="save-info" class="mr-2">
-                            <label for="save-info"
-                                class="text-main2">บันทึกชื่อและอีเมลสำหรับการใช้งานครั้งถัดไป</label>
+                            <label for="save-info" class="text-main2">บันทึกชื่อและอีเมลสำหรับการใช้งานครั้งถัดไป</label>
                         </div>
                         <input type="hidden" id="userlineid" name="userlineid">
                     </div>
@@ -433,7 +429,7 @@
 
         function displayData(row) {
             document.getElementById('username').value = row.Name || ''; // ชื่อผู้ใช้
-            document.getElementById('address').value = row.Address || '';  // ที่อยู่
+            document.getElementById('contact').value = row.Contact || '';  // ที่อยู่
             document.getElementById('userPoints').innerHTML = `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#000000" fill="none">
                     <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="currentColor" stroke-width="1.5" />
