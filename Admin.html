@@ -161,18 +161,9 @@
 
     // ฟังก์ชันฟอร์แมตราคา ถ้า .00 ให้ตัดออก
     function formatPrice(price) {
-      // ถ้าเป็นจุดทศนิยม .00 => ตัดออก
       if (Number.isInteger(price)) {
         return price.toString();
       } else {
-        // ถ้าไม่เป็นจำนวนเต็ม อาจต้องแสดงทศนิยม เช่น 120.5 => "120.50"
-        // แต่ถ้าอยากแสดงสั้นๆ ตามค่าเดิม เช่น 120.5 => "120.5" ก็ทำได้เช่นกัน
-        // เลือกใช้แบบเต็ม 2 ตำแหน่ง:
-        // return price.toFixed(2);
-
-        // หรือแสดง raw ตามที่ JS แปลง (กรณีไม่ต้องการ .00)
-        // ตัวอย่าง: 120.5 => "120.5" | 120.05 => "120.05"
-        //  (แล้วแต่ความต้องการ)
         return String(price);
       }
     }
@@ -184,12 +175,10 @@
       } else if (!status) {
         // กรณี status เป็นค่าว่าง (undefined, null, หรือ '')
         return '⚠️'; // ยังไม่ได้ระบุ หรือยังไม่ชำระ
-      } else if (status === 'ล้มเหลว') {
-        return '❌'; // ล้มเหลว
+      } else if (status === 'ยกเลิกสินค้า') {
+        return '❌'; // ยกเลิกสินค้า
       } else {
-        // ถ้ามีสถานะอื่นที่ไม่ได้คาดการณ์ เช่น "รอชำระ", "pending" ฯลฯ
-        // สามารถเพิ่ม elseif ดักเพิ่มได้ หรือเป็น default
-        return status;
+        return status; // สถานะอื่น ๆ (ถ้ามี)
       }
     }
 
@@ -227,12 +216,10 @@
 
         const priceCell = document.createElement('td');
         priceCell.className = 'px-4 py-2';
-        // ตรงนี้ใช้ formatPrice แทน
         priceCell.textContent = `${formatPrice(order.totalPrice)} บาท`;
 
         const statusCell = document.createElement('td');
         statusCell.className = 'px-4 py-2';
-        // แสดงอิโมจิตามเงื่อนไข
         statusCell.textContent = getStatusEmoji(order.paymentStatus);
 
         // คอลัมน์ "คำสั่ง"
@@ -265,7 +252,7 @@
         let detailHtml = `
           <div class="mb-2">
             <p><strong>ชื่อ:</strong> ${order.name}</p>
-            <p><strong>เมล:</strong> ${order.contact}</p>
+            <p><strong>เบอร์โทร:</strong> ${order.contact}</p>
             <p><strong>หมายเหตุ:</strong> ${order.note || '-'}</p>
           </div>
           <div class="mb-2">
@@ -384,7 +371,7 @@
         input: 'radio',
         inputOptions: {
           'ชำระเงินสำเร็จ': 'ชำระเงินสำเร็จ',
-          'ล้มเหลว': 'ล้มเหลว' // เพิ่มตัวเลือก "ล้มเหลว" ถ้าต้องการ
+          'ยกเลิกสินค้า': 'ยกเลิกสินค้า'
         },
         inputValidator: (value) => {
           if (!value) {
