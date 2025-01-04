@@ -172,8 +172,7 @@
     function getStatusEmoji(status) {
       if (status === 'ชำระเงินสำเร็จ') {
         return '✅';  // จ่ายแล้ว
-      } else if (!status === 'ยังไม่ชำระเงิน') {
-        // กรณี status เป็นค่าว่าง (undefined, null, หรือ '')
+      } else if (status === 'ยังไม่ชำระเงิน') {
         return '⚠️'; // ยังไม่ได้ระบุ หรือยังไม่ชำระ
       } else if (status === 'ยกเลิกสินค้า') {
         return '❌'; // ยกเลิกสินค้า
