@@ -26,7 +26,7 @@
     :root {
       --color-primary: #ffffff; /* สีหลัก: ขาว */
       --color-secondary: #000000; /* สีรอง: ดำ */
-      --color-accent: #808080; /* สีสำรอง: เทา */
+      --color-accent: #ffd8c1; /* สีสำรอง: เทา */
     }
   </style>
 </head>
@@ -82,7 +82,7 @@
           </div>
         </div>
         <!-- Slide Banner -->
-        <div id="banner-slider" class="swiper-container rounded-xl overflow-hidden max-h-72 mt-16">
+        <div id="banner-slider" class="swiper-container rounded-xl overflow-hidden ">
           <div class="swiper-wrapper">
             <!-- สไลด์จะแทรกผ่าน JavaScript -->
           </div>
@@ -90,7 +90,7 @@
         <div>
           <!-- หมวดหมู่สินค้า (แท็บโดยไม่แสดงรูป) -->
           <div class="flex">
-            <div id="tab-nav" class="flex overflow-x-auto space-x-4 py-2"></div>
+            <div id="tab-nav" class="flex overflow-x-auto space-x-4 py-6"></div>
           </div>
           <!-- ช่องค้นหาสินค้า -->
           <div class="relative">
@@ -393,7 +393,7 @@
       let categories = [...new Set(products.map(product => product.category || 'Uncategorized'))];
       categories = ['All'].concat(categories.filter(category => category !== 'All'));
       const tabContainer = document.createElement('div');
-      tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto', 'pb-2');
+      tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto');
       categories.forEach(function(category) {
         const tabButton = document.createElement('button');
         tabButton.classList.add('flex-shrink-0', 'px-3', 'py-1', 'rounded-xl', 'focus:outline-none', 'shadow-sm');
