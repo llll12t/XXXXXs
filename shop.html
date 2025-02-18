@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>IIIRN SHOP filecode</title>
   <!-- ฟอนต์ภาษาไทย -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet" />
   <!-- สไตล์สำหรับ Swiper.js -->
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <!-- Tailwind CSS -->
@@ -16,198 +15,173 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10" defer></script>
   <!-- Swiper.js -->
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
-
-  <!-- กำหนดธีมสีใหม่โดยใช้เพียงสามสี: สีหลัก (ขาว), สีรอง (ดำ) และสีสำรอง (เทา) -->
+  <!-- LIFF SDK -->
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js" defer></script>
+  <!-- กำหนดธีมสีด้วยตัวแปรใน :root เท่านั้น -->
   <style>
     :root {
       --color-primary: #ffffff; /* สีหลัก: ขาว */
       --color-secondary: #000000; /* สีรอง: ดำ */
-      --color-accent: #dadada; /* สีสำรอง: เทา */
-    }
-    .bg-main {
-      background-color: var(--color-primary);
-      color: var(--color-secondary);
-    }
-    .bg-main2,
-    .bg-main-cart {
-      background-color: var(--color-secondary);
-      color: var(--color-primary);
-    }
-    .bg-main-gray {
-      background-color: var(--color-accent);
-    }
-    .text-main {
-      color: var(--color-primary);
-    }
-    .text-main2 {
-      color: var(--color-secondary);
-    }
-    .border-2 {
-      border-color: var(--color-primary);
+      --color-accent: #808080; /* สีสำรอง: เทา */
     }
   </style>
 </head>
-
 <body class="bg-slate-100">
-  <!-- Loading Screen ใช้ Tailwind ในการจัดวาง -->
-  <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-main z-50">
+  <!-- Loading Screen แสดงก่อนเนื้อหาหลัก -->
+  <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-[var(--color-primary)] z-50">
     <div class="text-center">
-      <div class="relative flex w-64 animate-pulse gap-2 p-4">
-        <div class="h-12 w-12 rounded-full bg-slate-400"></div>
-        <div class="flex-1">
-          <div class="mb-1 h-5 w-3/5 rounded-lg bg-slate-400"></div>
-          <div class="h-5 w-[90%] rounded-lg bg-slate-400"></div>
-        </div>
-        <div class="absolute bottom-5 right-0 h-4 w-4 rounded-full bg-slate-400"></div>
+      <div class="flex flex-col items-center gap-4">
+        <!-- Spinner ตัวอย่างโดยใช้ Tailwind -->
+        <div class="w-16 h-16 border-4 border-[var(--color-secondary)] border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-[var(--color-secondary)] font-semibold">กำลังโหลด...</p>
       </div>
     </div>
   </div>
-
+  
+  <!-- เนื้อหาหลัก ซ่อนไว้ก่อนจนกว่าจะโหลดเสร็จ -->
   <div class="main-shop hidden">
-    <!-- ฟังก์ชันการแสดงรายการสินค้า -->
+    <!-- ฟังก์ชันแสดงรายการสินค้า -->
     <div id="product-selection" class="max-w-md mx-auto pt-20">
       <div class="p-4 rounded-xl">
-        <!-- ส่วนหัวของร้านค้า -->
-        <div class="fixed top-0 left-0 w-full bg-main shadow-sm z-50">
+        <!-- Header -->
+        <div class="fixed top-0 left-0 w-full bg-[var(--color-primary)] shadow-sm z-50">
           <div class="flex justify-between items-center p-4">
             <div class="flex items-center">
               <div class="w-12 h-12 rounded-xl">
                 <img src="https://via.placeholder.com/40?text=PROFILE" alt="Profile Image" id="profileImage" class="w-12 h-12 rounded-xl">
               </div>
               <div class="pl-4">
-                <p class="text-main2 text-xs">ยินดีต้อนรับ</p>
-                <input type="text" class="input-field bg-main w-32 text-main2 text-lg font-bold bg-opacity-0" id="displayName" name="displayName" readonly>
+                <p class="text-[var(--color-secondary)] text-xs">ยินดีต้อนรับ</p>
+                <input type="text" id="displayName" class="bg-[var(--color-primary)] w-32 text-[var(--color-secondary)] text-lg font-bold bg-opacity-0" readonly>
               </div>
             </div>
             <div class="flex items-center">
-              <p id="userPoints" class="bg-main-gray mx-1 rounded-xl w-full max-w-24 p-2 text-main2 text-md font-bold flex items-center gap-2">
+              <p id="userPoints" class="bg-[var(--color-accent)] mx-1 rounded-xl w-full max-w-[96px] p-2 text-[var(--color-secondary)] text-md font-bold flex items-center gap-2">
                 <!-- ไอคอนคะแนน -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none">
-                  <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="currentColor" stroke-width="1.5" />
-                  <path d="M12.8638 7.72209L13.7437 9.49644C13.8637 9.74344 14.1837 9.98035 14.4536 10.0257L16.0485 10.2929C17.0684 10.4643 17.3083 11.2103 16.5734 11.9462L15.3335 13.1964C15.1236 13.4081 15.0086 13.8164 15.0736 14.1087L15.4285 15.6562C15.7085 16.8812 15.0636 17.355 13.9887 16.7148L12.4939 15.8226C12.2239 15.6613 11.7789 15.6613 11.504 15.8226L10.0091 16.7148C8.93925 17.355 8.28932 16.8761 8.56929 15.6562L8.92425 14.1087C8.98925 13.8164 8.87426 13.4081 8.66428 13.1964L7.42442 11.9462C6.6945 11.2103 6.92947 10.4643 7.94936 10.2929L9.54419 10.0257C9.80916 9.98035 10.1291 9.74344 10.2491 9.49644L11.129 7.72209C11.609 6.7593 12.3889 6.7593 12.8638 7.72209Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M12.8638 7.72209L13.7437 9.49644C13.8637 9.74344 14.1837 9.98035 14.4536 10.0257L16.0485 10.2929C17.0684 10.4643 17.3083 11.2103 16.5734 11.9462L15.3335 13.1964C15.1236 13.4081 15.0086 13.8164 15.0736 14.1087L15.4285 15.6562C15.7085 16.8812 15.0636 17.355 13.9887 16.7148L12.4939 15.8226C12.2239 15.6613 11.7789 15.6613 11.504 15.8226L10.0091 16.7148C8.93925 17.355 8.28932 16.8761 8.56929 15.6562L8.92425 14.1087C8.98925 13.8164 8.87426 13.4081 8.66428 13.1964L7.42442 11.9462C6.6945 11.2103 6.92947 10.4643 7.94936 10.2929L9.54419 10.0257C9.80916 9.98035 10.1291 9.74344 10.2491 9.49644L11.129 7.72209C11.609 6.7593 12.3889 6.7593 12.8638 7.72209Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg> 0
               </p>
-              <button id="go-to-cart" class="bg-main-cart text-main text-md py-2 px-4 flex items-center gap-2 rounded-xl ml-4">
+              <button id="go-to-cart" class="bg-[var(--color-secondary)] text-[var(--color-primary)] text-md py-2 px-4 flex items-center gap-2 rounded-xl ml-4">
                 <!-- ไอคอนตะกร้าสินค้า -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none">
-                  <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7205 10.6235 21.621 10.747 21.4816 10.8132C20.9033 11.0876 20.4982 11.6081 20.3919 12.2134L19.7993 15.5878C19.5386 17.0725 19.4495 19.1943 18.1484 20.2402C17.1938 21 15.8184 21 13.0675 21H10.9325C8.18162 21 6.8062 21 5.8516 20.2402C4.55052 19.1942 4.46138 17.0725 4.20066 15.5878L3.60807 12.2134C3.50177 11.6081 3.09673 11.0876 2.51841 10.8132C2.37896 10.747 2.27952 10.6235 2.24894 10.4784C2.07874 9.67075 1.6264 8.5469 2.63812 8.10084C2.86684 8 3.17922 8 3.80397 8H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                  <path d="M14 12L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                  <path d="M6.5 11L10 3M15 3L17.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7205 10.6235 21.621 10.747 21.4816 10.8132C20.9033 11.0876 20.4982 11.6081 20.3919 12.2134L19.7993 15.5878C19.5386 17.0725 19.4495 19.1943 18.1484 20.2402C17.1938 21 15.8184 21 13.0675 21H10.9325C8.18162 21 6.8062 21 5.8516 20.2402C4.55052 19.1942 4.46138 17.0725 4.20066 15.5878L3.60807 12.2134C3.50177 11.6081 3.09673 11.0876 2.51841 10.8132C2.37896 10.747 2.27952 10.6235 2.24894 10.4784C2.07874 9.67075 1.6264 8.5469 2.63812 8.10084C2.86684 8 3.17922 8 3.80397 8H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M14 12L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.5 11L10 3M15 3L17.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg> 0
               </button>
             </div>
           </div>
         </div>
-
         <!-- Slide Banner -->
-        <div id="banner-slider" class="swiper-container rounded-xl overflow-hidden max-h-72">
+        <div id="banner-slider" class="swiper-container rounded-xl overflow-hidden max-h-72 mt-16">
           <div class="swiper-wrapper">
-            <!-- สไลด์จะแทรกที่นี่ผ่าน JavaScript -->
+            <!-- สไลด์จะแทรกผ่าน JavaScript -->
           </div>
         </div>
-
         <div>
-          <!-- ส่วนแสดงหมวดหมู่สินค้า (ปรับให้แสดงเฉพาะข้อความ) -->
+          <!-- หมวดหมู่สินค้า (แท็บโดยไม่แสดงรูป) -->
           <div class="flex">
-            <div id="tab-nav" class="flex overflow-x-auto space-x-4 py-4 mt-2"></div>
+            <div id="tab-nav" class="flex overflow-x-auto space-x-4 py-2"></div>
           </div>
           <!-- ช่องค้นหาสินค้า -->
           <div class="relative">
-            <input type="text" id="search-input" placeholder="ค้นหาสินค้า" class="w-full px-4 py-2 bg-main border rounded-xl shadow-sm">
+            <input type="text" id="search-input" placeholder="ค้นหาสินค้า" class="w-full px-4 py-2 bg-[var(--color-primary)] border rounded-xl shadow-sm">
           </div>
           <!-- รายการสินค้า -->
           <div id="product-list" class="grid grid-cols-2 gap-4 py-4"></div>
           <!-- ปุ่มโหลดเพิ่มเติม -->
           <div id="load-more-container" class="text-center w-full m-4 hidden">
-            <button id="load-more" class="bg-main text-main2 px-4 py-2 rounded-xl">เพิ่มเติม</button>
+            <button id="load-more" class="bg-[var(--color-primary)] text-[var(--color-secondary)] px-4 py-2 rounded-xl">เพิ่มเติม</button>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- ส่วนของตะกร้าสินค้า -->
+    
+    <!-- ตะกร้าสินค้า -->
     <div id="cart-view" class="max-w-md mx-auto pt-20 hidden">
-      <div class="bg-main rounded-xl p-4 m-2">
-        <div class="fixed top-0 left-0 w-full bg-main shadow-sm z-50">
+      <div class="bg-[var(--color-primary)] rounded-xl p-4 m-2">
+        <div class="fixed top-0 left-0 w-full bg-[var(--color-primary)] shadow-sm z-50">
           <div class="flex justify-between items-center p-4">
-            <h2 class="text-main2 text-md font-semibold">ตะกร้าสินค้า</h2>
-            <div id="back-to-products" class="bg-main border rounded-xl py-2 w-36 text-center font-bold">กลับ ร้านค้า</div>
+            <h2 class="text-[var(--color-secondary)] text-md font-semibold">ตะกร้าสินค้า</h2>
+            <div id="back-to-products" class="bg-[var(--color-primary)] border rounded-xl py-2 w-36 text-center font-bold">กลับ ร้านค้า</div>
           </div>
         </div>
-        <div id="cart-items" class="bg-main rounded-xl"></div>
+        <div id="cart-items" class="bg-[var(--color-primary)] rounded-xl"></div>
         <div class="pt-4">
           <div class="flex justify-between items-center mb-4">
             <span class="text-md font-semibold">ราคารวมสินค้า</span>
             <span id="total-price" class="text-md text-gray-400">0.00 บาท</span>
           </div>
         </div>
-        <button id="go-to-shipping" class="w-full bg-main2 text-main p-4 rounded-xl font-semibold hidden">ถัดไป</button>
+        <button id="go-to-shipping" class="w-full bg-[var(--color-secondary)] text-[var(--color-primary)] p-4 rounded-xl font-semibold hidden">ถัดไป</button>
       </div>
     </div>
-
-    <!-- หน้าการจัดส่ง (ฟอร์มชื่อ อีเมล หมายเหตุ) -->
+    
+    <!-- ข้อมูลการจัดส่ง -->
     <div id="shipping-info" class="max-w-md mx-auto pt-20 hidden">
       <div class="p-4">
-        <div class="fixed top-0 left-0 w-full bg-main shadow-sm z-50">
+        <div class="fixed top-0 left-0 w-full bg-[var(--color-primary)] shadow-sm z-50">
           <div class="flex justify-between items-center p-4">
-            <h2 class="text-main2 text-md font-semibold">การจัดส่ง</h2>
-            <button id="back-to-cart" class="bg-main border rounded-xl py-2 w-36 text-center font-bold">กลับ ตะกร้าสินค้า</button>
+            <h2 class="text-[var(--color-secondary)] text-md font-semibold">การจัดส่ง</h2>
+            <button id="back-to-cart" class="bg-[var(--color-primary)] border rounded-xl py-2 w-36 text-center font-bold">กลับ ตะกร้าสินค้า</button>
           </div>
         </div>
         <form id="shipping-form">
           <div id="form-container">
             <div class="mb-4">
-              <label for="username" class="block text-main2">ชื่อ:</label>
+              <label for="username" class="block text-[var(--color-secondary)]">ชื่อ:</label>
               <input type="text" id="username" placeholder="Name" class="block w-full mb-2 p-2 border rounded-xl" required />
             </div>
             <div class="mb-4">
-              <label for="contact" class="block text-main2">อีเมล:</label>
+              <label for="contact" class="block text-[var(--color-secondary)]">อีเมล:</label>
               <input type="email" id="contact" placeholder="Email" class="block w-full mb-2 p-2 border rounded-xl" required />
             </div>
             <div class="mb-4">
-              <label for="note" class="block text-main2">หมายเหตุ:</label>
+              <label for="note" class="block text-[var(--color-secondary)]">หมายเหตุ:</label>
               <textarea id="note" placeholder="Note" class="block w-full mb-2 p-2 border rounded-xl h-24"></textarea>
             </div>
             <div class="mb-4 flex items-center">
               <input type="checkbox" id="save-info" class="mr-2">
-              <label for="save-info" class="text-main2">บันทึกชื่อและอีเมลสำหรับการใช้งานครั้งถัดไป</label>
+              <label for="save-info" class="text-[var(--color-secondary)]">บันทึกชื่อและอีเมลสำหรับการใช้งานครั้งถัดไป</label>
             </div>
             <input type="hidden" id="userlineid" name="userlineid">
           </div>
-          <button type="submit" class="bg-main2 text-main p-4 w-full rounded-xl mt-4">สั่งซื้อสินค้า</button>
+          <button type="submit" class="bg-[var(--color-secondary)] text-[var(--color-primary)] p-4 w-full rounded-xl mt-4">สั่งซื้อสินค้า</button>
         </form>
       </div>
     </div>
-
-    <!-- ฟังก์ชันแสดงรายละเอียดการสั่งซื้อ -->
+    
+    <!-- แสดงรายละเอียดการสั่งซื้อ (Modal) -->
     <div id="order-details-modal" class="fixed inset-0 overflow-y-auto z-10 hidden">
       <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
           <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <div class="rounded-xl overflow-hidden max-w-sm mx-auto transform transition-all w-full">
-          <div class="bg-main px-4 pt-5 pb-4">
+          <div class="bg-[var(--color-primary)] px-4 pt-5 pb-4">
             <h3 class="text-lg font-medium" id="modal-title">รายละเอียดสั่งซื้อ</h3>
             <div class="mt-2">
               <div id="order-details-content" class="bg-gray-100 p-4 rounded-xl"></div>
             </div>
           </div>
           <div class="bg-gray-50 px-4 py-3 flex flex-col sm:flex-row-reverse sm:justify-end">
-            <button id="confirm-order" class="w-full sm:w-auto inline-flex justify-center rounded-xl border border-transparent px-4 py-4 bg-main2 text-main font-medium hover:bg-slate-600 focus:outline-none sm:ml-3 sm:text-sm">ยืนยันการสั่งซื้อ</button>
-            <button id="close-modal" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-xl border border-gray-300 px-4 py-2 bg-main text-base font-medium text-main2 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:text-sm">ยกเลิก</button>
+            <button id="confirm-order" class="w-full sm:w-auto inline-flex justify-center rounded-xl border border-transparent px-4 py-4 bg-[var(--color-secondary)] text-[var(--color-primary)] font-medium hover:bg-slate-600 focus:outline-none sm:ml-3 sm:text-sm">ยืนยันการสั่งซื้อ</button>
+            <button id="close-modal" class="mt-3 w-full sm:w-auto inline-flex justify-center rounded-xl border border-gray-300 px-4 py-2 bg-[var(--color-primary)] text-base font-medium text-[var(--color-secondary)] hover:bg-gray-50 focus:outline-none sm:mt-0 sm:text-sm">ยกเลิก</button>
             <div id="order-status" class="px-4 py-3 text-center text-sm hidden"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- สคริปต์หลัก (คงการทำงานเดิม) -->
+  
+  <!-- JavaScript: ฟังก์ชันทั้งหมด -->
   <script defer>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzRF6plY3kobQzVM0UBS74wkFd04FJxs6e2dicNNZkc1oLftMM1-TbYMZPVoxASxNx7EQ/exec";
     const WEB_MEMBER_APP_URL = "https://script.google.com/macros/s/AKfycbz8ArUt6Hj1E06QoeLYMRImPRrvcvSUnWyk1nVj07ryWkWdjbGw6NDJXcZsqchAH3Pw/exec";
     const LIFF_ID = '2006699683-qJrjZWAM';
-
+    
     let cart = [];
     let currentOrder = null;
     let currentTab = 'All';
@@ -216,8 +190,8 @@
     let isSearching = false;
     let filteredProducts = [];
     let productsCache = [];
-
-    // DOM
+    
+    // DOM Elements
     const productList = document.getElementById('product-list');
     const tabNav = document.getElementById('tab-nav');
     const goToCartBtn = document.getElementById('go-to-cart');
@@ -228,34 +202,29 @@
     const totalPriceEl = document.getElementById('total-price');
     const loadMoreBtn = document.getElementById('load-more');
     const loadMoreContainer = document.getElementById('load-more-container');
-
     const goToShippingBtn = document.getElementById('go-to-shipping');
     const shippingInfo = document.getElementById('shipping-info');
     const backToCartBtn = document.getElementById('back-to-cart');
     const shippingForm = document.getElementById('shipping-form');
-
     const orderDetailsModal = document.getElementById('order-details-modal');
     const orderDetailsContent = document.getElementById('order-details-content');
     const confirmOrderBtn = document.getElementById('confirm-order');
     const closeModalBtn = document.getElementById('close-modal');
     const orderStatusEl = document.getElementById('order-status');
-
+    
     document.addEventListener('DOMContentLoaded', initializeApp);
-
+    
     async function initializeApp() {
       showLoading(true);
       await initializeLiff();
-
       try {
         const [productsData, bannersData] = await Promise.all([
           fetchProducts(),
           fetchBanners()
         ]);
-
         productsCache = productsData;
         renderProducts(productsCache);
         renderTabs(productsCache);
-
         renderBanners(bannersData);
       } catch (error) {
         console.error('Error initializing app:', error);
@@ -263,7 +232,7 @@
         showLoading(false);
       }
     }
-
+    
     async function initializeLiff() {
       try {
         await liff.init({ liffId: LIFF_ID });
@@ -276,7 +245,7 @@
         console.error('Error initializing LIFF:', error);
       }
     }
-
+    
     async function getUserProfile() {
       try {
         const profile = await liff.getProfile();
@@ -289,7 +258,7 @@
         console.error('Error getting profile data:', error);
       }
     }
-
+    
     async function fetchData(userId) {
       try {
         const response = await fetch(WEB_MEMBER_APP_URL, {
@@ -304,18 +273,18 @@
         console.error('Error fetching data:', error);
       }
     }
-
+    
     function displayData(row) {
       document.getElementById('username').value = row.Name || '';
       document.getElementById('contact').value = row.Contact || '';
       document.getElementById('userPoints').innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none">
-                    <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="currentColor" stroke-width="1.5" />
-                    <path d="M12.8638 7.72209L13.7437 9.49644C13.8637 9.74344 14.1837 9.98035 14.4536 10.0257L16.0485 10.2929C17.0684 10.4643 17.3083 11.2103 16.5734 11.9462L15.3335 13.1964C15.1236 13.4081 15.0086 13.8164 15.0736 14.1087L15.4285 15.6562C15.7085 16.8812 15.0636 17.355 13.9887 16.7148L12.4939 15.8226C12.2239 15.6613 11.7789 15.6613 11.504 15.8226L10.0091 16.7148C8.93925 17.355 8.28932 16.8761 8.56929 15.6562L8.92425 14.1087C8.98925 13.8164 8.87426 13.4081 8.66428 13.1964L7.42442 11.9462C6.6945 11.2103 6.92947 10.4643 7.94936 10.2929L9.54419 10.0257C9.80916 9.98035 10.1291 9.74344 10.2491 9.49644L11.129 7.72209C11.609 6.7593 12.3889 6.7593 12.8638 7.72209Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg> ${row.Points || 0}
-            `;
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none">
+          <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M12.8638 7.72209L13.7437 9.49644C13.8637 9.74344 14.1837 9.98035 14.4536 10.0257L16.0485 10.2929C17.0684 10.4643 17.3083 11.2103 16.5734 11.9462L15.3335 13.1964C15.1236 13.4081 15.0086 13.8164 15.0736 14.1087L15.4285 15.6562C15.7085 16.8812 15.0636 17.355 13.9887 16.7148L12.4939 15.8226C12.2239 15.6613 11.7789 15.6613 11.504 15.8226L10.0091 16.7148C8.93925 17.355 8.28932 16.8761 8.56929 15.6562L8.92425 14.1087C8.98925 13.8164 8.87426 13.4081 8.66428 13.1964L7.42442 11.9462C6.6945 11.2103 6.92947 10.4643 7.94936 10.2929L9.54419 10.0257C9.80916 9.98035 10.1291 9.74344 10.2491 9.49644L11.129 7.72209C11.609 6.7593 12.3889 6.7593 12.8638 7.72209Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg> ${row.Points || 0}
+      `;
     }
-
+    
     function showLoading(isLoading) {
       const loadingScreen = document.getElementById('loading-screen');
       const mainShop = document.querySelector('.main-shop');
@@ -327,7 +296,7 @@
         mainShop.style.display = 'block';
       }
     }
-
+    
     async function fetchBanners() {
       try {
         const response = await fetch(`${WEB_APP_URL}?type=banners`);
@@ -342,7 +311,7 @@
         return [];
       }
     }
-
+    
     function renderBanners(banners) {
       const swiperWrapper = document.querySelector('#banner-slider .swiper-wrapper');
       if (banners.length === 0) {
@@ -352,11 +321,12 @@
         swiperWrapper.appendChild(noBanner);
         return;
       }
-      banners.forEach(function (banner) {
+      banners.forEach(function(banner) {
         const slide = document.createElement('div');
         slide.classList.add('swiper-slide');
         if (banner.link_url) {
-          const link = document.createElement('div');
+          const link = document.createElement('a');
+          link.href = banner.link_url;
           link.target = '_blank';
           const img = document.createElement('img');
           img.src = banner.image_url;
@@ -377,7 +347,7 @@
       });
       initializeSwiper();
     }
-
+    
     function initializeSwiper() {
       new Swiper('#banner-slider', {
         loop: true,
@@ -395,7 +365,7 @@
         },
       });
     }
-
+    
     async function fetchProducts() {
       try {
         const response = await fetch(WEB_APP_URL);
@@ -410,36 +380,34 @@
         return [];
       }
     }
-
-    // ปรับปรุงฟังก์ชัน renderTabs ให้ไม่แสดงรูปในแท็บหมวดหมู่สินค้า
+    
     function renderTabs(products) {
       tabNav.innerHTML = '';
       let categories = [...new Set(products.map(product => product.category || 'Uncategorized'))];
       categories = ['All'].concat(categories.filter(category => category !== 'All'));
       const tabContainer = document.createElement('div');
       tabContainer.classList.add('flex', 'space-x-4', 'overflow-x-auto', 'pb-2');
-      categories.forEach(function (category) {
+      categories.forEach(function(category) {
         const tabButton = document.createElement('button');
         tabButton.classList.add('flex-shrink-0', 'px-3', 'py-1', 'rounded-xl', 'focus:outline-none', 'shadow-sm');
         tabButton.setAttribute('data-category', category);
         if (category === currentTab) {
-          tabButton.classList.add('bg-main-gray', 'text-main2');
+          tabButton.classList.add('bg-[var(--color-accent)]', 'text-[var(--color-secondary)]');
         } else {
-          tabButton.classList.add('bg-main', 'text-main2');
+          tabButton.classList.add('bg-[var(--color-primary)]', 'text-[var(--color-secondary)]');
         }
-        // แสดงเฉพาะข้อความชื่อหมวดหมู่ (ไม่แสดงรูป)
         const categoryLabel = document.createElement('span');
         categoryLabel.textContent = category === 'All' ? 'รวมทั้งหมด' : category;
         categoryLabel.classList.add('text-sm', 'font-medium');
         tabButton.appendChild(categoryLabel);
-        tabButton.addEventListener('click', function () {
+        tabButton.addEventListener('click', function() {
           switchTab(category);
         });
         tabContainer.appendChild(tabButton);
       });
       tabNav.appendChild(tabContainer);
     }
-
+    
     function switchTab(category) {
       currentTab = category;
       currentPage = 0;
@@ -449,21 +417,21 @@
       renderProducts(productsCache);
       renderTabs(productsCache);
     }
-
+    
     document.getElementById('search-input').addEventListener('input', debounce(searchProducts, 300));
-
+    
     function debounce(func, wait) {
       let timeout;
-      return function () {
+      return function() {
         const context = this;
         const args = arguments;
         clearTimeout(timeout);
-        timeout = setTimeout(function () {
+        timeout = setTimeout(function() {
           func.apply(context, args);
         }, wait);
       };
     }
-
+    
     function searchProducts() {
       currentPage = 0;
       const query = document.getElementById('search-input').value.toLowerCase();
@@ -478,7 +446,7 @@
       }
       renderProducts(productsCache);
     }
-
+    
     function renderProducts(products, append = false) {
       if (!append) {
         productList.innerHTML = '';
@@ -493,7 +461,7 @@
       const endIndex = (currentPage + 1) * productsPerPage;
       const productsToDisplay = filtered.slice(startIndex, endIndex);
       const fragment = document.createDocumentFragment();
-      productsToDisplay.forEach(function (product) {
+      productsToDisplay.forEach(function(product) {
         const productElement = createProductElement(product);
         fragment.appendChild(productElement);
       });
@@ -504,10 +472,10 @@
         loadMoreContainer.classList.add('hidden');
       }
     }
-
+    
     function createProductElement(product) {
       const productDiv = document.createElement('div');
-      productDiv.classList.add('bg-main', 'flex', 'flex-col', 'rounded-xl', 'shadow-sm', 'relative');
+      productDiv.classList.add('bg-[var(--color-primary)]', 'flex', 'flex-col', 'rounded-xl', 'shadow-sm', 'relative');
       const imgContainer = document.createElement('div');
       imgContainer.classList.add('relative');
       const productImg = document.createElement('img');
@@ -518,9 +486,9 @@
       productImg.setAttribute('data-id', product.id);
       imgContainer.appendChild(productImg);
       const shareBtn = document.createElement('button');
-      shareBtn.classList.add('bg-main', 'text-main2', 'text-xs', 'p-2', 'rounded-xl', 'focus:outline-none', 'absolute', 'top-2', 'right-2');
+      shareBtn.classList.add('bg-[var(--color-primary)]', 'text-[var(--color-secondary)]', 'text-xs', 'p-2', 'rounded-xl', 'focus:outline-none', 'absolute', 'top-2', 'right-2');
       shareBtn.textContent = 'แชร์';
-      shareBtn.addEventListener('click', function () {
+      shareBtn.addEventListener('click', function() {
         shareProduct(product);
       });
       imgContainer.appendChild(shareBtn);
@@ -528,20 +496,20 @@
       const productInfoContainer = document.createElement('div');
       productInfoContainer.classList.add('flex-grow', 'text-left', 'p-2', 'text-sm', 'mt-2');
       const productName = document.createElement('h3');
-      productName.classList.add('py-2', 'font-semibold', 'text-main2');
+      productName.classList.add('py-2', 'font-semibold', 'text-[var(--color-secondary)]');
       productName.textContent = product.name;
       productInfoContainer.appendChild(productName);
       const actionContainer = document.createElement('div');
       actionContainer.classList.add('flex', 'justify-between', 'items-center');
       const sizeSelect = document.createElement('select');
-      sizeSelect.classList.add('bg-main', 'text-main2', 'rounded-xl', 'p-2', 'product-size', 'hidden');
+      sizeSelect.classList.add('bg-[var(--color-primary)]', 'text-[var(--color-secondary)]', 'rounded-xl', 'p-2', 'product-size', 'hidden');
       sizeSelect.setAttribute('data-id', product.id);
       const defaultOption = document.createElement('option');
       defaultOption.value = 'online';
       defaultOption.disabled = true;
       defaultOption.selected = true;
       sizeSelect.appendChild(defaultOption);
-      ['online'].forEach(function (size) {
+      ['online'].forEach(function(size) {
         if (product[size] > 0) {
           const option = document.createElement('option');
           option.value = size;
@@ -572,7 +540,7 @@
         actionContainer.appendChild(priceDisplay);
       }
       const addToCartBtn = document.createElement('button');
-      addToCartBtn.classList.add('bg-main2', 'text-main', 'p-2', 'rounded-xl', 'focus:outline-none', 'add-to-cart');
+      addToCartBtn.classList.add('bg-[var(--color-secondary)]', 'text-[var(--color-primary)]', 'p-2', 'rounded-xl', 'focus:outline-none', 'add-to-cart');
       addToCartBtn.style.width = '35%';
       addToCartBtn.textContent = 'ซื้อ';
       addToCartBtn.setAttribute('data-id', product.id);
@@ -581,7 +549,7 @@
       productDiv.appendChild(productInfoContainer);
       return productDiv;
     }
-
+    
     async function shareProduct(product) {
       const result = await Swal.fire({
         title: 'ยืนยันการแชร์สินค้า',
@@ -616,7 +584,8 @@
           body: {
             type: 'box',
             layout: 'vertical',
-            contents: [{
+            contents: [
+              {
                 type: 'text',
                 text: product.name,
                 weight: 'bold',
@@ -660,8 +629,8 @@
         }
       }
     }
-
-    document.addEventListener('click', function (event) {
+    
+    document.addEventListener('click', function(event) {
       if (event.target.classList.contains('add-to-cart')) {
         addToCart(event);
       }
@@ -673,7 +642,7 @@
         }
       }
     });
-
+    
     function addToCart(event) {
       const productId = event.target.dataset.id;
       const product = productsCache.find(p => p.id === productId);
@@ -708,58 +677,60 @@
       goToCartBtn.classList.remove('go-to-cart');
       void goToCartBtn.offsetWidth;
       goToCartBtn.classList.add('go-to-cart');
-      setTimeout(function () {
+      setTimeout(function() {
         goToCartBtn.classList.remove('go-to-cart');
       }, 500);
     }
-
+    
     function updateCartCount() {
       const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
       goToCartBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none">
-                    <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7205 10.6235 21.621 10.747 21.4816 10.8132C20.9033 11.0876 20.4982 11.6081 20.3919 12.2134L19.7993 15.5878C19.5386 17.0725 19.4495 19.1943 18.1484 20.2402C17.1938 21 15.8184 21 13.0675 21H10.9325C8.18162 21 6.8062 21 5.8516 20.2402C4.55052 19.1942 4.46138 17.0725 4.20066 15.5878L3.60807 12.2134C3.50177 11.6081 3.09673 11.0876 2.51841 10.8132C2.37896 10.747 2.27952 10.6235 2.24894 10.4784C2.07874 9.67075 1.6264 8.5469 2.63812 8.10084C2.86684 8 3.17922 8 3.80397 8H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M14 12L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M6.5 11L10 3M15 3L17.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                </svg> ${cartCount}
-            `;
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none">
+          <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7205 10.6235 21.621 10.747 21.4816 10.8132C20.9033 11.0876 20.4982 11.6081 20.3919 12.2134L19.7993 15.5878C19.5386 17.0725 19.4495 19.1943 18.1484 20.2402C17.1938 21 15.8184 21 13.0675 21H10.9325C8.18162 21 6.8062 21 5.8516 20.2402C4.55052 19.1942 4.46138 17.0725 4.20066 15.5878L3.60807 12.2134C3.50177 11.6081 3.09673 11.0876 2.51841 10.8132C2.37896 10.747 2.27952 10.6235 2.24894 10.4784C2.07874 9.67075 1.6264 8.5469 2.63812 8.10084C2.86684 8 3.17922 8 3.80397 8H7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M14 12L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6.5 11L10 3M15 3L17.5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg> ${cartCount}
+      `;
     }
-
+    
     function showCart() {
       productSelection.classList.add('hidden');
       cartView.classList.remove('hidden');
       renderCart();
     }
-
+    
     function renderCart() {
       cartItems.innerHTML = '';
       const fragment = document.createDocumentFragment();
       cart.forEach((item, index) => {
         const cartItemEl = document.createElement('div');
         cartItemEl.classList.add('flex', 'items-center', 'justify-between', 'border-b', 'p-2');
-        const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+        const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+          ? item.Discount
+          : item.Price;
         cartItemEl.innerHTML = `
-                    <img src="${item['Img-product']}" alt="${item.name}" class="w-20 h-20 rounded-xl mr-4">
-                    <div class="flex-1">
-                        <h3 class="text-md font-semibold">${item.name}</h3>
-                        ${
-          (item.Discount && item.Discount > 0 && item.Discount < item.Price)
-            ? `<p class="text-gray-600 text-sm line-through">${item.Price} บาท</p>
-                                   <p class="text-[#4bc56b] text-md font-semibold">${itemPrice.toFixed(2)} บาท</p>`
-            : `<p class="text-gray-600 item-price" data-price="${itemPrice}">${itemPrice.toFixed(2)} บาท</p>`
-        }
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
-                        <span class="w-8 text-center item-quantity">${item.quantity}</span>
-                        <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
-                    </div>
-                `;
+          <img src="${item['Img-product']}" alt="${item.name}" class="w-20 h-20 rounded-xl mr-4">
+          <div class="flex-1">
+            <h3 class="text-md font-semibold">${item.name}</h3>
+            ${
+              (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+              ? `<p class="text-gray-600 text-sm line-through">${item.Price} บาท</p>
+                 <p class="text-[#4bc56b] text-md font-semibold">${itemPrice.toFixed(2)} บาท</p>`
+              : `<p class="text-gray-600 item-price" data-price="${itemPrice}">${itemPrice.toFixed(2)} บาท</p>`
+            }
+          </div>
+          <div class="flex flex-col items-center">
+            <button onclick="increment(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mb-1">+</button>
+            <span class="w-8 text-center item-quantity">${item.quantity}</span>
+            <button onclick="decrement(${index})" class="bg-gray-200 rounded-xl w-7 h-7 flex items-center justify-center text-gray-600 font-bold pb-1 mt-1">-</button>
+          </div>
+        `;
         fragment.appendChild(cartItemEl);
       });
       cartItems.appendChild(fragment);
       updateTotalPrice();
     }
-
+    
     function increment(index) {
       const item = cart[index];
       const product = productsCache.find(p => p.id === item.id);
@@ -769,7 +740,7 @@
         updateCartCount();
       }
     }
-
+    
     function decrement(index) {
       if (cart[index].quantity > 1) {
         cart[index].quantity -= 1;
@@ -779,10 +750,12 @@
       renderCart();
       updateCartCount();
     }
-
+    
     function updateTotalPrice() {
       const productTotal = cart.reduce((total, item) => {
-        const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+        const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+          ? item.Discount
+          : item.Price;
         return total + (itemPrice * item.quantity);
       }, 0);
       totalPriceEl.textContent = productTotal.toFixed(2) + ' บาท';
@@ -792,23 +765,23 @@
         goToShippingBtn.classList.add('hidden');
       }
     }
-
+    
     goToCartBtn.addEventListener('click', showCart);
-    backToProductsBtn.addEventListener('click', function () {
+    backToProductsBtn.addEventListener('click', function() {
       cartView.classList.add('hidden');
       productSelection.classList.remove('hidden');
     });
-    goToShippingBtn.addEventListener('click', function () {
+    goToShippingBtn.addEventListener('click', function() {
       cartView.classList.add('hidden');
       shippingInfo.classList.remove('hidden');
     });
-    backToCartBtn.addEventListener('click', function () {
+    backToCartBtn.addEventListener('click', function() {
       shippingInfo.classList.add('hidden');
       cartView.classList.remove('hidden');
     });
-
+    
     shippingForm.addEventListener('submit', handleShippingFormSubmit);
-
+    
     function handleShippingFormSubmit(event) {
       event.preventDefault();
       const username = document.getElementById('username').value;
@@ -817,11 +790,15 @@
       const userlineid = document.getElementById('userlineid').value;
       const saveInfo = document.getElementById('save-info').checked;
       const productTotal = cart.reduce((total, item) => {
-        const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+        const itemPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+          ? item.Discount
+          : item.Price;
         return total + (itemPrice * item.quantity);
       }, 0);
       const finalItems = cart.map(item => {
-        const finalPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price) ? item.Discount : item.Price;
+        const finalPrice = (item.Discount && item.Discount > 0 && item.Discount < item.Price)
+          ? item.Discount
+          : item.Price;
         return { ...item, finalPrice: finalPrice };
       });
       const order = {
@@ -837,43 +814,43 @@
       orderDetailsContent.innerHTML = renderOrderDetails(order);
       orderDetailsModal.classList.remove('hidden');
     }
-
+    
     function renderOrderDetails(order) {
       const itemsHtml = order.items.map(item => {
         const hasDiscount = (item.Discount && item.Discount > 0 && item.Discount < item.Price);
         const itemPrice = hasDiscount ? item.Discount : item.Price;
         return `
-                    <div class="flex justify-between items-center my-2">
-                        <div>
-                            <p class="text-sm font-medium">${item.name} (${item.size})</p>
-                            ${
-          hasDiscount
-            ? `<p class="text-xs text-gray-500 line-through">ราคาเต็ม: ${item.Price} บาท</p>
-                                   <p class="text-xs text-[#4bc56b] font-semibold">ราคาลด: ${itemPrice} บาท</p>`
-            : `<p class="text-xs text-gray-500">ราคา: ${itemPrice} บาท</p>`
-        }
-                            <p class="text-xs text-gray-500">จำนวน: ${item.quantity}</p>
-                        </div>
-                        <p class="text-sm">${(itemPrice * item.quantity).toFixed(2)} บาท</p>
-                    </div>
-                `;
+          <div class="flex justify-between items-center my-2">
+            <div>
+              <p class="text-sm font-medium">${item.name} (${item.size})</p>
+              ${
+                hasDiscount
+                ? `<p class="text-xs text-gray-500 line-through">ราคาเต็ม: ${item.Price} บาท</p>
+                   <p class="text-xs text-[#4bc56b] font-semibold">ราคาลด: ${itemPrice} บาท</p>`
+                : `<p class="text-xs text-gray-500">ราคา: ${itemPrice} บาท</p>`
+              }
+              <p class="text-xs text-gray-500">จำนวน: ${item.quantity}</p>
+            </div>
+            <p class="text-sm">${(itemPrice * item.quantity).toFixed(2)} บาท</p>
+          </div>
+        `;
       }).join('');
       return `
-                <div>
-                    <p class="text-md font-semibold mb-2">ชื่อ: ${order.username}</p>
-                    <p class="text-md font-semibold mb-2">อีเมล: ${order.contact}</p>
-                    <p class="text-md mb-2">หมายเหตุ: ${order.note || '-'}</p>
-                    <div class="border-t mt-4 pt-4">
-                        ${itemsHtml}
-                    </div>
-                    <div class="border-t mt-4 pt-4">
-                        <p class="text-lg font-semibold">ราคารวมทั้งหมด: ${order.total.toFixed(2)} บาท</p>
-                    </div>
-                </div>
-            `;
+        <div>
+          <p class="text-md font-semibold mb-2">ชื่อ: ${order.username}</p>
+          <p class="text-md font-semibold mb-2">อีเมล: ${order.contact}</p>
+          <p class="text-md mb-2">หมายเหตุ: ${order.note || '-'}</p>
+          <div class="border-t mt-4 pt-4">
+            ${itemsHtml}
+          </div>
+          <div class="border-t mt-4 pt-4">
+            <p class="text-lg font-semibold">ราคารวมทั้งหมด: ${order.total.toFixed(2)} บาท</p>
+          </div>
+        </div>
+      `;
     }
-
-    confirmOrderBtn.addEventListener('click', async function () {
+    
+    confirmOrderBtn.addEventListener('click', async function() {
       confirmOrderBtn.disabled = true;
       confirmOrderBtn.textContent = 'กำลังบันทึก...';
       await saveOrder(currentOrder);
@@ -886,11 +863,11 @@
       shippingForm.reset();
       liff.closeWindow();
     });
-
-    closeModalBtn.addEventListener('click', function () {
+    
+    closeModalBtn.addEventListener('click', function() {
       orderDetailsModal.classList.add('hidden');
     });
-
+    
     async function saveOrder(order) {
       orderStatusEl.classList.remove('hidden');
       orderStatusEl.textContent = 'กำลังบันทึกคำสั่งซื้อของคุณ...🛒';
@@ -907,7 +884,7 @@
         orderStatusEl.textContent = 'เกิดข้อผิดพลาดในการบันทึกคำสั่งซื้อ';
       }
     }
-
+    
     async function sendTextMessage() {
       try {
         if (!liff.isLoggedIn()) {
@@ -919,13 +896,13 @@
         console.error('Error sending message:', error);
       }
     }
-
+    
     function showProductDetails(product) {
       const formattedDetail = product.detail ? product.detail.replace(/\n/g, '<br>') : 'ไม่มีรายละเอียดสินค้าเพิ่มเติม';
       const mainImage = product['Img-product'] || 'https://via.placeholder.com/300?text=NO+IMAGE';
       const htmlContent = `
         <div class="flex justify-center mb-4">
-            <img src="${mainImage}" alt="${product.name}" loading="lazy" class="w-full h-48 object-cover rounded-xl">
+          <img src="${mainImage}" alt="${product.name}" loading="lazy" class="w-full h-48 object-cover rounded-xl">
         </div>
         <p class="text-left text-sm p-4">${formattedDetail}</p>
       `;
@@ -936,13 +913,11 @@
         focusConfirm: false,
       });
     }
-
-    loadMoreBtn.addEventListener('click', function () {
+    
+    loadMoreBtn.addEventListener('click', function() {
       currentPage += 1;
       renderProducts(productsCache, true);
     });
   </script>
-  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js" defer></script>
 </body>
-
 </html>
