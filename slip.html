@@ -1,194 +1,205 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>อัปโหลดใบเสร็จ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <title>อัปโหลดใบเสร็จ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
-<body style="font-family: Noto Sans Thai;">
-    <div class="h-screen bg-slate-100 flex justify-center items-center">
-        <div class="max-w-md mx-auto px-4 py-4 bg-white rounded-lg shadow-md">
-            <form id="uploadForm">
-                <div class="relative p-4 rounded-lg mx-auto">
-                    <div class="text-center">
-                        <div class="text-slate-800 text-xl font-semibold mb-6">
-                            อัพโหลด ใบเสร็จชำระเงิน
-                        </div>
-                        <!-- Image preview and upload button side by side -->
-                        <div class="flex justify-between items-center mb-4">
-                            <!-- Image preview on the left -->
-                            <div class="w-40 h-52 bg-gray-200 flex items-center justify-center rounded-lg">
-                                <img id="preview" src="https://via.placeholder.com/600?text=preview" alt="Default Image" class="object-cover w-full h-full rounded-lg" />
-                            </div>
-                            <!-- Upload button on the right -->
-                            <label for="file" class="cursor-pointer inline-flex justify-center items-center w-80 h-52 py-4 px-8 rounded-lg text-lg text-white bg-indigo-900 font-medium ml-6">
-                                อัพโหลดสลิปโอนเงิน
-                                <input type="file" id="file" name="file" accept="image/*" class="hidden">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="text-center text-sm text-slate-500 mt-4">
-                        ขอบคุณ กรณี ล่าช้าหรือมีปัญหา แอดมินจะทำการตรวจสอบอีกครั้ง<br>
-                        กรุณารอการตรวจสอบสลิปหลังการโอนประมาณ 5-10 นาที
-                    </div>
-                </div>
-            </form>
+<body style="font-family: 'Noto Sans Thai';">
+  <div class="bg-slate-100 flex justify-center items-center p-4">
+    <div class="w-full max-w-md mx-auto">
+      <form id="uploadForm">
+        <div class="p-6">
+          <div class="text-center">
+            <h1 class="text-slate-800 text-2xl font-semibold mb-6">อัพโหลดใบเสร็จชำระเงิน</h1>
+          </div>
+          <!-- Preview and upload button -->
+          <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+            <!-- SVG preview container -->
+            <div id="previewContainer" class="w-full md:w-1/2 h-48 bg-gray-200 flex items-center justify-center rounded-lg overflow-hidden">
+              <!-- SVG icon แสดงก่อนอัพโหลด -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64" color="#000000" fill="none">
+                <path d="M8 16L16.7201 15.2733C19.4486 15.046 20.0611 14.45 20.3635 11.7289L21 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M6 6L7.5 6M22 6H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M10.5 7C10.5 7 11.5 7 12.5 9C12.5 9 15.6765 4 18.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="6" cy="20" r="2" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="17" cy="20" r="2" stroke="currentColor" stroke-width="1.5" />
+                <path d="M8 20L15 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M2 2H2.966C3.91068 2 4.73414 2.62459 4.96326 3.51493L7.93852 15.0765C8.08887 15.6608 7.9602 16.2797 7.58824 16.7616L6.63213 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            </div>
+            <!-- Upload button with SVG icon -->
+            <label for="file" class="cursor-pointer w-full md:w-1/2 h-24 flex flex-col justify-center items-center bg-slate-900 rounded-lg text-white font-medium p-4 hover:bg-slate-800 transition">
+              <!-- ไอคอนกล้อง -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" color="#FFFFFF" fill="none">
+                <path d="M13 3.00231C12.5299 3 12.0307 3 11.5 3C7.02166 3 4.78249 3 3.39124 4.39124C2 5.78249 2 8.02166 2 12.5C2 16.9783 2 19.2175 3.39124 20.6088C4.78249 22 7.02166 22 11.5 22C15.9783 22 18.2175 22 19.6088 20.6088C20.9472 19.2703 20.998 17.147 20.9999 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M2 14.1354C2.61902 14.0455 3.24484 14.0011 3.87171 14.0027C6.52365 13.9466 9.11064 14.7729 11.1711 16.3342C13.082 17.7821 14.4247 19.7749 15 22" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M21 16.8962C19.8246 16.3009 18.6088 15.9988 17.3862 16.0001C15.5345 15.9928 13.7015 16.6733 12 18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M17 4.5C17.4915 3.9943 18.7998 2 19.5 2M22 4.5C21.5085 3.9943 20.2002 2 19.5 2M19.5 2V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+               </svg>
+              <span class="text-lg">อัพโหลดสลิปโอนเงิน</span>
+              <input type="file" id="file" name="file" accept="image/*" class="hidden">
+            </label>
+          </div>
+          <div class="text-center text-sm text-slate-500">
+            <p>กรณีล่าช้าหรือมีปัญหา แอดมินจะทำการตรวจสอบอีกครั้ง</p>
+            <p>กรุณารอการตรวจสอบสลิปหลังการโอนประมาณ 5-10 นาที</p>
+          </div>
         </div>
+      </form>
     </div>
-</body>
+  </div>
 
-<script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-
-<script>
-    // Function triggered when the page loads
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+  <script>
+    // เมื่อหน้าเว็บโหลด ให้เรียกฟังก์ชัน displayFormData
     window.onload = function () {
-        displayFormData();
+      displayFormData();
     };
 
-    // Function to display the data passed via URL
+    // ฟังก์ชันสำหรับแสดงข้อมูลจาก URL
     function displayFormData() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const liffState = urlParams.get('liff.state');
-        if (liffState) {
-            const decodedLiffState = decodeURIComponent(liffState);
-            const nestedParams = new URLSearchParams(decodedLiffState);
+      const urlParams = new URLSearchParams(window.location.search);
+      const liffState = urlParams.get('liff.state');
+      if (liffState) {
+        const decodedLiffState = decodeURIComponent(liffState);
+        const nestedParams = new URLSearchParams(decodedLiffState);
 
-            const orderId = nestedParams.get('orderId');
-            const totalOrder = nestedParams.get('totalOrder');
-            const username = nestedParams.get('username');
-            const userlineid = nestedParams.get('userlineid');
-            const contact = nestedParams.get('contact');
+        const orderId = nestedParams.get('orderId');
+        const totalOrder = nestedParams.get('totalOrder');
+        const username = nestedParams.get('username');
+        const userlineid = nestedParams.get('userlineid');
+        const contact = nestedParams.get('contact');
 
-
-            // Set hidden form inputs with extracted data
-            document.getElementById('uploadForm').orderId = orderId;
-            document.getElementById('uploadForm').totalOrder = totalOrder;
-            document.getElementById('uploadForm').username = username;
-            document.getElementById('uploadForm').userlineid = userlineid;
-            document.getElementById('uploadForm').contact = contact;
-
-        }
+        // กำหนดข้อมูลลงใน form
+        document.getElementById('uploadForm').orderId = orderId;
+        document.getElementById('uploadForm').totalOrder = totalOrder;
+        document.getElementById('uploadForm').username = username;
+        document.getElementById('uploadForm').userlineid = userlineid;
+        document.getElementById('uploadForm').contact = contact;
+      }
     }
 
-    let url = "https://script.google.com/macros/s/AKfycbwDA-uMnqI_YCiBY_MRXhbVAGKE9j7fT52c1yo2qes_nRt_kGc4puVuMlXNX6KkvmI7/exec"; // Replace with actual URL
+    let url = "https://script.google.com/macros/s/AKfycbwDA-uMnqI_YCiBY_MRXhbVAGKE9j7fT52c1yo2qes_nRt_kGc4puVuMlXNX6KkvmI7/exec"; // URL ปลายทางสำหรับส่งข้อมูล
     let fileInput = document.getElementById("file");
-    let imgPreview = document.getElementById("preview");
+    let previewContainer = document.getElementById("previewContainer");
 
-    // Function to convert the file to base64
+    // ฟังก์ชันแปลงไฟล์เป็น base64
     function getBase64(file) {
-        return new Promise((resolve, reject) => {
-            let reader = new FileReader();
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = error => reject(error);
-            reader.readAsDataURL(file);
-        });
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
     }
 
-    // Function to show the selected image preview
+    // ฟังก์ชันแสดง preview เมื่อเลือกไฟล์
     function previewImage() {
-        if (fileInput.files.length > 0) {
-            let file = fileInput.files[0];
-            let reader = new FileReader();
+      if (fileInput.files.length > 0) {
+        let file = fileInput.files[0];
+        let reader = new FileReader();
 
-            reader.onload = function (e) {
-                imgPreview.src = e.target.result;
-                submitData(file);
-            };
+        reader.onload = function (e) {
+          // สร้าง img element สำหรับแสดง preview
+          let img = document.createElement("img");
+          img.src = e.target.result;
+          img.alt = "Image Preview";
+          img.className = "object-cover w-full h-full rounded-lg";
+          // เคลียร์ container แล้วแสดงรูปแทน SVG icon
+          previewContainer.innerHTML = "";
+          previewContainer.appendChild(img);
+          submitData(file);
+        };
 
-            reader.readAsDataURL(file);
-        } else {
-            imgPreview.src = "https://via.placeholder.com/40?text=Ship";
-        }
+        reader.readAsDataURL(file);
+      }
     }
 
-    // Function to submit the data
+    // ฟังก์ชันส่งข้อมูลไปยัง server
     async function submitData(file) {
-        const isConfirmed = await showConfirmationDialog();
+      const isConfirmed = await showConfirmationDialog();
+      if (isConfirmed) {
+        try {
+          let base64 = await getBase64(file);
 
-        if (isConfirmed) {
-            try {
-                let base64 = await getBase64(file);
-                imgPreview.src = `data:${file.type};base64,${base64}`;
+          const formData = document.getElementById('uploadForm');
+          let obj = {
+            base64: base64,
+            type: file.type,
+            name: file.name,
+            orderId: formData.orderId,
+            userlineId: formData.userlineid,
+            totalOrder: formData.totalOrder,
+            customerName: formData.username,
+            contact: formData.contact
+          };
 
-                const formData = document.getElementById('uploadForm');
-                let obj = {
-                    base64: base64,
-                    type: file.type,
-                    name: file.name,
-                    orderId: formData.orderId,
-                    userlineId: formData.userlineid,
-                    totalOrder: formData.totalOrder,
-                    customerName: formData.username,
-                    contact: formData.contact
-
-                };
-
-                Swal.fire({
-                    title: 'กำลังบันทึก, กรุณารอสักครู่...',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    html: '<div class="swal2-loading text-md"></div>',
-                    onBeforeOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                let response = await fetch(url, {
-                    method: "POST",
-                    body: JSON.stringify(obj)
-                });
-
-                let data = await response.text();
-
-                Swal.fire({
-                    title: 'สำเร็จ!',
-                    text: 'อัปโหลดใบเสร็จเรียบร้อยแล้ว!',
-                    icon: 'success',
-                    confirmButtonText: 'ปิด',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        liff.closeWindow();
-                    }
-                });
-                console.log(data);
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ข้อผิดพลาด',
-                    text: 'เกิดข้อผิดพลาดขณะส่งข้อมูล',
-                });
-
-                console.error(error);
+          Swal.fire({
+            title: 'กำลังบันทึก, กรุณารอสักครู่...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            html: '<div class="swal2-loading text-md"></div>',
+            onBeforeOpen: () => {
+              Swal.showLoading();
             }
-        } else {
-            Swal.fire('ยกเลิกการส่งข้อมูล', 'ข้อมูลของคุณยังไม่ถูกส่ง', 'info');
+          });
+
+          let response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(obj)
+          });
+
+          let data = await response.text();
+
+          Swal.fire({
+            title: 'สำเร็จ!',
+            text: 'อัปโหลดใบเสร็จเรียบร้อยแล้ว!',
+            icon: 'success',
+            confirmButtonText: 'ปิด',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              liff.closeWindow();
+            }
+          });
+          console.log(data);
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'ข้อผิดพลาด',
+            text: 'เกิดข้อผิดพลาดขณะส่งข้อมูล',
+          });
+          console.error(error);
         }
+      } else {
+        Swal.fire('ยกเลิกการส่งข้อมูล', 'ข้อมูลของคุณยังไม่ถูกส่ง', 'info');
+      }
     }
 
-    // Set event listener when a new file is selected
+    // ตั้ง event listener เมื่อมีการเลือกไฟล์ใหม่
     fileInput.addEventListener('change', () => {
-        previewImage();
+      previewImage();
     });
 
-    // Function to display confirmation dialog before submitting
+    // ฟังก์ชันแสดง dialog เพื่อยืนยันการส่งข้อมูล
     async function showConfirmationDialog() {
-        const confirmation = await Swal.fire({
-            title: 'ยืนยันการส่งข้อมูล',
-            text: 'คุณแน่ใจหรือว่าต้องการส่งข้อมูลนี้?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'ใช่, ส่งข้อมูล!',
-            cancelButtonText: 'ไม่, ยกเลิก'
-        });
-
-        return confirmation.isConfirmed;
+      const confirmation = await Swal.fire({
+        title: 'ยืนยันการส่งข้อมูล',
+        text: 'คุณแน่ใจหรือว่าต้องการส่งข้อมูลนี้?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'ใช่, ส่งข้อมูล!',
+        cancelButtonText: 'ไม่, ยกเลิก'
+      });
+      return confirmation.isConfirmed;
     }
+  </script>
+</body>
 
-</script>
 </html>
