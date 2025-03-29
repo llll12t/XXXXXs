@@ -21,7 +21,6 @@
   <style>
     .main-shop {
           display: none;
-          /* ซ่อนในตอนเริ่มต้น */
       }
     :root {
       --color-primary: #ffffff; /* สีหลัก: ขาว */
@@ -30,7 +29,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-800">
+<body class="bg-slate-100">
   <!-- Loading Screen แสดงก่อนเนื้อหาหลัก -->
   <div id="loading-screen" class="fixed inset-0 flex items-center justify-center bg-[#F5F8FD] z-50">
   <div class="text-center">
@@ -482,7 +481,7 @@
     
     function createProductElement(product) {
       const productDiv = document.createElement('div');
-      productDiv.classList.add('bg-[var(--color-primary)]', 'flex', 'flex-col', 'rounded-xl', 'shadow-sm', 'relative');
+      productDiv.classList.add('bg-[var(--color-primary)]', 'flex', 'flex-col', 'rounded-xl','relative', 'border');
       const imgContainer = document.createElement('div');
       imgContainer.classList.add('relative');
       const productImg = document.createElement('img');
@@ -501,7 +500,7 @@
       imgContainer.appendChild(shareBtn);
       productDiv.appendChild(imgContainer);
       const productInfoContainer = document.createElement('div');
-      productInfoContainer.classList.add('flex-grow', 'text-left', 'p-2', 'text-sm', 'mt-2');
+      productInfoContainer.classList.add('flex-grow', 'text-left', 'p-2', 'text-sm');
       const productName = document.createElement('h3');
       productName.classList.add('py-2', 'font-semibold', 'text-[var(--color-secondary)]');
       productName.textContent = product.name;
