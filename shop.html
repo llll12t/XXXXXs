@@ -241,7 +241,12 @@
                             <input type="text" id="contact" placeholder="กรอกเบอร์ติดต่อ"
                                 class="block w-full mb-2 p-2 border rounded-xl focus:outline-none" required />
                         </div>
-                       
+                        <!-- ฟิลด์เพิ่มข้อมูลเลขรหัสประชาชน -->
+                        <div class="mb-4">
+                            <label for="citizenid" class="block text-[var(--secondary-color)]">เลขรหัสประชาชน</label>
+                            <input type="text" id="citizenid" placeholder="กรอกเลขรหัสประชาชน"
+                                class="block w-full mb-2 p-2 border rounded-xl focus:outline-none" required />
+                        </div>
                         <div class="mb-4">
                             <label for="address" class="block text-[var(--secondary-color)]">ที่อยู่</label>
                             <textarea id="address" placeholder="กรอกข้อมูลที่อยู่ในการจัดส่ง"
@@ -342,7 +347,7 @@
 
         async function initializeApp() {
             showLoading(true);
-          await initializeLiff();
+             await initializeLiff();
             try {
                 const [productsData, shippingData, bannersData] = await Promise.all([
                     fetchProducts(),
@@ -411,6 +416,7 @@
             document.getElementById('username').value = row.Name || '';
             document.getElementById('address').value = row.Address || '';
             document.getElementById('contact').value = row.Contact || '';
+            document.getElementById('citizenid').value = row.CitizenId || '';
         }
 
         function showLoading(isLoading) {
@@ -717,7 +723,7 @@
             defaultOption.textContent = 'เลือกไซต์';
             sizeSelect.appendChild(defaultOption);
 
-            ['กล่อง', 'แผง', 'ขวด'].forEach(function (size) {
+            ['FS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'].forEach(function (size) {
                 if (product[size] > 0) {
                     const option = document.createElement('option');
                     option.value = size;
@@ -726,10 +732,10 @@
                 }
             });
 
-            // const otherOption = document.createElement('option');
-            // otherOption.value = 'Other';
-            // otherOption.textContent = 'ระบุเอง';
-            // sizeSelect.appendChild(otherOption);
+            const otherOption = document.createElement('option');
+            otherOption.value = 'Other';
+            otherOption.textContent = 'ระบุเอง';
+            sizeSelect.appendChild(otherOption);
 
             rowContainer.appendChild(sizeSelect);
 
@@ -1071,6 +1077,7 @@
             const username = document.getElementById('username').value;
             const address = document.getElementById('address').value;
             const contact = document.getElementById('contact').value;
+            const citizenid = document.getElementById('citizenid').value;
             const note = document.getElementById('note').value;
             const userlineid = document.getElementById('userlineid').value;
             const saveInfo = document.getElementById('save-info').checked;
@@ -1098,6 +1105,7 @@
                 username: username,
                 address: address,
                 contact: contact,
+                citizenid: citizenid,
                 note: note,
                 userlineid: userlineid,
                 items: finalItems,
@@ -1149,6 +1157,7 @@
           <p class="text-md font-semibold mb-2">ชื่อ: ${order.username}</p>
           <p class="text-md font-semibold mb-2">ที่อยู่จัดส่ง: ${order.address}</p>
           <p class="text-md font-semibold mb-2">เบอร์ติดต่อ: ${order.contact}</p>
+          <p class="text-md font-semibold mb-2">เลขรหัสประชาชน: ${order.citizenid}</p>
           <div class="border-t mt-4 pt-4">
             ${itemsHtml}
             ${shippingHtml}
