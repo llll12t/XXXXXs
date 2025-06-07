@@ -15,6 +15,16 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
     body { font-family: 'Kanit', sans-serif; }
+
+    /* pulse animation */
+    @keyframes pulseCustom {
+      0%   { transform: scale(1); opacity: 1; }
+      50%  { transform: scale(1.02); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .pulse-custom { animation: pulseCustom 1.2s ease-in-out infinite; }
+
+    /* alert transition */
     .alert-fade-enter-active, .alert-fade-leave-active {
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
@@ -22,6 +32,8 @@
       opacity: 0;
       transform: translateY(10px);
     }
+
+    /* disabled button */
     .disabled { opacity: 0.5; cursor: not-allowed; }
   </style>
 </head>
@@ -67,20 +79,20 @@
     const scanBtn  = document.getElementById('scanBtn');
     const alertOvl = document.getElementById('customAlertOverlay');
 
-    function showAlert(title, msg, cb) {
-      document.getElementById('customAlertTitle').textContent = title;
-      document.getElementById('customAlertMessage').textContent = msg;
+    function showAlert(title, message, cb) {
+      document.getElementById('customAlertTitle').textContent   = title;
+      document.getElementById('customAlertMessage').textContent = message;
       alertOvl.classList.remove('hidden');
       alertOvl.querySelector('div').classList.remove('alert-fade-enter');
-      function hide() {
+      const hide = () => {
         alertOvl.querySelector('div').classList.add('alert-fade-leave-to');
-        setTimeout(()=>{
+        setTimeout(() => {
           alertOvl.classList.add('hidden');
           alertOvl.querySelector('div').classList.remove('alert-fade-leave-to');
           cb && cb();
-        },300);
+        }, 300);
         alertOvl.removeEventListener('click', hide);
-      }
+      };
       alertOvl.addEventListener('click', hide);
     }
 
@@ -88,7 +100,7 @@
       try {
         const { value: scannedEventId } = await liff.scanCodeV2();
 
-        // 1) ดึงข้อมูลกิจกรรม
+        // ดึงข้อมูลกิจกรรม
         const eRes = await fetch(`${CONFIG.GAS_URL}?action=getEventById&id=${scannedEventId}`);
         const eData = await eRes.json();
         if (eData.error) {
@@ -96,9 +108,10 @@
           return;
         }
 
-        // 2) เรียก joinEvent เพื่อบันทึกเหมือนกดรับ
+        // บันทึกเหมือน joinEvent
         const jRes = await fetch(CONFIG.GAS_URL, {
           method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action:  'joinEvent',
             lineId,
@@ -109,10 +122,19 @@
         });
         const resultText = await jRes.text();
 
-        showAlert('สถานะ', resultText, () => {
-          scanBtn.disabled = true;
-          scanBtn.classList.add('disabled');
-        });
+        // แสดง alert ยินดี และแสดงพ้อยต์ที่ได้รับ
+        showAlert(
+          'ยินดีด้วย!',
+          `คุณได้รับ ${eData.point} พ้อยต์ จากกิจกรรม "${eData.title}"`,
+          () => {
+            // อัปเดต point บน UI
+            const current = parseInt(pointEl.textContent) || 0;
+            pointEl.textContent = current + eData.point;
+            // disable ปุ่มสแกน
+            scanBtn.disabled = true;
+            scanBtn.classList.add('disabled');
+          }
+        );
       } catch (err) {
         console.error(err);
         showAlert('ข้อผิดพลาด', 'ไม่สามารถสแกนได้ กรุณาลองใหม่');
@@ -130,20 +152,10 @@
         dpEl.alt = profile.displayName;
       }
 
-      // ดึงแต้มและ history เพื่อตรวจสอบการสแกนก่อนหน้า
-      const [ uRes, hRes ] = await Promise.all([
-        fetch(`${CONFIG.GAS_URL}?action=getUserInfo&lineId=${lineId}`),
-        fetch(`${CONFIG.GAS_URL}?action=getHistory&lineId=${lineId}`)
-      ]);
-      const [ uData, historyList ] = await Promise.all([ uRes.json(), hRes.json() ]);
-
-      pointEl.textContent = (uData.point || 0);
-
-      // ถ้ามีประวัติ event พร้อม eventId ให้ disable
-      if (historyList.some(i => i.type === 'event' && i.eventId)) {
-        scanBtn.disabled = true;
-        scanBtn.classList.add('disabled');
-      }
+      // ดึงแต้มปัจจุบัน
+      const uRes = await fetch(`${CONFIG.GAS_URL}?action=getUserInfo&lineId=${lineId}`);
+      const uData = await uRes.json();
+      pointEl.textContent = uData.point || 0;
 
       scanBtn.addEventListener('click', scan);
     }
